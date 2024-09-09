@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-    baseURL: 'https://backend-gae-report-mugc.onrender.com' + '/GAE/v1',
+    baseURL: 'https://backend-gae-report-dc7h.onrender.com' + '/GAE/v1',
     timeout: 5000
 })
 

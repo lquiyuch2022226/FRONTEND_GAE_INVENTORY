@@ -1,0 +1,145 @@
+.appointment-container {
+    background-color: white;
+    height: 100%;
+    width: 70rem;
+    margin-left: 25%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .appointment-title-container {
+    background-color: rgb(248, 246, 246);
+    color: rgb(0, 0, 0);
+  }
+  
+  .appointment-title-container h1 {
+    margin-left: 2%;
+  }
+  
+  .title-separator {
+    display: flex;
+    margin: 0 2%;
+    height: 2px;
+    background-color: #000000;
+  }
+  
+  .appointment-container__content {
+    display: flex;
+  }
+  
+  .form-appointment-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    height: 100%;
+    padding: 20px;
+      h1{
+        color: black;
+      }
+  }
+
+.form-appointment-container textarea{
+  background-color: white;
+  min-width: 80%;
+  min-height: 100px;
+  max-height: 200px;
+  font-size: 18px;
+  color: black;
+  padding: 20px;
+}
+
+  .Date-appointment-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+  }
+  
+  .Date-tile-container {
+    color: black;
+  }
+  
+  .Date-container {
+    background-color: #e4e4e4;
+    height:400px;
+    width: 90%;
+    border-radius: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .time-slot{
+    margin-top: 5%;
+    color: black;
+    background-color: rgb(255, 255, 255);
+    padding: 4%;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 1s;
+    border: 2px i;
+  }
+
+  .time-slot:hover{
+    cursor: pointer;
+    margin-top: 5%;
+    background-color: rgb(185, 185, 185);
+    padding: 4%;
+    border-radius: 10px;
+  }
+
+  .time-slot:active{
+    background-color: rgb(185, 185, 185);
+  }
+  .arrow-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5em;
+    color: black;
+  }
+  .input-button-container{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2%;
+    width: 90%;
+
+  }
+
+  .buttons-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .button-agendar, .button-cancelar {
+    padding: 20px 30px;
+    border: none;
+    font-size: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .button-agendar {
+    background-color: #4CAF50;
+    color: white;
+    transition: 1s;
+  }
+  .button-agendar:hover{
+    background-color: #65e169;
+  }
+
+  .button-cancelar {
+    background-color: #f44336;
+    color: white;
+    transition: 1s;
+  }
+
+  .button-cancelar:hover {
+    background-color: #f7574b;
+    color: white;
+  }

@@ -1,0 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
+.auth-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #e0f7fa;
+}
+
+.login-container,
+.register-container {
+  width: 600px;
+  margin: 0 auto;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  height: auto;
+  padding: 20px;
+  /* Reducir padding para menor altura */
+  background-color: #ffffff;
+  /* Fondo blanco para contraste */
+  box-shadow: 0 4px 20px rgba(5, 5, 5, 0.1);
+  /* Sombra sutil para el contenedor */
+}
+
+.register-container {
+  height: auto;
+  /* Ajusta la altura según el contenido */
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  width: 100%;
+}
+
+.auth-form input {
+  margin: 5px 0;
+  /* Reducir margen para menor altura */
+  padding: 10px;
+  height: 35px;
+  /* Reducir altura del input */
+  width: 100%;
+  font-size: 16px;
+  color: #333;
+  background-color: #f7f9fc;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: border-color 0.3s;
+}
+
+.auth-form input:focus {
+  border-color: #00acc1;
+  /* Azul claro */
+}
+
+.auth-form button {
+  cursor: pointer;
+  background-color: #1b2a52 ;
+  /* Azul claro */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+  height: 35px;
+  /* Reducir altura del botón */
+  font-weight: 500;
+  margin-top: 15px;
+  /* Reducir margen superior */
+  transition: background-color 0.3s;
+}
+
+.auth-form button:hover {
+  background-color: #0b1329 ;
+}
+
+.auth-form button:disabled {
+  background-color: #b0c4ff;
+  cursor: not-allowed;
+}
+
+.auth-form-label {
+  width: 100%;
+  font-weight: 500;
+  margin-top: 1%;
+}
+
+.auth-logo-container {
+  display: flex;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.logoGobE {
+  max-width: 100%;
+  min-height: 150%;
+  width: auto;
+  height: auto;
+  border-radius: 10px;
+}
+
+.auth-form-switch-label {
+  color: #00acc1;
+  /* Azul claro */
+  display: flex;
+  cursor: pointer;
+  margin-top: 15px;
+  /* Reducir margen superior */
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.auth-form-switch-label:hover {
+  text-decoration: underline;
+}
+
+.auth-form-validations-message {
+  font-size: 14px;
+  color: red;
+  margin-top: 5px;
+  width: 100%;
+}
+
+.logo-separator {
+  display: flex;
+  margin: 10px 0;
+  /* Reducir márgenes */
+  height: 2px;
+  width: 100%;
+  background-color: #000000;
+}
+
+.input-container {
+  width: 100%;
+  margin: 0;
+}
+
+.vices-container {
+  margin-top: 1rem;
+}
+
+.vices-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.vice-button {
+  border: 1px solid #ddd;
+  background-color: #e0f7fa;
+  /* Fondo celeste claro */
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.vice-button.active {
+  border-color: #00acc1;
+  /* Azul claro */
+  color: #ffffff;
+  /* Texto blanco */
+  background-color: #00acc1;
+  /* Fondo azul claro */
+}
+
+.vice-button:hover {
+  background-color: #007c91;
+  /* Azul más oscuro */
+  color: #fff;
+}

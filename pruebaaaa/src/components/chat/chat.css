@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap');
+
+
+
+body {
+    margin: 0;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+code {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.chat-container {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.chat-container, .chat-container * {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+.ce-custom-message-input, .ce-chat-feed *{
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+}

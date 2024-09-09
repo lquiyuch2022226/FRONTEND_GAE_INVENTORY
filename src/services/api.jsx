@@ -1,9 +1,10 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-    baseURL: 'http://127.0.0.1:3000/GAE/v1',
+    baseURL: process.env.REACT_APP_BACKEND_URL + '/GAE/v1',
     timeout: 5000
 })
+
 
 apiClient.interceptors.request.use(
     (config) => {

@@ -1,0 +1,97 @@
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f8ff;
+}
+
+.create-user-container {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    width: 75vw;
+    height: 1050px;
+    margin-top: 500px;
+}
+
+.auth-logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.auth-logo-container img {
+    width: 100px;
+}
+
+.logo-separator {
+    height: 2px;
+    background-color: #007acc;
+    width: 100%;
+    margin: 20px 0;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-field {
+    margin-bottom: 15px;
+}
+
+.vices-container {
+    margin: 20px 0;
+}
+
+.vices-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.vice-button {
+    background-color: #f0f8ff;
+    border: 1px solid #007acc;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.vice-button.active {
+    background-color: #007acc;
+    color: #fff;
+}
+
+.buttonCreateUser {
+    width: 100%;
+    padding: 10px;
+    background-color: #007acc;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:disabled {
+    background-color: #cccccc;
+}
+
+button:not(:disabled):hover {
+    background-color: #030e2e;
+}
+
+.auth-form-switch-label {
+    display: block;
+    margin-top: 20px;
+    text-align: center;
+    cursor: pointer;
+    color: #007acc;
+}
+
+.auth-form-switch-label:hover {
+    text-decoration: underline;
+}

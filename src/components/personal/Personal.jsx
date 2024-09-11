@@ -39,7 +39,8 @@ export const Personal = () => {
   const { report } = useGenerarExcel();
   const { assistance, fecha} = useFetchUnity(userDetails.unidadId);
 
-  const isUserAllowedToGenerateExcel = userDetails.email === 'jaime@gmail.com';
+  const isUserAllowedToGenerateExcel = userDetails.unidadId === '66df5b59a530991563dc71b8';
+  console.log(userDetails)
 
   useEffect(() => {
     const currentDate = new Date().toISOString().split('T')[0];

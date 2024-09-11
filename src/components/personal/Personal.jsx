@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Input } from "../Input.jsx";
-import { useNavigate } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 import { useFetchPersonal } from '../../shared/hooks/index.js';
 import { useUserDetails } from "../../shared/hooks/useUserDetails";
-import { useUpdateUser } from "../../shared/hooks/useUpdateUser";
 import { useUpdateUnity } from "../../shared/hooks/useUpdateUnity";
 import { useFetchUnity } from '../../shared/hooks/useFetchUnity.jsx';
 import { useStoreReporte } from '../../shared/hooks/useStoreReporte.jsx';
@@ -37,6 +36,7 @@ export const Personal = () => {
   const { storeReporteData } = useStoreReporte();
   const { reportResponse, fechaReport } = useGetReport();
   const { report } = useGenerarExcel();
+  const history = useHistory();
   const { assistance, fecha} = useFetchUnity(userDetails.unidadId);
 
   const isUserAllowedToGenerateExcel = userDetails.unidadId === '66df5b59a530991563dc71b8';
@@ -116,8 +116,8 @@ export const Personal = () => {
         toast.success('Informe enviado');
 
         setTimeout(() => {
-          window.location.reload();
-          
+          // Usa history.push para redirigir a la misma ruta sin recargar la página
+          history.push('/dashboard/personal');
         }, 1000);
 
       } catch (error) {

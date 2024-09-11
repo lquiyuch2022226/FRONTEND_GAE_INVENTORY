@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Input } from "../Input.jsx";
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useFetchPersonal } from '../../shared/hooks/index.js';
 import { useUserDetails } from "../../shared/hooks/useUserDetails";
 import { useUpdateUnity } from "../../shared/hooks/useUpdateUnity";
@@ -36,8 +36,8 @@ export const Personal = () => {
   const { storeReporteData } = useStoreReporte();
   const { reportResponse, fechaReport } = useGetReport();
   const { report } = useGenerarExcel();
-  const history = useHistory();
-  const { assistance, fecha} = useFetchUnity(userDetails.unidadId);
+  const navigate = useNavigate();
+  const { assistance, fecha } = useFetchUnity(userDetails.unidadId);
 
   const isUserAllowedToGenerateExcel = userDetails.unidadId === '66df5b59a530991563dc71b8';
   console.log(userDetails)
@@ -45,14 +45,14 @@ export const Personal = () => {
   useEffect(() => {
     const currentDate = new Date().toISOString().split('T')[0];
     setTodayDate(currentDate);
-  
+
     if (fecha) {
       const fechaUnity = new Date(fecha).toISOString().split('T')[0];
       setFechaDeLaUnidad(fechaUnity);
     }
   }, [fecha]);
   console.log(fechaDeLaUnidad, "ayuda")
-  
+
 
   const handleReasonSelect = (reason, id) => {
     if (reason === 'Otro') {
@@ -80,9 +80,9 @@ export const Personal = () => {
     fetchUnityData();
   }, [userDetails.unidadId]);
 
-  
 
-  
+
+
 
   const handleEnviarReporte = async () => {
     console.log(reportResponse, "reporte");
@@ -116,8 +116,7 @@ export const Personal = () => {
         toast.success('Informe enviado');
 
         setTimeout(() => {
-          // Usa history.push para redirigir a la misma ruta sin recargar la página
-          history.push('/dashboard/personal');
+          navigate('/dashboard/personal');
         }, 1000);
 
       } catch (error) {

@@ -22,19 +22,10 @@
 
 .first-container {
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
-    align-items: flex-start;
-    background-color: #030e2e;
-    color: white;
-    text-align: left;
-    height: 400px;
-    width: 600px;
-    padding: 20px;
-    box-sizing: border-box;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+    align-items: center;
+    gap: 20px;
+  }
 
 .first-container label {
     font-size: 20px;
@@ -42,7 +33,14 @@
     margin-bottom: 10px;
 }
 
-.first-container input,
+.first-container input {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+  }
+
+
 .first-container textarea {
     color: black;
     width: 80%;

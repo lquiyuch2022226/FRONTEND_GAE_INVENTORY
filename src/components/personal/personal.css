@@ -3,6 +3,179 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Keyframes de la animación */
+@keyframes circle-in-center {
+  from {
+    clip-path: circle(0%);
+  }
+  to {
+    clip-path: circle(125%);
+  }
+}
+
+.checkbox-wrapper-16[transition-style="in:circle:center"] {
+  animation: 2.5s cubic-bezier(.25, 1, .30, 1) circle-in-center both;
+}
+
+.personal {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #0d0d26;
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+}
+
+.input-group {
+  display: flex;
+  gap: 20px;
+}
+
+.input-group input {
+  border: none;
+  background-color: #ffffff; /* Color de fondo oscuro para el input */
+  color: #000000; /* Color de texto claro */
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+.buttons-group {
+  display: flex;
+  gap: 10px;
+}
+
+.posts-personal {
+  margin-top: 20px;
+}
+
+/* Ajuste para que siempre haya dos columnas */
+.employee-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px; /* Ajuste del espacio entre tarjetas */
+  width: 100%;
+}
+
+.checkbox-wrapper-16 {
+  background-color: #0d0d26;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  box-sizing: border-box;
+  overflow: visible;
+  overflow: visible;
+  transition: transform 0.5s ease;
+  cursor: pointer;  /* Cambiado de 'hidden' a 'visible' para permitir la expansión del dropdown */
+}
+
+/* Ajustes del tamaño de las tarjetas */
+.checkbox-wrapper-16 .checkbox-tile {
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 130px; /* Reducir un poco más el tamaño */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.5s ease;
+}
+
+/* Animación más suave al hacer hover */
+.checkbox-wrapper-16:hover .checkbox-tile {
+  transform: scale(1.02); /* Ligeramente más pequeño */
+  transition: transform 0.5s ease;
+}
+
+/* Estilos para el dropdown */
+.checkbox-dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: 10px;
+  z-index: 1000; /* Aseguramos que todo el dropdown tenga prioridad en el stack */
+  position: relative; /* Asegurar que el dropdown aparezca encima de otros elementos */
+}
+
+.checkbox-dropdown select {
+  padding: 8px;
+  border: 1px solid #444;
+  border-radius: 5px;
+  background-color: #f4f4f4;
+  cursor: pointer;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.checkbox-dropdown select:hover {
+  border-color: #750101; /* Cambiar el color del borde al pasar el mouse */
+}
+
+.checkbox-dropdown select:focus {
+  outline: none;
+  border-color: #750101;
+}
+
+/* Ajuste del dropdown con scroll */
+.checkbox-dropdown .dropdown-menu {
+  max-height: 150px; /* Limitar la altura máxima */
+  overflow-y: auto;  /* Permitir el scroll si hay muchas razones */
+  width: 100%; /* Asegurar que use todo el espacio disponible */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative; /* Asegurarse de que el dropdown esté bien posicionado */
+  z-index: 1000; /* Asegurar que el dropdown esté por encima de otros elementos */
+}
+
+
+.checkbox-info {
+  text-align: left;
+}
+
+.pushable {
+  background-color: #750101;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.pushable:disabled {
+  background-color: gray;
+  cursor: not-allowed;
+}
+
+/* Alineación correcta del contenido dentro del checkbox-wrapper */
+.checkbox-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: auto;
+  box-sizing: border-box;
+}
+
+.checkbox-info {
+  flex: 1;
+  padding: 10px;
+  text-align: left;
+}
+
+.checkbox-wrapper-16:hover {
+  transform: scale(1.00); /* Reduce el escalado para evitar superposición */
+}
+
+/* Otros estilos originales */
 .hero-section {
   position: relative;
   display: flex;
@@ -15,11 +188,10 @@
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-.posts-personal {
-  height: 100%;
-  width: 700px;
-  overflow-y: auto;
-
+.botones-excel {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
 }
 
 .botones-excel button {
@@ -44,13 +216,11 @@
   overflow-x: hidden;
 }
 
-
 @media (min-width: 768px) {
   .hero-section {
     flex-direction: row;
   }
 }
-
 
 .title-container {
   display: flex;
@@ -113,7 +283,7 @@
   text-align: right;
 }
 
-
+/* Estilos para los checkboxes */
 .checkbox-wrapper-5 .check {
   --size: 40px;
 
@@ -210,9 +380,8 @@
   line-height: 0;
 }
 
-.checkbox-wrapper-16 *,
-.checkbox-wrapper-16 *:after,
-.checkbox-wrapper-16 *:before {
+/* Estilos para las tarjetas de empleados */
+.checkbox-wrapper-16 * {
   box-sizing: border-box;
 }
 
@@ -226,9 +395,11 @@
   width: 1px;
 }
 
-.checkbox-tile{
-  display: grid;
-  grid-template-columns: 2fr 1fr;
+.checkbox-tile {
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .checkbox-wrapper-16 .checkbox-input:checked+.checkbox-tile {
@@ -237,37 +408,16 @@
   color: #c42424;
 }
 
-.checkbox-wrapper-16 .checkbox-input:checked+.checkbox-tile:before {
-  transform: scale(1);
-  opacity: 1;
-  background-color: #750101;
-  border-color: #750101;
-}
-
-.checkbox-wrapper-16 .checkbox-input:checked+.checkbox-tile .checkbox-icon,
-.checkbox-wrapper-16 .checkbox-input:checked+.checkbox-tile .checkbox-label {
-  color: #750101;
-}
-
-.checkbox-wrapper-16 .checkbox-input:focus+.checkbox-tile {
-  border-color: #750101;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1), 0 0 0 4px #b5c9fc;
-}
-
-.checkbox-wrapper-16 .checkbox-input:focus+.checkbox-tile:before {
-  transform: scale(1);
-  opacity: 1;
-}
-
 .checkbox-wrapper-16 .checkbox-tile {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-  width: 50vw;
+  width: 100%;
   margin: 0 auto;
   min-height: 7rem;
   border: 2px solid #b5bfd9;
   text-align: center;
+  height: 190px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   transition: 0.15s ease;
   cursor: pointer;
@@ -275,89 +425,6 @@
   display: inline-block;
   vertical-align: middle;
 }
-
-
-.checkbox-wrapper-16 .checkbox-tile:before {
-  content: "";
-  display: block;
-  width: 1.25rem;
-  height: 1.25rem;
-  border: 2px solid #b5bfd9;
-  background-color: #fff;
-  border-radius: 50%;
-  top: 0.25rem;
-  left: 0.25rem;
-  opacity: 0;
-  transform: scale(0);
-  transition: 0.25s ease;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192' fill='%23FFFFFF' viewBox='0 0 256 256'%3E%3Crect width='256' height='256' fill='none'%3E%3C/rect%3E%3Cpolyline points='216 72.005 104 184 48 128.005' fill='none' stroke='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' stroke-width='32'%3E%3C/polyline%3E%3C/svg%3E");
-  background-size: 12px;
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-  margin: 0.2rem;
-}
-
-.checkbox-wrapper-16 .checkbox-tile:hover {
-  border-color: #5a0101;
-}
-
-.checkbox-wrapper-16 .checkbox-tile:hover:before {
-  transform: scale(1);
-  opacity: 1;
-}
-
-.checkbox-wrapper-16 .checkbox-icon {
-  transition: 0.375s ease;
-  color: #5f3e3e;
-}
-
-.checkbox-wrapper-16 .checkbox-icon svg {
-  height: 3rem;
-}
-
-.checkbox-wrapper-16 .checkbox-label {
-  color: #5f3e3e;
-  transition: 0.375s ease;
-  text-align: center;
-}
-
-.first-container input {
-  font-family: 'Plus Jakarta Sans', sans-serif !important;
-}
-
-.checkbox-wrapper-16{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.checkbox-container {
-  display: flex; /* Usamos flexbox para alinear los elementos */
-  align-items: center; /* Centra los elementos verticalmente */
-  justify-content: space-between; /* Espacia los elementos a lo largo del contenedor */
-  width: 100%;
-  height: 100%; /* Ajusta la altura según sea necesario */
-}
-
-.checkbox-info,
-.checkbox-dropdown {
-  flex: 1; /* Cada elemento ocupará el 50% del ancho */
-  text-align: center; /* Opcional: centra el texto dentro de cada elemento */
-}
-
-/* Opcional: Ajusta el padding o el margen según sea necesario */
-.checkbox-info {
-  padding: 0 10px;
-}
-
-.checkbox-dropdown {
-  padding: 0 10px;
-}
-
-
-
-
 
 .checkbox-wrapper-16 .checkbox-info {
   display: flex;
@@ -368,4 +435,23 @@
   margin-left: auto;
   display: flex;
   align-items: center;
+}
+
+.checkbox-wrapper-16 .checkbox-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+}
+
+.checkbox-info,
+.checkbox-dropdown {
+  flex: 1;
+  text-align: center;
+}
+
+.checkbox-wrapper-16:hover .checkbox-tile {
+  transform: scale(1.03);
+  transition: transform 1s ease;
 }

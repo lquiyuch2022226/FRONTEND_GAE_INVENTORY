@@ -39,7 +39,6 @@ export const Personal = () => {
   const { assistance, fecha} = useFetchUnity(userDetails.unidadId);
 
   const isUserAllowedToGenerateExcel = userDetails.unidadId === '66df5b59a530991563dc71b8';
-  console.log(userDetails)
 
   useEffect(() => {
     const currentDate = new Date().toISOString().split('T')[0];
@@ -50,8 +49,6 @@ export const Personal = () => {
       setFechaDeLaUnidad(fechaUnity);
     }
   }, [fecha]);
-  console.log(fechaDeLaUnidad, "ayuda")
-  
 
   const handleReasonSelect = (reason, id) => {
     if (reason === 'Otro') {
@@ -65,30 +62,7 @@ export const Personal = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchUnityData = async () => {
-      try {
-        const response = await fetch(`/api/unidades/${userDetails.unidadId}`);
-        const data = await response.json();
-        setReportSent(data.reportSent);
-      } catch (error) {
-        console.log('Error fetching unidad data:', error);
-      }
-    };
-
-    fetchUnityData();
-  }, [userDetails.unidadId]);
-
-  
-
-  
-
   const handleEnviarReporte = async () => {
-    console.log(reportResponse, "reporte");
-    console.log(fecha, "--------------------------------------------", todayDate);
-    console.log(todayDate, "Fecha actual ---------", fechaDeLaUnidad, "fecha de envio de la unuidad")
-
-
     if (todayDate !== fechaDeLaUnidad) {
       const allPersonalList = personales.personales.map((personal) => {
         const isSelected = selectedPersonal[personal._id] || false;
@@ -105,32 +79,22 @@ export const Personal = () => {
 
       assistance.unity.report = false;
       assistance.unity.dateOfReportByUnity = todayDate;
-      console.log(assistance.unity.dateOfReportByUnity, todayDate, "Datos para actualizar")
 
       try {
         await storeReporteData(allPersonalList, todayDate);
-        console.log(allPersonalList, "pepapig");
         await actualizarUnidad(assistance.unity._id, assistance.unity);
-        console.log(assistance.unity);
         toast.success('Informe enviado');
 
         setTimeout(() => {
           window.location.reload();
-          
         }, 1000);
-
       } catch (error) {
-        console.error('Error al actualizar el reporte en la base de datos:', error);
         toast.error('Error al enviar el informe');
       }
     } else {
-      console.log(assistance.unity.report, "ya enviado");
       toast.error('Ya se envió el informe de asistencia de hoy');
     }
   };
-
-
-
 
   const handleGenerateExcel = async () => {
     try {
@@ -142,7 +106,6 @@ export const Personal = () => {
       }
     } catch (e) {
       toast.error('Hubo un problema al generar el Excel');
-      console.log(e);
     }
   };
 
@@ -179,18 +142,6 @@ export const Personal = () => {
     }));
   };
 
-  const handleInputValidationOnBlur = (value, field) => {
-    let isValid = value.trim() !== "";
-    setFormState((prevState) => ({
-      ...prevState,
-      [field]: {
-        ...prevState[field],
-        isValid,
-        showError: !isValid
-      },
-    }));
-  };
-
   const isSubmitButtonDisabled = !formState.fecha.isValid || !formState.hora.isValid;
 
   const handleSelectAll = () => {
@@ -204,134 +155,88 @@ export const Personal = () => {
     }));
   };
 
-  const handleDocumentClick = (e) => {
-    if (!e.target.closest('.dropdown')) {
-      setDropdownOpen(false);
-    }
-  };
-
-  const handleCommentClick = (publication) => {
-    setSelectedPublication(publication);
-    setShowComments(true);
-  };
-
-  const handleCloseComments = () => {
-    setShowComments(false);
-    setSelectedPublication(null);
-  };
-
-  useEffect(() => {
-    document.addEventListener('click', handleDocumentClick);
-    return () => {
-      document.removeEventListener('click', handleDocumentClick);
-    };
-  }, []);
-
   return (
-    <div className='personal'>
-      <div className="two-titles">
-        <div className='titlePost'>
-          <h1>Control de Personal</h1>
-          <hr />
-        </div>
-        <div className='selectAll'>
-          <h2>Marcar a todos</h2>
-          <div className="checkbox-wrapper-5">
-            <div className="check">
-              <input
-                id="check-5"
-                type="checkbox"
-                checked={selectAll}
-                onChange={handleSelectAll}
-              />
-              <label htmlFor="check-5"></label>
-            </div>
-          </div>
-        </div>
-        {/* Include DropdownButton here */}
-      </div>
-      <div className='personal-containerr'>
-        <div className='first-container'>
+    <div className="personal">
+      <div className="header-container">
+        <div className="input-group">
           <Input
-            field='fecha'
-            label='Fecha'
+            field="fecha"
+            label="Fecha"
             value={todayDate}
             onChangeHandler={handleInputValueChange}
-            type='text'
+            type="text"
             disabled={true}
-            onBlurHandler={handleInputValidationOnBlur}
           />
           <Input
-            field='hora'
-            label='Hora'
+            field="hora"
+            label="Hora"
             value={currentTime}
             onChangeHandler={handleInputValueChange}
-            type='text'
+            type="text"
             disabled={true}
-            onBlurHandler={handleInputValidationOnBlur}
           />
-          <div className='botones-excel'>
-            <button
-              className="pushable"
-              onClick={handleEnviarReporte}
-              disabled={isGenerating || reportSent || isSendingReport}
-            >
+        </div>
+        <div className="buttons-group">
+          <button
+            className="pushable"
+            onClick={handleEnviarReporte}
+            disabled={isGenerating || reportSent || isSendingReport}
+          >
+            <span className="shadow"></span>
+            <span className="edge"></span>
+            <span className="front">Enviar</span>
+          </button>
+  
+          {isUserAllowedToGenerateExcel && (
+            <button className="pushable" onClick={handleGenerateExcel} disabled={isGenerating || report}>
               <span className="shadow"></span>
               <span className="edge"></span>
-              <span className="front">Enviar</span>
+              <span className="front">Generar Excel</span>
             </button>
-
-            {isUserAllowedToGenerateExcel && (
-              <button className="pushable" onClick={handleGenerateExcel} disabled={isGenerating || report}>
-                <span className="shadow"></span>
-                <span className="edge"></span>
-                <span className="front">Generar Excel</span>
-              </button>
-            )}
-          </div>
-          {message && <p>{message}</p>}
-        </div>
-        <div className='posts-personal'>
-          {isLoadingPersonal ? (
-            <p>Cargando empleados...</p>
-          ) : error ? (
-            <p>Error al cargar empleados: {error.message}</p>
-          ) : (
-            personales.personales.length > 0 ? (
-              personales.personales.map((personal) => (
-                <div className='checkbox-wrapper-16' key={personal._id}>
-                  <label className="checkbox-wrapper">
-                    <input
-                      type="checkbox"
-                      className="checkbox-input"
-                      checked={selectedPersonal[personal._id] || false}
-                      onChange={(e) => handleCheckboxChange(e, personal._id)}
-                    />
-                    <span className="checkbox-tile">
-                      <div className="checkbox-container">
-                        <div className="checkbox-info">
-                          <h3>{`${personal.name} ${personal.lastName}`}</h3>
-                          <p>{personal.number}</p>
-                        </div>
-                        {/* Mostrar Dropdown solo si el checkbox está seleccionado */}
-                        {selectedPersonal[personal._id] && (
-                          <div className="checkbox-dropdown">
-                            <DropdownButton
-                              onSelect={(reason) => { handleReasonSelect(reason, personal._id); }}
-                            />
-                          </div>
-                        )}
-                      </div>
-                    </span>
-                  </label>
-                </div>
-              ))
-            ) : (
-              <p>No hay empleados disponibles.</p>
-            )
           )}
         </div>
       </div>
+      <div className="posts-personal">
+        {isLoadingPersonal ? (
+          <p>Cargando empleados...</p>
+        ) : error ? (
+          <p>Error al cargar empleados: {error.message}</p>
+        ) : personales.personales.length > 0 ? (
+          <div className="employee-container">
+            {personales.personales.map((personal) => (
+              <div className="checkbox-wrapper-16" key={personal._id}>
+                <label className="checkbox-wrapper">
+                  <input
+                    type="checkbox"
+                    className="checkbox-input"
+                    checked={selectedPersonal[personal._id] || false}
+                    onChange={(e) => handleCheckboxChange(e, personal._id)}
+                  />
+                  <span className="checkbox-tile">
+                    <div className="checkbox-container">
+                      <div className="checkbox-info">
+                        <h3>{`${personal.name} ${personal.lastName}`}</h3>
+                        <p>{personal.number}</p>
+                      </div>
+                      {selectedPersonal[personal._id] && (
+                        <div className="checkbox-dropdown">
+                          <DropdownButton
+                            onSelect={(reason) => {
+                              handleReasonSelect(reason, personal._id);
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </span>
+                </label>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p>No hay empleados disponibles.</p>
+        )}
+      </div>
     </div>
   );
-};
+  };

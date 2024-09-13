@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx'; 
 import { Input } from "../Input.jsx";
 import { useNavigate } from "react-router-dom";
 import { useFetchPersonal } from '../../shared/hooks/index.js';
@@ -36,14 +38,14 @@ export const Personal = () => {
   const { storeReporteData } = useStoreReporte();
   const { reportResponse, fechaReport } = useGetReport();
   const { report } = useGenerarExcel();
-  const { assistance, fecha} = useFetchUnity(userDetails.unidadId);
+  const { assistance, fecha } = useFetchUnity(userDetails.unidadId);
 
   const isUserAllowedToGenerateExcel = userDetails.unidadId === '66df5b59a530991563dc71b8';
 
   useEffect(() => {
     const currentDate = new Date().toISOString().split('T')[0];
     setTodayDate(currentDate);
-  
+
     if (fecha) {
       const fechaUnity = new Date(fecha).toISOString().split('T')[0];
       setFechaDeLaUnidad(fechaUnity);
@@ -61,6 +63,19 @@ export const Personal = () => {
       }));
     }
   };
+
+
+  const handleCheckboxClick = (id) => {
+    const tile = document.getElementById(`tile-${id}`);
+    if (tile) {
+      tile.classList.add("animate");
+      setTimeout(() => {
+        tile.classList.remove("animate");
+      }, 1020); // Duración de la animación
+    }
+  };
+  
+  
 
   const handleEnviarReporte = async () => {
     if (todayDate !== fechaDeLaUnidad) {
@@ -96,11 +111,24 @@ export const Personal = () => {
     }
   };
 
+  
   const handleGenerateExcel = async () => {
     try {
       if (reportResponse.data.reportes.length > 0) {
-        toast.success('Excel generado');
-        generateExcelForSelected(reportResponse.data.reportes);
+        // Generar el archivo Excel
+        const workbook = XLSX.utils.book_new();
+        const worksheet = XLSX.utils.json_to_sheet(reportResponse.data.reportes);
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Reportes");
+  
+        // Convertir el workbook a un archivo blob para que se pueda descargar
+        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+  
+        // Permitir al usuario descargar el archivo con file-saver
+        saveAs(blob, `Reportes_${new Date().toLocaleDateString()}.xlsx`);
+  
+        toast.success('Excel generado y listo para descargar');
+  
       } else {
         toast.error('No hay informes enviados');
       }
@@ -108,7 +136,6 @@ export const Personal = () => {
       toast.error('Hubo un problema al generar el Excel');
     }
   };
-
   const [formState, setFormState] = useState({
     fecha: {
       value: "",
@@ -121,6 +148,7 @@ export const Personal = () => {
       showError: false,
     },
   });
+  
 
   useEffect(() => {
     if (personales && personales.personales) {
@@ -138,15 +166,26 @@ export const Personal = () => {
       [field]: {
         ...prevState[field],
         value,
+        isValid: value !== '', // Aquí puedes ajustar la lógica de validación
       },
     }));
+  
+    // Si quieres que la animación se active cuando ambos campos sean válidos:
+    if (formState.fecha.isValid && formState.hora.isValid) {
+      // Aplica la clase de animación al elemento correspondiente
+      const tile = document.getElementById(`tile-${field}`);
+      if (tile) {
+        tile.classList.add("animate");
+        setTimeout(() => {
+          tile.classList.remove("animate");
+        }, 2500); // Duración de la animación
+      }
+    }
   };
-
+  
   const isSubmitButtonDisabled = !formState.fecha.isValid || !formState.hora.isValid;
 
-  const handleSelectAll = () => {
-    setSelectAll(!selectAll);
-  };
+
 
   const handleCheckboxChange = (e, id) => {
     setSelectedPersonal((prevSelected) => ({
@@ -211,8 +250,9 @@ export const Personal = () => {
                     className="checkbox-input"
                     checked={selectedPersonal[personal._id] || false}
                     onChange={(e) => handleCheckboxChange(e, personal._id)}
+                    onClick={() => handleCheckboxClick(personal._id)} 
                   />
-                  <span className="checkbox-tile">
+                  <span className={`checkbox-tile ${selectedPersonal[personal._id] || formState.fecha.isValid && formState.hora.isValid ? 'animate' : ''}`} id={`tile-${personal._id}`}>
                     <div className="checkbox-container">
                       <div className="checkbox-info">
                         <h3>{`${personal.name} ${personal.lastName}`}</h3>
@@ -239,4 +279,6 @@ export const Personal = () => {
       </div>
     </div>
   );
-  };
+  
+  
+};  

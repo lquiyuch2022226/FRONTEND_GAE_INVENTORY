@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './dropdown.css';
 import { Modal } from '../modal/Modal.jsx';
 
@@ -7,6 +7,7 @@ export const DropdownButton = ({ onSelect }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [customReason, setCustomReason] = useState('');
+  const modalRef = useRef(null);
 
   const reasons = ["Enfermedad", "Viene Tarde", "Otro"];
 
@@ -24,16 +25,34 @@ export const DropdownButton = ({ onSelect }) => {
     }
   };
 
-const handleSaveCustomReason = () => {
-  if (customReason.trim() !== '') {
-    setSelectedReason(customReason);
-    onSelect(customReason);
-    setShowModal(false);
-    setDropdownOpen(false);
-    setSelectedReason("Otro");
-  }
-};
+  const handleSaveCustomReason = () => {
+    if (customReason.trim() !== '') {
+      setSelectedReason(customReason);
+      onSelect(customReason);
+      setShowModal(false);
+      setDropdownOpen(false);
+      setSelectedReason("Otro");
+    }
+  };
 
+  // Cerrar el modal si se hace clic fuera
+/*   useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        setShowModal(false); // Cerrar modal si se hace clic afuera
+      }
+    };
+
+    if (showModal) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showModal]); */
 
   return (
     <div className="dropdown">
@@ -56,21 +75,24 @@ const handleSaveCustomReason = () => {
         ))}
       </div>
 
+      {/* Modal */}
       <Modal show={showModal} onClose={() => setShowModal(false)}>
-        <div className="input-group">
-          <textarea
-            required={true}
-            type="text"
-            value={customReason}
-            className="input"
-            onChange={(e) => setCustomReason(e.target.value)}
-            placeholder="Describe la razón"
-          />
-        </div>
-        <div className='espacio'>
-          <button className='button' onClick={handleSaveCustomReason}>
-            <span>Guardar</span>
-          </button>
+        <div className="modal-content" ref={modalRef}>
+          <div className="input-group">
+            <textarea
+              required={true}
+              type="text"
+              value={customReason}
+              className="input"
+              onChange={(e) => setCustomReason(e.target.value)}
+              placeholder="Describe la razón"
+            />
+          </div>
+          <div className='espacio'>
+            <button className='button-guardar' onClick={handleSaveCustomReason}>
+              <span>Guardar</span>
+            </button>
+          </div>
         </div>
       </Modal>
     </div>

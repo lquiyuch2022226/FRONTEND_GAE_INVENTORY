@@ -3,19 +3,30 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Keyframes de la animación */
+
 @keyframes circle-in-center {
   from {
-    clip-path: circle(0%);
+    clip-path: circle(0% at center);
   }
   to {
-    clip-path: circle(125%);
+    clip-path: circle(125% at center);
   }
 }
 
-.checkbox-wrapper-16[transition-style="in:circle:center"] {
+.checkbox-tile.animate {
+  animation: 2.5s cubic-bezier(.25, 1, .30, 1) circle-in-center both;
+  background-color: red;
+  color: white;
+  border-color: red;
+}
+
+
+
+
+.animate {
   animation: 2.5s cubic-bezier(.25, 1, .30, 1) circle-in-center both;
 }
+
 
 .personal {
   display: flex;
@@ -41,8 +52,10 @@
 
 .input-group input {
   border: none;
-  background-color: #ffffff; /* Color de fondo oscuro para el input */
-  color: #000000; /* Color de texto claro */
+  background-color: #ffffff;
+  /* Color de fondo oscuro para el input */
+  color: #000000;
+  /* Color de texto claro */
   padding: 10px;
   border-radius: 8px;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -62,7 +75,8 @@
 .employee-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px; /* Ajuste del espacio entre tarjetas */
+  gap: 10px;
+  /* Ajuste del espacio entre tarjetas */
   width: 100%;
 }
 
@@ -76,7 +90,7 @@
   overflow: visible;
   overflow: visible;
   transition: transform 0.5s ease;
-  cursor: pointer;  /* Cambiado de 'hidden' a 'visible' para permitir la expansión del dropdown */
+  cursor: pointer;
 }
 
 /* Ajustes del tamaño de las tarjetas */
@@ -86,16 +100,11 @@
   padding: 15px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
-  height: 130px; /* Reducir un poco más el tamaño */
+  height: 130px;
+  /* Reducir un poco más el tamaño */
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.5s ease;
-}
-
-/* Animación más suave al hacer hover */
-.checkbox-wrapper-16:hover .checkbox-tile {
-  transform: scale(1.02); /* Ligeramente más pequeño */
   transition: transform 0.5s ease;
 }
 
@@ -104,8 +113,8 @@
   position: relative;
   display: inline-block;
   margin-left: 10px;
-  z-index: 1000; /* Aseguramos que todo el dropdown tenga prioridad en el stack */
-  position: relative; /* Asegurar que el dropdown aparezca encima de otros elementos */
+  z-index: 1000;
+  position: relative;
 }
 
 .checkbox-dropdown select {
@@ -119,7 +128,8 @@
 }
 
 .checkbox-dropdown select:hover {
-  border-color: #750101; /* Cambiar el color del borde al pasar el mouse */
+  border-color: #750101;
+  /* Cambiar el color del borde al pasar el mouse */
 }
 
 .checkbox-dropdown select:focus {
@@ -129,12 +139,17 @@
 
 /* Ajuste del dropdown con scroll */
 .checkbox-dropdown .dropdown-menu {
-  max-height: 150px; /* Limitar la altura máxima */
-  overflow-y: auto;  /* Permitir el scroll si hay muchas razones */
-  width: 100%; /* Asegurar que use todo el espacio disponible */
+  max-height: 150px;
+  /* Limitar la altura máxima */
+  overflow-y: auto;
+  /* Permitir el scroll si hay muchas razones */
+  width: 100%;
+  /* Asegurar que use todo el espacio disponible */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  position: relative; /* Asegurarse de que el dropdown esté bien posicionado */
-  z-index: 1000; /* Asegurar que el dropdown esté por encima de otros elementos */
+  position: relative;
+  /* Asegurarse de que el dropdown esté bien posicionado */
+  z-index: 1000;
+  /* Asegurar que el dropdown esté por encima de otros elementos */
 }
 
 
@@ -172,7 +187,7 @@
 }
 
 .checkbox-wrapper-16:hover {
-  transform: scale(1.00); /* Reduce el escalado para evitar superposición */
+  transform: scale(1.00);
 }
 
 /* Otros estilos originales */
@@ -403,9 +418,10 @@
 }
 
 .checkbox-wrapper-16 .checkbox-input:checked+.checkbox-tile {
-  border-color: #750101;
+  border-color: #f7f3f3;
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
-  color: #c42424;
+  color: #ffffff;
+  background: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(99,11,176,1) 100%);
 }
 
 .checkbox-wrapper-16 .checkbox-tile {
@@ -449,9 +465,4 @@
 .checkbox-dropdown {
   flex: 1;
   text-align: center;
-}
-
-.checkbox-wrapper-16:hover .checkbox-tile {
-  transform: scale(1.03);
-  transition: transform 1s ease;
 }

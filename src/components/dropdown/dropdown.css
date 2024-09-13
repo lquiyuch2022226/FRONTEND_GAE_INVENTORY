@@ -16,6 +16,7 @@
   transition: background-color 0.3s, border-color 0.3s, transform 0.3s ease-in-out;
 }
 
+
 .dropdown .btn:hover {
   background-color: #555555;
   border-color: #666666;
@@ -70,3 +71,20 @@
   background-color: #e0e0e0;
   color: #000000;
 }
+
+.button-guardar{
+  outline: none;
+  cursor: pointer;
+  border: none;
+  padding: 0.9rem 2rem;
+  font-family: inherit;
+  font-size: inherit;
+  display: inline-block;
+  font-weight: 700;
+  border-radius: 500px;
+  background: black;
+  color: white;
+  transition: background-color 0.4s cubic-bezier(0.3, 1, 0.8, 1); 
+}
+
+

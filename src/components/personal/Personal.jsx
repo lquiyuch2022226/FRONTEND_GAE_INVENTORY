@@ -113,23 +113,34 @@ export const Personal = () => {
     }
   };
   
-
-  
   const handleGenerateExcel = async () => {
     try {
-      if (reportResponse.data.reportes.length > 0) {
-        const processedData = await Promise.all(reportResponse.data.reportes.map(async (personal) => {
-          // Usar el hook para obtener la unidad
-          const { assistance } = useFetchUnity(personal.unidadId);
+      const { unities, isLoading, error } = useFetchAllUnities(); // Obtenemos todas las unidades
   
-          return {
-            name: personal.name,
-            lastName: personal.lastName,
-            number: personal.number,
-            unidad: assistance?.unity?.nameUnity || personal.unidadId, // Usar nameUnity si está disponible
-            reason: personal.reason,
-            selected: personal.selected ? 'Asistió' : 'No asistió', // Cambiar true/false por Asistió/No asistió
-          };
+      if (isLoading) {
+        toast.error('Cargando unidades, por favor espera');
+        return;
+      }
+  
+      if (error) {
+        toast.error('Hubo un error al cargar las unidades');
+        return;
+      }
+  
+      if (reportResponse.data.reportes.length > 0) {
+        // Crear un diccionario de unidades por unidadId para rápido acceso
+        const unityMap = unities.reduce((map, unity) => {
+          map[unity._id] = unity.nameUnity;
+          return map;
+        }, {});
+  
+        const processedData = reportResponse.data.reportes.map((personal) => ({
+          name: personal.name,
+          lastName: personal.lastName,
+          number: personal.number,
+          unidad: unityMap[personal.unidadId] || personal.unidadId, // Usar nameUnity si está disponible
+          reason: personal.reason,
+          selected: personal.selected ? 'Asistió' : 'No asistió', // Cambiar true/false por Asistió/No asistió
         }));
   
         // Generar el archivo Excel
@@ -151,7 +162,6 @@ export const Personal = () => {
       toast.error('Hubo un problema al generar el Excel');
     }
   };
-  
   
   
   const [formState, setFormState] = useState({

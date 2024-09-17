@@ -1,52 +1,36 @@
 import { useState, useEffect } from "react";
-import { getUnityById as getUnityByIdRequest } from "../../services/api";
+import { getAllUnities as getAllUnitiesRequest } from "../../services/api";
 import toast from "react-hot-toast";
 
-export const useFetchUnity = (unityId) => {
-  const [assistance, setAssistance] = useState(null);
-  const [fecha, setFecha] = useState(null);
+export const useFetchAllUnities = () => {
+  const [unities, setUnities] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchUnity = async () => {
+  const fetchUnities = async () => {
     setIsLoading(true);
-
     try {
-      const response = await getUnityByIdRequest(unityId);
-      if (response.data?.unity) {
-        setFecha(response.data.unity.dateOfReportByUnity);
-        setAssistance(response.data);
-        console.log(response.data.unity.dateOfReportByUnity, "unidad encontrada");
+      const response = await getAllUnitiesRequest();
+      if (response.data) {
+        setUnities(response.data); // Asumimos que el API devuelve un array de unidades
       } else {
-        setError('Unidad no encontrada');
-        toast.error('Error al cargar la unidad');
+        setError("No se encontraron unidades");
+        toast.error("Error al cargar las unidades");
       }
     } catch (err) {
-      setError('Error al cargar la unidad');
-      toast.error('Error al cargar la unidad');
+      setError("Error al cargar las unidades");
+      toast.error("Error al cargar las unidades");
     }
-
     setIsLoading(false);
   };
 
-  // useEffect para ejecutar fetchUnity cuando cambie unityId
   useEffect(() => {
-    if (unityId) {
-      fetchUnity();
-    }
-  }, [unityId]);
-
-  // useEffect para registrar el mensaje solo cuando se carga la data
-  useEffect(() => {
-    if (!isLoading && assistance) {
-      console.log(assistance.unity.dateOfReportByUnity, "fecha encontrada");
-    }
-  }, [isLoading, assistance]);
+    fetchUnities();
+  }, []);
 
   return {
-    assistance,
-    fecha,
+    unities,
     isLoading,
-    error
+    error,
   };
 };

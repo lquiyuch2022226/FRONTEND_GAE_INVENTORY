@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { saveAs } from 'file-saver';
-import * as XLSX from 'xlsx'; 
+import * as XLSX from 'xlsx';
 import { Input } from "../Input.jsx";
 import { useNavigate } from "react-router-dom";
 import { useFetchPersonal } from '../../shared/hooks/index.js';
@@ -52,6 +52,20 @@ export const Personal = () => {
     }
   }, [fecha]);
 
+  useEffect(() => {
+    const fetchUnityData = async () => {
+      try {
+        const response = await fetch(`/api/unidades/${userDetails.unidadId}`);
+        const data = await response.json();
+        setReportSent(data.reportSent);
+      } catch (error) {
+        console.log('Error fetching unidad data:', error);
+      }
+    };
+
+    fetchUnityData();
+  }, [userDetails.unidadId]);
+
   const handleReasonSelect = (reason, id) => {
     if (reason === 'Otro') {
       setCurrentPersonalId(id);
@@ -74,8 +88,8 @@ export const Personal = () => {
       }, 1020); // Duración de la animación
     }
   };
-  
-  
+
+
   const handleEnviarReporte = async () => {
     if (todayDate !== fechaDeLaUnidad) {
       const allPersonalList = personales.personales.map((personal) => {
@@ -83,17 +97,17 @@ export const Personal = () => {
         const reason = isSelected
           ? (selectedReason[personal._id] || "Sin justificar")
           : " ";
-  
+
         return {
           ...personal,
           selected: isSelected,
           reason: reason,
         };
       });
-  
+
       assistance.unity.report = false;
       assistance.unity.dateOfReportByUnity = todayDate;
-  
+
       try {
         await storeReporteData({
           listado: allPersonalList,
@@ -101,7 +115,7 @@ export const Personal = () => {
         });
         await actualizarUnidad(assistance.unity._id, assistance.unity);
         toast.success('Informe enviado');
-  
+
         setTimeout(() => {
           window.location.reload();
         }, 1000);
@@ -112,9 +126,7 @@ export const Personal = () => {
       toast.error('Ya se envió el informe de asistencia de hoy');
     }
   };
-  
 
-  
   const handleGenerateExcel = async () => {
     try {
       if (reportResponse.data.reportes.length > 0) {
@@ -127,8 +139,8 @@ export const Personal = () => {
             lastName: personal.lastName,
             number: personal.number,
             unidad: assistance?.unity?.nameUnity || personal.unidadId, // Usar nameUnity si está disponible
-            reason: personal.reason,
-            selected: personal.selected ? 'Asistió' : 'No asistió', // Cambiar true/false por Asistió/No asistió
+            asistencia: personal.selected ? 'No asistió' : 'Asistió', // Cambiar true/false por "No asistió"/"Asistió"
+            reason: personal.reason, // Incluir la razón
           };
         }));
   
@@ -152,8 +164,9 @@ export const Personal = () => {
     }
   };
   
-  
-  
+
+
+
   const [formState, setFormState] = useState({
     fecha: {
       value: "",
@@ -166,7 +179,7 @@ export const Personal = () => {
       showError: false,
     },
   });
-  
+
 
   useEffect(() => {
     if (personales && personales.personales) {
@@ -187,7 +200,7 @@ export const Personal = () => {
         isValid: value !== '',
       },
     }));
-  
+
     if (formState.fecha.isValid && formState.hora.isValid) {
       const tile = document.getElementById(`tile-${field}`);
       if (tile) {
@@ -198,7 +211,7 @@ export const Personal = () => {
       }
     }
   };
-  
+
   const isSubmitButtonDisabled = !formState.fecha.isValid || !formState.hora.isValid;
 
 
@@ -241,7 +254,7 @@ export const Personal = () => {
             <span className="edge"></span>
             <span className="front">Enviar</span>
           </button>
-  
+
           {isUserAllowedToGenerateExcel && (
             <button className="pushable" onClick={handleGenerateExcel} disabled={isGenerating || report}>
               <span className="shadow"></span>
@@ -266,7 +279,7 @@ export const Personal = () => {
                     className="checkbox-input"
                     checked={selectedPersonal[personal._id] || false}
                     onChange={(e) => handleCheckboxChange(e, personal._id)}
-                    onClick={() => handleCheckboxClick(personal._id)} 
+                    onClick={() => handleCheckboxClick(personal._id)}
                   />
                   <span className={`checkbox-tile ${selectedPersonal[personal._id] || formState.fecha.isValid && formState.hora.isValid ? 'animate' : ''}`} id={`tile-${personal._id}`}>
                     <div className="checkbox-container">
@@ -295,6 +308,6 @@ export const Personal = () => {
       </div>
     </div>
   );
-  
-  
+
+
 };  

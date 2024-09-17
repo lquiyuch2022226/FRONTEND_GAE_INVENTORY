@@ -76,7 +76,6 @@ export const Personal = () => {
   };
   
   
-
   const handleEnviarReporte = async () => {
     if (todayDate !== fechaDeLaUnidad) {
       const allPersonalList = personales.personales.map((personal) => {
@@ -84,22 +83,25 @@ export const Personal = () => {
         const reason = isSelected
           ? (selectedReason[personal._id] || "Sin justificar")
           : " ";
-
+  
         return {
           ...personal,
           selected: isSelected,
           reason: reason,
         };
       });
-
+  
       assistance.unity.report = false;
       assistance.unity.dateOfReportByUnity = todayDate;
-
+  
       try {
-        await storeReporteData(allPersonalList, todayDate);
+        await storeReporteData({
+          listado: allPersonalList,
+          nameUnity: assistance.unity.nameUnity // Enviar el nombre de la unidad
+        });
         await actualizarUnidad(assistance.unity._id, assistance.unity);
         toast.success('Informe enviado');
-
+  
         setTimeout(() => {
           window.location.reload();
         }, 1000);
@@ -110,25 +112,38 @@ export const Personal = () => {
       toast.error('Ya se envió el informe de asistencia de hoy');
     }
   };
+  
 
   
   const handleGenerateExcel = async () => {
     try {
       if (reportResponse.data.reportes.length > 0) {
+        const processedData = await Promise.all(reportResponse.data.reportes.map(async (personal) => {
+          // Usar el hook para obtener la unidad
+          const { assistance } = useFetchUnity(personal.unidadId);
+  
+          return {
+            name: personal.name,
+            lastName: personal.lastName,
+            number: personal.number,
+            unidad: assistance?.unity?.nameUnity || personal.unidadId, // Usar nameUnity si está disponible
+            reason: personal.reason,
+            selected: personal.selected ? 'Asistió' : 'No asistió', // Cambiar true/false por Asistió/No asistió
+          };
+        }));
+  
         // Generar el archivo Excel
         const workbook = XLSX.utils.book_new();
-        const worksheet = XLSX.utils.json_to_sheet(reportResponse.data.reportes);
+        const worksheet = XLSX.utils.json_to_sheet(processedData);
         XLSX.utils.book_append_sheet(workbook, worksheet, "Reportes");
   
         // Convertir el workbook a un archivo blob para que se pueda descargar
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
   
-        // Permitir al usuario descargar el archivo con file-saver
         saveAs(blob, `Reportes_${new Date().toLocaleDateString()}.xlsx`);
   
         toast.success('Excel generado y listo para descargar');
-  
       } else {
         toast.error('No hay informes enviados');
       }
@@ -136,6 +151,9 @@ export const Personal = () => {
       toast.error('Hubo un problema al generar el Excel');
     }
   };
+  
+  
+  
   const [formState, setFormState] = useState({
     fecha: {
       value: "",
@@ -166,19 +184,17 @@ export const Personal = () => {
       [field]: {
         ...prevState[field],
         value,
-        isValid: value !== '', // Aquí puedes ajustar la lógica de validación
+        isValid: value !== '',
       },
     }));
   
-    // Si quieres que la animación se active cuando ambos campos sean válidos:
     if (formState.fecha.isValid && formState.hora.isValid) {
-      // Aplica la clase de animación al elemento correspondiente
       const tile = document.getElementById(`tile-${field}`);
       if (tile) {
         tile.classList.add("animate");
         setTimeout(() => {
           tile.classList.remove("animate");
-        }, 2500); // Duración de la animación
+        }, 5000);
       }
     }
   };

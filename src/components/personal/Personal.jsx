@@ -113,72 +113,45 @@ export const Personal = () => {
     }
   };
   
+
+  
   const handleGenerateExcel = async () => {
     try {
-      console.log('Iniciando la generación del Excel...');
-      const { unities, isLoading, error } = useFetchAllUnities(); // Obtenemos todas las unidades
-  
-      if (isLoading) {
-        console.log('Cargando unidades...');
-        toast.error('Cargando unidades, por favor espera');
-        return;
-      }
-  
-      if (error) {
-        console.error('Error al cargar las unidades:', error);
-        toast.error('Hubo un error al cargar las unidades');
-        return;
-      }
-  
       if (reportResponse.data.reportes.length > 0) {
-        // Crear un diccionario de unidades por unidadId para rápido acceso
-        const unityMap = unities.reduce((map, unity) => {
-          map[unity._id] = unity.nameUnity;
-          return map;
-        }, {});
-  
-        console.log('Diccionario de unidades:', unityMap);
-  
-        const processedData = reportResponse.data.reportes.map((personal) => {
-          const unidadName = unityMap[personal.unidadId] || personal.unidadId;
-          console.log('Procesando datos de:', personal.name, 'Unidad:', unidadName);
+        const processedData = await Promise.all(reportResponse.data.reportes.map(async (personal) => {
+          // Usar el hook para obtener la unidad
+          const { assistance } = useFetchUnity(personal.unidadId);
   
           return {
             name: personal.name,
             lastName: personal.lastName,
             number: personal.number,
-            unidad: unidadName, // Usar nameUnity si está disponible
+            unidad: assistance?.unity?.nameUnity || personal.unidadId, // Usar nameUnity si está disponible
             reason: personal.reason,
             selected: personal.selected ? 'Asistió' : 'No asistió', // Cambiar true/false por Asistió/No asistió
           };
-        });
-  
-        console.log('Datos procesados para el Excel:', processedData);
+        }));
   
         // Generar el archivo Excel
         const workbook = XLSX.utils.book_new();
         const worksheet = XLSX.utils.json_to_sheet(processedData);
         XLSX.utils.book_append_sheet(workbook, worksheet, "Reportes");
   
-        console.log('Generando el archivo Excel...');
-  
         // Convertir el workbook a un archivo blob para que se pueda descargar
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
   
-        console.log('Guardando el archivo Excel...');
         saveAs(blob, `Reportes_${new Date().toLocaleDateString()}.xlsx`);
   
         toast.success('Excel generado y listo para descargar');
       } else {
-        console.log('No hay informes enviados');
         toast.error('No hay informes enviados');
       }
     } catch (e) {
-      console.error('Error al generar el Excel:', e);
       toast.error('Hubo un problema al generar el Excel');
     }
   };
+  
   
   
   const [formState, setFormState] = useState({

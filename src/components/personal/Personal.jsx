@@ -91,6 +91,11 @@ export const Personal = () => {
 
 
   const handleEnviarReporte = async () => {
+    console.log(reportResponse, "reporte");
+    console.log(fecha, "--------------------------------------------", todayDate);
+    console.log(todayDate, "Fecha actual ---------", fechaDeLaUnidad, "fecha de envio de la unuidad")
+
+
     if (todayDate !== fechaDeLaUnidad) {
       const allPersonalList = personales.personales.map((personal) => {
         const isSelected = selectedPersonal[personal._id] || false;
@@ -107,65 +112,89 @@ export const Personal = () => {
 
       assistance.unity.report = false;
       assistance.unity.dateOfReportByUnity = todayDate;
+      console.log(assistance.unity.dateOfReportByUnity, todayDate, "Datos para actualizar")
 
       try {
-        await storeReporteData({
-          listado: allPersonalList,
-          nameUnity: assistance.unity.nameUnity // Enviar el nombre de la unidad
-        });
+        await storeReporteData(allPersonalList, todayDate);
+        console.log(allPersonalList, "pepapig");
         await actualizarUnidad(assistance.unity._id, assistance.unity);
+        console.log(assistance.unity);
         toast.success('Informe enviado');
 
         setTimeout(() => {
           window.location.reload();
+          
         }, 1000);
+
       } catch (error) {
+        console.error('Error al actualizar el reporte en la base de datos:', error);
         toast.error('Error al enviar el informe');
       }
     } else {
+      console.log(assistance.unity.report, "ya enviado");
       toast.error('Ya se envió el informe de asistencia de hoy');
     }
   };
 
+
+  
   const handleGenerateExcel = async () => {
     try {
-      if (reportResponse.data.reportes.length > 0) {
-        const processedData = await Promise.all(reportResponse.data.reportes.map(async (personal) => {
-          // Usar el hook para obtener la unidad
-          const { assistance } = useFetchUnity(personal.unidadId);
+      // Revisar si los datos de reportResponse están correctamente obtenidos
+      console.log('Datos de reportResponse:', reportResponse);
   
-          return {
-            name: personal.name,
-            lastName: personal.lastName,
-            number: personal.number,
-            unidad: assistance?.unity?.nameUnity || personal.unidadId, // Usar nameUnity si está disponible
-            asistencia: personal.selected ? 'No asistió' : 'Asistió', // Cambiar true/false por "No asistió"/"Asistió"
-            reason: personal.reason, // Incluir la razón
-          };
-        }));
+      if (!reportResponse || !reportResponse.data || reportResponse.data.reportes.length === 0) {
+        toast.error('No hay reportes disponibles para generar el Excel.');
+        return;
+      }
   
-        // Generar el archivo Excel
+      // Asegúrate de que los reportes de diferentes departamentos estén separados
+      const reportesPorDepartamento = {};
+  
+      // Procesar los datos de los reportes
+      reportResponse.data.reportes.forEach((personal) => {
+        const unityName = assistance?.unity?.nameUnity || personal.unidadId;
+  
+        // Si el departamento aún no está en el objeto, lo inicializamos
+        if (!reportesPorDepartamento[unityName]) {
+          reportesPorDepartamento[unityName] = [];
+        }
+  
+        // Añadir el reporte de cada persona al departamento correspondiente
+        reportesPorDepartamento[unityName].push({
+          name: personal.name || 'N/A',
+          lastName: personal.lastName || 'N/A',
+          number: personal.number || 'N/A',
+          unidad: unityName,
+          asistencia: personal.selected ? 'No asistió' : 'Asistió',
+          reason: personal.reason || 'Sin justificar',
+        });
+      });
+  
+      // Crear el archivo Excel por cada departamento
+      Object.keys(reportesPorDepartamento).forEach((departamento) => {
+        const processedData = reportesPorDepartamento[departamento];
+  
+        // Crear el workbook de Excel y añadir la hoja con los datos procesados
         const workbook = XLSX.utils.book_new();
         const worksheet = XLSX.utils.json_to_sheet(processedData);
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Reportes");
+        XLSX.utils.book_append_sheet(workbook, worksheet, `Reportes_${departamento}`);
   
-        // Convertir el workbook a un archivo blob para que se pueda descargar
+        // Convertir el workbook a un archivo Blob y descargarlo
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
   
-        saveAs(blob, `Reportes_${new Date().toLocaleDateString()}.xlsx`);
+        // Descargar el archivo Excel con un nombre único por departamento
+        saveAs(blob, `Reportes_${departamento}_${new Date().toLocaleDateString()}.xlsx`);
+      });
   
-        toast.success('Excel generado y listo para descargar');
-      } else {
-        toast.error('No hay informes enviados');
-      }
+      toast.success('Excel generado y listo para descargar');
     } catch (e) {
+      console.error(e);
       toast.error('Hubo un problema al generar el Excel');
     }
   };
   
-
-
 
   const [formState, setFormState] = useState({
     fecha: {

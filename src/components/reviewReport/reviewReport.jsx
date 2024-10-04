@@ -3,7 +3,7 @@ import { useFetchUnityToday } from '../../shared/hooks/useFetchUnityToday';
 import './reviewReport.css';
 
 export const ReviewReport = ({ unityId }) => {
-  const { reportCount, missingUnits, isLoading, error } = useFetchUnityToday();
+  const { reportCount, missingUnits, allUnits, updatedUnits, isLoading, error } = useFetchUnityToday();
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -12,6 +12,9 @@ export const ReviewReport = ({ unityId }) => {
   if (error) {
     return <p>{error}</p>;
   }
+
+  const allUnitsReported = updatedUnits.length === allUnits.length;
+  const noUnitsReported = updatedUnits.length === 0;
 
   return (
     <>
@@ -26,13 +29,15 @@ export const ReviewReport = ({ unityId }) => {
             </p>
           </div>
           <div className="review-modal-body">
-            {missingUnits.length > 0 ? (
+            {noUnitsReported ? (
+              <span>Ninguna unidad ha enviado su reporte hoy.</span>
+            ) : allUnitsReported ? (
+              <span>Todas las unidades han enviado su reporte hoy.</span>
+            ) : (
               <span>
                 Las unidades que faltan de enviar el reporte son:{" "}
                 {missingUnits.map(unit => unit.nameUnity).join(", ")}
               </span>
-            ) : (
-              <span>Todas las unidades han enviado su reporte hoy.</span>
             )}
           </div>
           <a href="#modal-closed" className="close-review-modal-link"></a>

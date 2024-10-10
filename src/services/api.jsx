@@ -71,7 +71,6 @@ export const getUserProfile = async () => {
     }
 };
 
-
 export const getPatients = async () => {
 
     try {
@@ -84,8 +83,6 @@ export const getPatients = async () => {
     }
 
 };
-
-
 
 export const updatePatientProgress = async (id, data) => {
 
@@ -335,6 +332,29 @@ export const getUnityById = async (id) => {
 export const generarExcel = async (listado) => {
     try {
         return await apiClient.post(`/unidad/excel`, { listado });
+    } catch (e) {
+        return {
+            error: true,
+            e
+        };
+    }
+};
+
+export const getUpdatedUnitsToday = async (id) => {
+    try {
+        return await apiClient.get(`/unidad/obtener/UnidadesEnviadas`)
+    } catch (e) {
+        return {
+            error: true,
+            e
+        }
+    }
+}
+
+export const getUnits = async () => {
+    try {
+        const response = await apiClient.get('/unidad');
+        return response.data;
     } catch (e) {
         return {
             error: true,

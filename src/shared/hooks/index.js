@@ -11,6 +11,7 @@ export { useStoreReporte } from './useStoreReporte.jsx';
 export { useGetReport } from './useGetReport.jsx';
 export { useGenerarExcel } from './useGenerarExcel.jsx';
 export { logout } from './useLogout.jsx';
+export { useFetchUnityToday } from './useFetchUnityToday.jsx'
 
 export { useGetForum } from './useGetForum.jsx';
 export { useAddCommentForo } from './useAddCommentForo.jsx';

@@ -62,9 +62,11 @@
 }
 
 .input-group {
-    position: relative;
     margin-bottom: 1rem;
-    
+    height: 100%; /* Asegúrate de que el contenedor padre tenga altura definida */
+    display: flex;
+    align-items: center; /* Centrar verticalmente */
+    justify-content: stretch; /* Asegúrate de que ocupe todo el ancho */
 }
 
 .input {
@@ -99,10 +101,6 @@ textarea:focus~.user-label {
 .button:hover {
     background-color: #444;
     
-}
-
-.modal-body .input-group {
-    margin-bottom: 1.5rem;
 }
 
 

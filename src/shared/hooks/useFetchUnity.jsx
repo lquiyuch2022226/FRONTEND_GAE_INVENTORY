@@ -1,3 +1,4 @@
+// useFetchUnity.js
 import { useState, useEffect } from "react";
 import { getUnityById as getUnityByIdRequest } from "../../services/api";
 import toast from "react-hot-toast";
@@ -9,14 +10,11 @@ export const useFetchUnity = (unityId) => {
   const [error, setError] = useState(null);
 
   const fetchUnity = async () => {
-    setIsLoading(true);
-
     try {
       const response = await getUnityByIdRequest(unityId);
       if (response.data?.unity) {
         setFecha(response.data.unity.dateOfReportByUnity);
         setAssistance(response.data);
-        console.log(response.data.unity.dateOfReportByUnity, "unidad encontrada");
       } else {
         setError('Unidad no encontrada');
         toast.error('Error al cargar la unidad');
@@ -25,23 +23,20 @@ export const useFetchUnity = (unityId) => {
       setError('Error al cargar la unidad');
       toast.error('Error al cargar la unidad');
     }
-
-    setIsLoading(false);
   };
 
-  // useEffect para ejecutar fetchUnity cuando cambie unityId
   useEffect(() => {
     if (unityId) {
+      setIsLoading(true);
       fetchUnity();
     }
   }, [unityId]);
 
-  // useEffect para registrar el mensaje solo cuando se carga la data
   useEffect(() => {
-    if (!isLoading && assistance) {
-      console.log(assistance.unity.dateOfReportByUnity, "fecha encontrada");
+    if (!error) {
+      setIsLoading(false); // Stop loading if no error
     }
-  }, [isLoading, assistance]);
+  }, [assistance, error]);
 
   return {
     assistance,

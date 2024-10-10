@@ -45,6 +45,7 @@
   color: white;
 }
 
+
 .input-group {
   display: flex;
   gap: 20px;
@@ -466,3 +467,4 @@
   flex: 1;
   text-align: center;
 }
+

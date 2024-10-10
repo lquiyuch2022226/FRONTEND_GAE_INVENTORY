@@ -115,7 +115,7 @@ export const Personal = () => {
       });
 
       assistance.unity.report = false;
-      /* assistance.unity.dateOfReportByUnity = todayDate; */
+      assistance.unity.dateOfReportByUnity = todayDate;
       console.log(assistance.unity.dateOfReportByUnity, todayDate, "Datos para actualizar")
 
       try {
@@ -145,55 +145,67 @@ export const Personal = () => {
       const now = new Date();
       const currentDate = now.toISOString().split('T')[0];
       console.log("data del reporte", reportResponse.data.updatedAt, "fecha del reporte:", reportResponse.data.createAt);
-
+  
       // Revisar si los datos de reportResponse están correctamente obtenidos
       console.log('Datos de reportResponse:', reportResponse);
-
+  
       if (!reportResponse || !reportResponse.data || reportResponse.data.reportes.length === 0) {
         toast.error('No hay reportes disponibles para generar el Excel.');
         return;
       }
-
+  
       // Asegúrate de que los reportes de diferentes departamentos estén separados
       const reportesPorDepartamento = {};
-
+  
       // Procesar los datos de los reportes
       reportResponse.data.reportes.forEach((personal) => {
         const unityName = assistance?.unity?.nameUnity || personal.unidadId;
-
+  
         // Si el departamento aún no está en el objeto, lo inicializamos
         if (!reportesPorDepartamento[unityName]) {
           reportesPorDepartamento[unityName] = [];
         }
-
+  
         // Añadir el reporte de cada persona al departamento correspondiente
         reportesPorDepartamento[unityName].push({
           Nombre: personal.name || 'N/A',
           Apellido: personal.lastName || 'N/A',
-          Nuúmero_De_Personal: personal.number || 'N/A',
+          Extención: personal.number || 'N/A',
           Unidad: unityName,
           Asistencia: personal.selected ? 'No asistió' : 'Asistió',
           Razón: personal.reason || 'Sin justificar',
         });
       });
-
+  
       // Crear el archivo Excel por cada departamento
       Object.keys(reportesPorDepartamento).forEach((departamento) => {
         const processedData = reportesPorDepartamento[departamento];
-
+  
         // Crear el workbook de Excel y añadir la hoja con los datos procesados
         const workbook = XLSX.utils.book_new();
         const worksheet = XLSX.utils.json_to_sheet(processedData);
+  
+        // Ajustar el tamaño de las columnas al contenido
+        const columnWidths = [
+          { wpx: 80 }, // Anchura para la columna "Nombre"
+          { wpx: 80 }, // Anchura para la columna "Apellido"
+          { wpx: 90 }, // Anchura para la columna "Nuúmero_De_Personal"
+          { wpx: 110 }, // Anchura para la columna "Unidad"
+          { wpx: 80 }, // Anchura para la columna "Asistencia"
+          { wpx: 200 }, // Anchura para la columna "Razón"
+        ];
+        worksheet['!cols'] = columnWidths;
+  
         XLSX.utils.book_append_sheet(workbook, worksheet, `Reportes_${departamento}`);
-
+  
         // Convertir el workbook a un archivo Blob y descargarlo
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
-
+  
         // Descargar el archivo Excel con un nombre único por departamento
         saveAs(blob, `Reportes_${departamento}_${new Date().toLocaleDateString()}.xlsx`);
       });
-
+  
       // Actualizar la fecha de hoy después de generar el Excel
       localStorage.setItem('lastGeneratedDate', currentDate); // Almacenar la fecha actual
       toast.success('Excel generado y listo para descargar');
@@ -202,6 +214,7 @@ export const Personal = () => {
       toast.error('Hubo un problema al generar el Excel');
     }
   };
+  
 
 
 

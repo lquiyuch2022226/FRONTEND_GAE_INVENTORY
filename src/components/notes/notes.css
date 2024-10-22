@@ -1,0 +1,93 @@
+.note-list,
+.note-creator {
+    padding: 20px;
+    background-color: #f0f8ff;
+    color: #333;
+}
+
+.note-list ul,
+.note-creator ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.note-list li,
+.note-creator li {
+    margin-bottom: 15px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.note-list h1,
+.note-creator h1 {
+    margin-bottom: 20px;
+}
+
+.note-creator .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.note-creator .header button {
+    background-color: #007acc;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.note-creator .header button:hover {
+    background-color: #005fa3;
+}
+
+.create-note-container {
+    padding: 20px;
+    background-color: #f0f8ff;
+    color: #333;
+    max-width: 600px;
+    margin: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.create-note-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.create-note-form input,
+.create-note-form textarea {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.create-note-form button {
+    padding: 10px;
+    background-color: #007acc;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.create-note-form button:disabled {
+    background-color: #cccccc;
+}
+
+.create-note-form button:not(:disabled):hover {
+    background-color: #005fa3;
+}
+
+.create-note-form span {
+    color: red;
+    font-size: 12px;
+}

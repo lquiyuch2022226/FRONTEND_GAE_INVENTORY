@@ -1,0 +1,37 @@
+.posts-container {
+    display: block; 
+    width: 100%;
+    margin-left: 20px;
+    overflow-y: auto; /* Permite el scroll vertical */
+    height: 400px;
+}
+
+.post-card {
+    background-color: white;
+    padding: 10px; /* Reducir el padding de las tarjetas */
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Reducir la sombra para una apariencia más compacta */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 80%; /* Ajustar el ancho de las tarjetas */
+    margin: 0 auto; /* Centrar las tarjetas horizontalmente */
+}
+
+.post-card h3 {
+    font-size: 1rem; /* Reducir el tamaño de la fuente del título */
+    margin: 5px 0; /* Reducir los márgenes del título */
+}
+
+.post-card p {
+    font-size: 0.9rem; /* Reducir el tamaño de la fuente del párrafo */
+    margin: 5px 0; /* Reducir los márgenes del párrafo */
+}
+
+.post-card img {
+    max-width: 80%; /* Ajustar el tamaño de la imagen */
+    border-radius: 5px;
+    margin-top: 10px;
+}

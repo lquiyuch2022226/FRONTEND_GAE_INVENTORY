@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { useUsers } from '../../shared/hooks/useUsers';
 import { useUserDetails } from "../../shared/hooks/useUserDetails";
 import './user.css';
+import editIcon from '../../assets/img/edit.png';
+import deleteIcon from '../../assets/img/papelera.png';
+
 
 export const UserManagement = () => {
     const navigate = useNavigate();
@@ -49,12 +52,14 @@ export const UserManagement = () => {
                                         <td>{user.email}</td>
                                         <td>{user.unidadId.nameUnity}</td>
                                         <td>
-                                            <button onClick={() => handleEditUser(user.id)}>
-                                                <img src="/path/to/edit-icon.png" alt="Editar" />
-                                            </button>
-                                            <button onClick={() => handleDeleteUser(user.id)}>
-                                                <img src="/path/to/delete-icon.png" alt="Eliminar" />
-                                            </button>
+                                            <div className="action-buttons">
+                                                <button onClick={() => handleEditUser(user.id)}>
+                                                    <img src={editIcon} alt="Editar" />
+                                                </button>
+                                                <button onClick={() => handleDeleteUser(user.id)}>
+                                                    <img src={deleteIcon} alt="Eliminar" />
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}

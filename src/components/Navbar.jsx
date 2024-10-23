@@ -17,7 +17,7 @@ export const Navbar = ({ user }) => {
         </div>
         <div className="navbar-center">
           <button onClick={() => navigate("/dashboard/personal")}>Informes</button>
-          <button onClick={() => navigate("/dashboard/chat")}>Chat</button>
+          {/* <button onClick={() => navigate("/dashboard/chat")}>Chat</button> */}
           <button onClick={() => navigate("/dashboard/users")}>Usuarios</button>
           {/* <button onClick={() => navigate("/dashboard/postUser")}>Posts</button> */}
           <button onClick={() => navigate("/dashboard/forums/")}>Forum</button>

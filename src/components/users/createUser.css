@@ -1,3 +1,18 @@
+/* Input styles */
+.create-user-input-field input {
+    margin: 5px 0;
+    padding: 0px;
+    height: 35px;
+    width: 100%;
+    font-size: 16px;
+    color: #333;
+    background-color: #f7f9fc;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: border-color 0.3s;
+}
+
+/* Other styles remain unchanged */
 .create-user-auth-container {
     display: flex;
     justify-content: center;
@@ -37,12 +52,6 @@
     display: grid;
     grid-template-columns: 1fr 1fr; /* Dos columnas para los inputs */
     gap: 15px; /* Espacio entre los inputs */
-}
-
-.create-user-input-field {
-    display: flex;
-    flex-direction: column;
-    gap: 5px; /* Espacio entre label y input */
 }
 
 .auth-form-input-username {

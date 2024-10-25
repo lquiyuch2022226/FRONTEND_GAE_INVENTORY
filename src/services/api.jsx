@@ -1,49 +1,52 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-    baseURL: 'https://backend-gae-report-dc7h.onrender.com' + '/GAE/v1',
+    baseURL: 'tp://localhost:3000' + '/GAE/v1',
     timeout: 10000
 })
 
 
 apiClient.interceptors.request.use(
     (config) => {
-        let token = localStorage.getItem('token');
-
+        const token = localStorage.getItem('token')?.replace(/^"|"$/g, '');
         if (token) {
-            token = token.replace(/^"|"$/g, '');
             config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
     },
-    (e) => {
-        return Promise.reject(e);
+    (error) => {
+        return Promise.reject(error);
     }
 );
 
-
-export const login = async (data) => {
-    try {
-        return await apiClient.post('/auth/login', data)
-    } catch (e) {
-        return {
-            error: true,
-            e
-        }
+// Centralized error handling function
+const handleError = (error) => {
+    const responseStatus = error?.response?.status;
+    if (responseStatus === 401 || responseStatus === 403) {
+        // Handle logout or redirect if needed
+        logout(); // Implement this function to handle user logout
     }
-}
+    return {
+        error: true,
+        message: error.response?.data?.msg || error.message,
+    };
+};
+
+export const login = async (token) => {
+    try {
+        return await apiClient.post('/auth/login/microsoft', { token });
+    } catch (error) {
+        return handleError(error);
+    }
+};
 
 export const register = async (data) => {
     try {
-        console.log("Esta es la data: ", data);
         return await apiClient.post('/auth/register', data);
-    } catch (e) {
-        return {
-            error: true,
-            e
-        }
+    } catch (error) {
+        return handleError(error);
     }
-}
+};
 
 export const getUsers = async () => {
 
@@ -362,11 +365,3 @@ export const getUnits = async () => {
         };
     }
 };
-
-const checkResponseStatus = (e) => {
-    const responseStatus = e?.response?.status
-
-    if (responseStatus) {
-        (responseStatus === 401 || responseStatus === 403) && logout
-    }
-}

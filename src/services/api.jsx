@@ -1,17 +1,24 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-    baseURL: 'tp://localhost:3000' + '/GAE/v1',
-    timeout: 10000
-})
-
+    baseURL: 'http://localhost:3000/GAE/v1',
+    timeout: 10000,
+});
 
 apiClient.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem('token')?.replace(/^"|"$/g, '');
+        const storedUserData = JSON.parse(localStorage.getItem('datosUsuario'));
+        const token = storedUserData?.accessToken;
+
+        console.log("Token recuperado:", token);
+
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
+        } else {
+            console.warn('Token no encontrado, se enviará la solicitud sin autenticación');
         }
+
+        console.log("Configuración de la solicitud:", config);
         return config;
     },
     (error) => {
@@ -19,12 +26,10 @@ apiClient.interceptors.request.use(
     }
 );
 
-// Centralized error handling function
 const handleError = (error) => {
     const responseStatus = error?.response?.status;
     if (responseStatus === 401 || responseStatus === 403) {
-        // Handle logout or redirect if needed
-        logout(); // Implement this function to handle user logout
+        logout(); // Asegúrate de definir esta función
     }
     return {
         error: true,
@@ -34,7 +39,10 @@ const handleError = (error) => {
 
 export const login = async (token) => {
     try {
-        return await apiClient.post('/auth/login/microsoft', { token });
+        const response = await apiClient.post('/auth/login/microsoft', { token });
+        console.log('await apiClient.post(/auth/login/microsoft', token);
+        localStorage.setItem('datosUsuario', JSON.stringify(response.data));
+        return response.data;
     } catch (error) {
         return handleError(error);
     }
@@ -49,7 +57,6 @@ export const register = async (data) => {
 };
 
 export const getUsers = async () => {
-
     try {
         const response = await apiClient.get('/user');
         return response.data.users;
@@ -62,7 +69,6 @@ export const getUsers = async () => {
 };
 
 export const getUserProfile = async () => {
-
     try {
         const response = await apiClient.get('/user/profile');
         return response.data.user;
@@ -75,104 +81,90 @@ export const getUserProfile = async () => {
 };
 
 export const getPatients = async () => {
-
     try {
         return await apiClient.get('/user/patients');
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
-
 };
 
 export const updatePatientProgress = async (id, data) => {
-
     try {
         return await apiClient.patch(`/user/patients/${id}`, data);
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
 };
 
 export const getSupporters = async () => {
-
     try {
         return await apiClient.get('/user/profesionalSupport');
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
-
 };
 
 export const getAllNotes = async () => {
-
     try {
         return await apiClient.get('/note/all');
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
-
 };
 
 export const getNotesByCreator = async () => {
-
     try {
         return await apiClient.get('/note/creator');
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
-
 };
 
-export const getReporteData = async () => {
-
+/* export const getReporteData = async () => {
     try {
         return await apiClient.get('/report/');
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
-
-};
+}; */
 
 export const createNote = async (data) => {
-
     try {
         return await apiClient.post('/note/create', data);
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
-
 };
 
 export const putUnity = async (id, data) => {
-
     try {
         return await apiClient.put(`/unidad/${id}`, data);
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
 };
 
@@ -192,38 +184,35 @@ export const storeReporteData = async ({ listado, fecha }) => {
 };
 
 export const updateUser = async (id, data) => {
-
     try {
         return await apiClient.put(`/user/put/${id}`, data);
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
 };
 
 export const updateNote = async (id, data) => {
-
     try {
         return await apiClient.put(`/note/update/${id}`, data);
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
 };
 
 export const deleteNote = async (id) => {
-
     try {
         return await apiClient.delete(`/note/delete/${id}`);
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
 };
 
@@ -297,18 +286,16 @@ export const useAddComment = async (forumTitle, username, text) => {
 
 /*-------------------------Informe de entrada de personal------------------------------*/
 
-
-export const getPersonalById = async (id) => {
+/* export const getPersonalById = async (id) => {
     try {
         return await apiClient.get(`/personal/${id}`);
-        console.log('personal---', id);
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
-}
+}; */
 
 export const getUserById = async (id) => {
     try {
@@ -317,20 +304,20 @@ export const getUserById = async (id) => {
         return {
             error: true,
             e
-        }
+        };
     }
-}
+};
 
 export const getUnityById = async (id) => {
     try {
-        return await apiClient.get(`/unidad/${id}`)
+        return await apiClient.get(`/unidad/${id}`);
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
-}
+};
 
 export const generarExcel = async (listado) => {
     try {
@@ -343,16 +330,16 @@ export const generarExcel = async (listado) => {
     }
 };
 
-export const getUpdatedUnitsToday = async (id) => {
+/* export const getUpdatedUnitsToday = async (id) => {
     try {
-        return await apiClient.get(`/unidad/obtener/UnidadesEnviadas`)
+        return await apiClient.get(`/unidad/obtener/UnidadesEnviadas`);
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
-}
+}; */
 
 export const getUnits = async () => {
     try {

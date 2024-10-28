@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import logoGAE from '../../assets/img/SmallLogo.jpg';
 import { registerValidationMessages, validateRegister } from '../../shared/validators';
 import './createUser.css';
-import { useFetchUnityToday } from '../../shared/hooks/useFetchUnityToday';
+/* import { useFetchUnityToday } from '../../shared/hooks/useFetchUnityToday'; */
 
 export const CreateUser = () => {
     const { createUser, isLoading } = useCreateUser();

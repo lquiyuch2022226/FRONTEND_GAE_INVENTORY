@@ -86,19 +86,44 @@ export const Login = ({ switchAuthHandler }) => {
 
   const loginWithMicrosoft = async () => {
     const loginRequest = {
-      scopes: ['openid', 'profile', 'email'],
+      scopes: [
+        'openid',
+        'profile',
+        'email',
+        'User.Read'
+      ],
     };
-  
+
     try {
       const response = await msalInstance.loginPopup(loginRequest);
       const token = response.accessToken;
-  
-      // Log the token and user information
-      console.log("User logged in successfully:", response.account); // Log user info
-      console.log("Access Token:", token); // Log the access token
-  
-      const loginResponse = await login(token);
-  
+
+      // Almacenar datos del usuario
+      localStorage.setItem('datosUsuario', JSON.stringify({
+        account: response.account,
+        accessToken: token
+      }));
+
+      // Llamada a la API de Microsoft Graph para obtener más información sobre el usuario
+      const userProfile = await fetch('https://graph.microsoft.com/v1.0/me', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const userData = await userProfile.json();
+
+      // Almacenar el perfil del usuario
+      localStorage.setItem('userProfile', JSON.stringify(userData));
+
+      // Si tienes un campo específico para la unidad (departmento), guárdalo.
+      const officeLocation = userData.officeLocation || 'Default Location';
+      console.log("Departamento del usuario:", officeLocation);
+
+      // Ahora llama a tu API con el token
+      const loginResponse = await login(token); // Aquí se utiliza el token de Microsoft
+
       if (loginResponse.error) {
         setError("Login with Microsoft failed: " + loginResponse.message);
       } else {
@@ -109,7 +134,6 @@ export const Login = ({ switchAuthHandler }) => {
       setError("Microsoft login failed.");
     }
   };
-  
 
 
   const isSubmitButtonDisabled =

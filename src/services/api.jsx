@@ -2,23 +2,19 @@ import axios from "axios";
 
 const apiClient = axios.create({
     baseURL: 'http://localhost:3000/GAE/v1',
-    timeout: 10000,
+    timeout: 50000,
 });
 
 apiClient.interceptors.request.use(
     (config) => {
         const storedUserData = JSON.parse(localStorage.getItem('datosUsuario'));
-        const token = storedUserData?.accessToken;
-
-        console.log("Token recuperado:", token);
+        const token = storedUserData.accessToken;
 
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         } else {
             console.warn('Token no encontrado, se enviará la solicitud sin autenticación');
         }
-
-        console.log("Configuración de la solicitud:", config);
         return config;
     },
     (error) => {
@@ -37,16 +33,17 @@ const handleError = (error) => {
     };
 };
 
+
 export const login = async (token) => {
     try {
         const response = await apiClient.post('/auth/login/microsoft', { token });
-        console.log('await apiClient.post(/auth/login/microsoft', token);
-        localStorage.setItem('datosUsuario', JSON.stringify(response.data));
         return response.data;
     } catch (error) {
-        return handleError(error);
+        throw error;
     }
 };
+
+
 
 export const register = async (data) => {
     try {

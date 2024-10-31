@@ -99,12 +99,26 @@ export const Login = ({ switchAuthHandler }) => {
         account: response.account,
       });
   
-      const userProfile = profileResponse.idTokenClaims;
+      // Llamada a Microsoft Graph para obtener detalles del usuario
+      const userDetailsResponse = await fetch('https://graph.microsoft.com/v1.0/me', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
   
+      if (!userDetailsResponse.ok) {
+        throw new Error("Error fetching user details");
+      }
+  
+      const userDetails = await userDetailsResponse.json();
+      console.log('User Details:', userDetails); // Imprime los detalles del usuario
+  
+      // Guarda los datos relevantes en localStorage
       localStorage.setItem('datosUsuario', JSON.stringify({
         account: response.account,
         accessToken: token,
-        profilePicture: userProfile.picture,
+        profilePicture: profileResponse.idTokenClaims.picture,
+        officeLocation: userDetails.officeLocation, // Almacena el officeLocation
       }));
   
       navigate('/dashboard/personal');
@@ -112,6 +126,7 @@ export const Login = ({ switchAuthHandler }) => {
       setError("Microsoft login failed: " + (error.message || "Unknown error"));
     }
   };
+  
   
 
   const isSubmitButtonDisabled =

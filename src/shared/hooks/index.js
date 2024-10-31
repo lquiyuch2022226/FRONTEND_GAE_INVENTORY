@@ -1,5 +1,4 @@
 export { useLogin } from './useLogin.jsx';
-export { useRegister } from './useRegister.jsx';
 export { useFetchPosts } from './useFetchPosts.jsx';
 /* export { useFetchPersonal } from './useFetchPersonal.jsx'; */
 export { useUserDetails } from './useUserDetails.jsx';

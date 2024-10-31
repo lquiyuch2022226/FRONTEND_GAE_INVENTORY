@@ -10,14 +10,12 @@ import { PostList } from "./components/postList/PostList.jsx"
 import { ForumList } from "./components/foro/forumList.jsx";
 import { UserManagement } from "./components/users/UserManagment"
 import { NoteList } from "./components/notes/NoteList"
-import { CreateUser } from "./components/users/CreateUser";
 import { Profile } from "./components/users/Profile"
 
 const routes = [
 
     { path: '/', element: <AuthPage /> },
     { path: '/notes', element: <NoteList /> },
-    { path: '/create-user', element: <CreateUser /> },
     { path: '/profile', element: <Profile /> },
     {
         path: '/dashboard', element: <DashboardPage />, children: [

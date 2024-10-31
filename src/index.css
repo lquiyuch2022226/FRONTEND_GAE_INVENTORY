@@ -8,7 +8,6 @@
   line-height: 1.5;
   font-weight: 400;
   color-scheme: light dark;
-  color: rgba(0, 0, 0, 0.87);
   background-color: #ffffff;
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-synthesis: none;
@@ -31,7 +30,6 @@ code {
  
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
     background-color: #ffffff;
   }
   a:hover {

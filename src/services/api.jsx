@@ -45,11 +45,14 @@ export const login = async (token) => {
 
 
 
-export const register = async (data) => {
+export const reportarEntrada = async (data) => {
     try {
-        return await apiClient.post('/auth/register', data);
-    } catch (error) {
-        return handleError(error);
+        return await apiClient.post('/report', data);
+    } catch (e) {
+        return {
+            error: true,
+            e
+        };
     }
 };
 

@@ -28,7 +28,7 @@ export const Navbar = () => {
     };
 
     try {
-      // Llama a la API para registrar la entrada
+     
       const response = await reportarEntrada(record);
 
       // Maneja la respuesta de la API

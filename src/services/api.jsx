@@ -1,52 +1,62 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-    baseURL: 'https://backend-gae-report-dc7h.onrender.com' + '/GAE/v1',
-    timeout: 10000
-})
-
+    baseURL: 'http://localhost:3000/GAE/v1',
+    timeout: 50000,
+});
 
 apiClient.interceptors.request.use(
     (config) => {
-        let token = localStorage.getItem('token');
+        const storedUserData = JSON.parse(localStorage.getItem('datosUsuario'));
+        const token = storedUserData.accessToken;
 
         if (token) {
-            token = token.replace(/^"|"$/g, '');
             config.headers.Authorization = `Bearer ${token}`;
+        } else {
+            console.warn('Token no encontrado, se enviará la solicitud sin autenticación');
         }
         return config;
     },
-    (e) => {
-        return Promise.reject(e);
+    (error) => {
+        return Promise.reject(error);
     }
 );
 
+const handleError = (error) => {
+    const responseStatus = error?.response?.status;
+    if (responseStatus === 401 || responseStatus === 403) {
+        logout(); // Asegúrate de definir esta función
+    }
+    return {
+        error: true,
+        message: error.response?.data?.msg || error.message,
+    };
+};
 
-export const login = async (data) => {
+
+export const login = async (token) => {
     try {
-        return await apiClient.post('/auth/login', data)
+        const response = await apiClient.post('/auth/login/microsoft', { token });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+
+
+export const reportarEntrada = async (data) => {
+    try {
+        return await apiClient.post('/report', data);
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
-}
-
-export const register = async (data) => {
-    try {
-        console.log("Esta es la data: ", data);
-        return await apiClient.post('/auth/register', data);
-    } catch (e) {
-        return {
-            error: true,
-            e
-        }
-    }
-}
+};
 
 export const getUsers = async () => {
-
     try {
         const response = await apiClient.get('/user');
         return response.data.users;
@@ -59,7 +69,6 @@ export const getUsers = async () => {
 };
 
 export const getUserProfile = async () => {
-
     try {
         const response = await apiClient.get('/user/profile');
         return response.data.user;
@@ -72,104 +81,90 @@ export const getUserProfile = async () => {
 };
 
 export const getPatients = async () => {
-
     try {
         return await apiClient.get('/user/patients');
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
-
 };
 
 export const updatePatientProgress = async (id, data) => {
-
     try {
         return await apiClient.patch(`/user/patients/${id}`, data);
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
 };
 
 export const getSupporters = async () => {
-
     try {
         return await apiClient.get('/user/profesionalSupport');
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
-
 };
 
 export const getAllNotes = async () => {
-
     try {
         return await apiClient.get('/note/all');
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
-
 };
 
 export const getNotesByCreator = async () => {
-
     try {
         return await apiClient.get('/note/creator');
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
-
 };
 
-export const getReporteData = async () => {
-
+/* export const getReporteData = async () => {
     try {
         return await apiClient.get('/report/');
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
-
-};
+}; */
 
 export const createNote = async (data) => {
-
     try {
         return await apiClient.post('/note/create', data);
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
-
 };
 
 export const putUnity = async (id, data) => {
-
     try {
         return await apiClient.put(`/unidad/${id}`, data);
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
 };
 
@@ -189,38 +184,35 @@ export const storeReporteData = async ({ listado, fecha }) => {
 };
 
 export const updateUser = async (id, data) => {
-
     try {
         return await apiClient.put(`/user/put/${id}`, data);
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
 };
 
 export const updateNote = async (id, data) => {
-
     try {
         return await apiClient.put(`/note/update/${id}`, data);
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
 };
 
 export const deleteNote = async (id) => {
-
     try {
         return await apiClient.delete(`/note/delete/${id}`);
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
 };
 
@@ -294,18 +286,16 @@ export const useAddComment = async (forumTitle, username, text) => {
 
 /*-------------------------Informe de entrada de personal------------------------------*/
 
-
-export const getPersonalById = async (id) => {
+/* export const getPersonalById = async (id) => {
     try {
         return await apiClient.get(`/personal/${id}`);
-        console.log('personal---', id);
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
-}
+}; */
 
 export const getUserById = async (id) => {
     try {
@@ -314,20 +304,20 @@ export const getUserById = async (id) => {
         return {
             error: true,
             e
-        }
+        };
     }
-}
+};
 
 export const getUnityById = async (id) => {
     try {
-        return await apiClient.get(`/unidad/${id}`)
+        return await apiClient.get(`/unidad/${id}`);
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
-}
+};
 
 export const generarExcel = async (listado) => {
     try {
@@ -340,16 +330,16 @@ export const generarExcel = async (listado) => {
     }
 };
 
-export const getUpdatedUnitsToday = async (id) => {
+/* export const getUpdatedUnitsToday = async (id) => {
     try {
-        return await apiClient.get(`/unidad/obtener/UnidadesEnviadas`)
+        return await apiClient.get(`/unidad/obtener/UnidadesEnviadas`);
     } catch (e) {
         return {
             error: true,
             e
-        }
+        };
     }
-}
+}; */
 
 export const getUnits = async () => {
     try {
@@ -362,11 +352,3 @@ export const getUnits = async () => {
         };
     }
 };
-
-const checkResponseStatus = (e) => {
-    const responseStatus = e?.response?.status
-
-    if (responseStatus) {
-        (responseStatus === 401 || responseStatus === 403) && logout
-    }
-}

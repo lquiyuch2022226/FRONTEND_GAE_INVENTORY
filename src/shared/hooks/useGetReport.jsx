@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+/* import { useEffect, useState } from 'react';
 import { getReporteData } from '../../services/api';
 
 export const useGetReport = () => {
@@ -32,3 +32,4 @@ export const useGetReport = () => {
         error
     };
 };
+ */

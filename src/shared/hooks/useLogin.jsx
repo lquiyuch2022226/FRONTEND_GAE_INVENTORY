@@ -7,27 +7,29 @@ export const useLogin = () => {
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
 
-    const login = async(email, password) => {
-        setIsLoading(true)
-
-        const response = await loginRequest({
-            email,
-            password
-        })
-
-        console.log(response);
-        setIsLoading(false)
-
-        if (response.error) {
-            const errorMessage = response.e?.response?.data?.msg || 'Ocurrió un error al iniciar sesión'
-            return toast.error(errorMessage)
+    const login = async (microsoftToken) => {
+        setIsLoading(true);
+    
+        try {
+            const response = await loginRequest(microsoftToken);
+    
+            if (response.error) {
+                const errorMessage = response.e?.response?.data?.msg || 'Ocurrió un error al iniciar sesión';
+                toast.error(errorMessage);
+            } else {
+                // Asegúrate de acceder a accessToken
+                const { accessToken } = response; // Cambia aquí
+                localStorage.setItem('token', accessToken); // Guarda el token
+                navigate('/dashboard/personal');
+            }
+        } catch (error) {
+            console.error("Error en el login:", error);
+            toast.error("Ocurrió un error al iniciar sesión");
+        } finally {
+            setIsLoading(false); // Asegúrate de que esto se ejecute siempre
         }
-
-        const { token } = response.data
-        localStorage.setItem('token', JSON.stringify(token))
-        navigate('/dashboard/personal')
-    }
-
+    };
+    
     return {
         login,
         isLoading

@@ -17,7 +17,7 @@ export const RoleBasedLinks = () => {
       });
     }
     
-    window.location.href = 'http://localhost:5173/'; // Adjust this to your login path
+    window.location.href = 'http://localhost:5173/dashboard/personal'; // Adjust this to your login path
   };
 
   return (

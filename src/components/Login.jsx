@@ -13,8 +13,8 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const msalConfig = {
   auth: {
-    clientId: 'cec5f4e6-e5cf-4897-8c2d-143722d79b5d', // Tu clientId
-    authority: 'https://login.microsoftonline.com/4e5a94e9-e691-484d-a509-0f12ed40cce5', // Tu tenant ID
+    clientId: '7d105d0d-94ca-4645-873d-4bd5edf190bb', // Tu clientId
+    authority: 'https://login.microsoftonline.com/a00e95d9-ed09-478e-9f3a-7aa025deb516', // Tu tenant ID
     redirectUri: 'http://localhost:5173/dashboard/personal', // URI de redirección
     postLogoutRedirectUri: 'http://localhost:5173/', // Opcional
   },

@@ -1,12 +1,11 @@
-import logo from "../assets/img/BigLogoWhite.png";  
+import logo from "../assets/img/BigLogoWhite.png";
 import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
-import { getReporteData, createReporteIfNotExist } from '../services/api.jsx'; // Asegúrate de importar el método correctamente
+import { getReporteData } from '../services/api.jsx'; // Solo importar getReporteData
 
 export const Navbar = () => {
   const userId = JSON.parse(localStorage.getItem('datosUsuario'))?.account?.homeAccountId;
 
-  // Definir estados y efectos en el nivel del componente
   const [attendanceRecords, setAttendanceRecords] = useState([]);
 
   useEffect(() => {
@@ -20,11 +19,8 @@ export const Navbar = () => {
         }
 
         if (response.data.reportes.length === 0) {
-          // Hacer una llamada para crear un reporte si no existe
-          await createReporteIfNotExist();
-          // Volver a obtener los reportes después de la creación
-          const updatedResponse = await getReporteData();
-          setAttendanceRecords(updatedResponse.data.reportes || []);
+          // Solo manejar el caso si no hay reportes
+          setAttendanceRecords([]); // O puedes manejarlo de otra manera si lo prefieres
         } else {
           setAttendanceRecords(response.data.reportes || []);
         }
@@ -35,7 +31,7 @@ export const Navbar = () => {
     };
 
     fetchReporte();
-  }, []); // Solo se ejecuta al montar el componente
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('datosUsuario');
@@ -54,13 +50,11 @@ export const Navbar = () => {
   };
 
   const exportToExcel = () => {
-    // Si no hay registros, no hacer nada
     if (attendanceRecords.length === 0) {
       alert('No hay registros para exportar');
       return;
     }
 
-    // Eliminar el campo "_id" de cada registro y renombrar las claves
     const recordsWithoutId = attendanceRecords.map(({ _id, ...rest }) => ({
       "Nombre": rest.name,
       "Fecha": rest.date,
@@ -70,7 +64,6 @@ export const Navbar = () => {
       "Razón": rest.reason
     }));
 
-    // Crear el archivo Excel con los registros modificados
     const worksheet = XLSX.utils.json_to_sheet(recordsWithoutId);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Reporte de Asistencia");

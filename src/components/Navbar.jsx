@@ -1,17 +1,15 @@
-import logo from "../assets/img/BigLogoWhite.png";
+import logo from "../assets/img/BigLogoWhite.png"; 
 import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
-import { getReporteData } from '../services/api.jsx'; // Cambia la ruta por la correcta
-
+import { getReporteData } from '../services/api.jsx'; // Asegúrate de importar el método correctamente
 
 export const Navbar = () => {
   const userId = JSON.parse(localStorage.getItem('datosUsuario'))?.account?.homeAccountId;
-  
+
   // Definir estados y efectos en el nivel del componente
   const [attendanceRecords, setAttendanceRecords] = useState([]);
-  
+
   useEffect(() => {
-    // Obtener el último reporte desde el backend
     const fetchReporte = async () => {
       try {
         const response = await getReporteData();
@@ -25,7 +23,7 @@ export const Navbar = () => {
       }
     };
     fetchReporte();
-  }, []); // Solo se ejecuta una vez al montar el componente
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('datosUsuario');
@@ -50,8 +48,11 @@ export const Navbar = () => {
       return;
     }
 
-    // Crear el archivo Excel con los registros
-    const worksheet = XLSX.utils.json_to_sheet(attendanceRecords);
+    // Eliminar el campo "_id" de cada registro
+    const recordsWithoutId = attendanceRecords.map(({ _id, ...rest }) => rest);
+
+    // Crear el archivo Excel con los registros modificados
+    const worksheet = XLSX.utils.json_to_sheet(recordsWithoutId);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Reporte de Asistencia");
     XLSX.writeFile(workbook, `Reporte_Asistencia_${new Date().toISOString().split('T')[0]}.xlsx`);

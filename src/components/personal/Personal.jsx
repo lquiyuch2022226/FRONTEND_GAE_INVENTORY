@@ -24,12 +24,14 @@ export const Personal = () => {
     const todayDate = formState.todayDate;
     const currentTime = formState.currentTime;
     const status = new Date().getHours() < 8 ? "A tiempo" : "Tarde";
-
+  
     try {
+      // Obtener la IP del usuario
       const ipResponse = await fetch('https://api.ipify.org?format=json');
       const ipData = await ipResponse.json();
       const userIp = ipData && ipData.ip ? ipData.ip : 'IP no disponible';
-
+  
+      // Crear el objeto de registro
       const record = {
         user: userName,
         date: todayDate,
@@ -37,17 +39,22 @@ export const Personal = () => {
         status,
         ip: userIp,
       };
-      console.log(record)
-
+  
+      // Enviar al backend
       const response = await reportarEntrada(record);
-
+  
       if (response.error) {
         console.error(response.error);
         alert("Error al registrar la asistencia: " + response.error.message);
       } else {
+        // Actualizar los registros en el frontend (localStorage)
         const updatedRecords = [...attendanceRecords, record];
         setAttendanceRecords(updatedRecords);
+  
+        // Guardar los registros actualizados en localStorage
         localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
+  
+        // Mostrar mensaje de éxito
         alert("Asistencia registrada correctamente");
       }
     } catch (error) {
@@ -55,6 +62,7 @@ export const Personal = () => {
       alert("Error al registrar la asistencia");
     }
   };
+  
 
   const usuarioLogueado = JSON.parse(localStorage.getItem('datosUsuario')) || {};
   const currentHour = new Date().getHours();

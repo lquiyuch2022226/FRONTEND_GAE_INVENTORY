@@ -32,6 +32,13 @@ export const Navbar = () => {
   };
 
   const exportToExcel = () => {
+    const [attendanceRecords, setAttendanceRecords] = useState([]);
+
+    useEffect(() => {
+      const storedRecords = JSON.parse(localStorage.getItem(`attendanceRecords_${userId}`)) || [];
+      setAttendanceRecords(storedRecords);
+    }, [userId]);
+
     const todayDate = new Date().toISOString().split('T')[0]; // Obtén la fecha de hoy en formato YYYY-MM-DD
   
     // Filtra los registros que tengan la fecha de hoy

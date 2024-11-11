@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-    baseURL: 'https://frontend-gae-inventory-rkmq.vercel.app/GAE/v1',
+    baseURL: 'https://backend-gae-report-dc7h.onrender.com/GAE/v1',
     timeout: 50000,
 });
 
@@ -47,7 +47,7 @@ const handleError = (error) => {
 
 export const reportarEntrada = async (data) => {
     try {
-        return await apiClient.post('/report', data);
+        return await apiClient.post('/report/enviar', data);
     } catch (e) {
         return {
             error: true,

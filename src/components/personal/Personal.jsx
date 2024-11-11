@@ -43,9 +43,9 @@ export const Personal = () => {
       // Enviar al backend
       const response = await reportarEntrada(record);
   
-      if (response.error) {
+      if (response && response.error) {
         console.error(response.error);
-        alert("Error al registrar la asistencia: " + response.error.message);
+        alert("Error al registrar la asistencia: " + response.error.message || response.error);
       } else {
         // Actualizar los registros en el frontend (localStorage)
         const updatedRecords = [...attendanceRecords, record];
@@ -59,7 +59,7 @@ export const Personal = () => {
       }
     } catch (error) {
       console.error("Error al registrar la asistencia:", error);
-      alert("Error al registrar la asistencia");
+      alert("Error al registrar la asistencia: " + error.message);
     }
   };
   

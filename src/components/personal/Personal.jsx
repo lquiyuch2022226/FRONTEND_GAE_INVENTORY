@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Navbar } from '../Navbar.jsx';
 import { useNavigate } from "react-router-dom";
 import { reportarEntrada } from '../../services/api.jsx';
-import * as XLSX from 'xlsx'; // Importa la librería xlsx
+import * as XLSX from 'xlsx';
 import './personal.css';
 import defaultAvatar from '../../assets/img/palmamorro.jpg';
 import earlyImage from '../../assets/img/comprobado.png';
@@ -15,14 +15,20 @@ export const Personal = () => {
   const userId = user.account?.homeAccountId || "Invitado";
   const userName = user.account?.name || "Invitado";
 
+  // Definimos el estado formState
+  const [formState, setFormState] = useState({
+    todayDate: new Date().toISOString().split('T')[0],
+    currentTime: new Date().toTimeString().split(' ')[0]
+  });
+
   useEffect(() => {
     const storedRecords = JSON.parse(localStorage.getItem(`attendanceRecords_${userId}`)) || [];
     setAttendanceRecords(storedRecords);
   }, [userId]);
 
   const handleAttendance = async () => {
-    const todayDate = new Date().toISOString().split('T')[0];
-    const currentTime = new Date().toTimeString().split(' ')[0];
+    const todayDate = formState.todayDate;
+    const currentTime = formState.currentTime;
     const status = new Date().getHours() < 8 ? "A tiempo" : "Tarde";
 
     try {
@@ -47,7 +53,6 @@ export const Personal = () => {
         const updatedRecords = [...attendanceRecords, record];
         setAttendanceRecords(updatedRecords);
         localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
-        console.log("Registro de asistencia:", record);
         alert("Asistencia registrada correctamente");
       }
     } catch (error) {
@@ -81,14 +86,10 @@ export const Personal = () => {
   useEffect(() => {
     fetchInternetTime();
     const interval = setInterval(() => {
-      setFormState((prevState) => {
-        const updatedTime = new Date();
-        updatedTime.setSeconds(updatedTime.getSeconds() + 1);
-        return {
-          ...prevState,
-          currentTime: updatedTime.toTimeString().split(' ')[0],
-        };
-      });
+      setFormState((prevState) => ({
+        ...prevState,
+        currentTime: new Date().toTimeString().split(' ')[0]
+      }));
     }, 1000);
 
     return () => clearInterval(interval);
@@ -122,12 +123,11 @@ export const Personal = () => {
                 <div className="card" style={{ background: backgroundColor }}>
                   <div className="card-content">
                     <div className="card-top">
-                      <span className="card-title"></span>
                       <p>{isOnTime}</p>
                     </div>
                     <div className="card-bottom">
                       <p>{formState.todayDate}</p>
-                      {formState.currentTime}
+                      <p>{formState.currentTime}</p>
                     </div>
                   </div>
                   <div className="card-image">

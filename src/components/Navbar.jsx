@@ -79,7 +79,7 @@ export const Navbar = () => {
       </div>
       <div className="navbar-center">
         <label>Registro de asistencia</label>
-        {userEmail === 'jose.delacerda@transparencia.gob.gt' && (
+        {userEmail === 'Jose.delacerda@transparencia.gob.gt' && (
           <button onClick={exportToExcel} className="export-btn">
             Exportar a Excel
           </button>

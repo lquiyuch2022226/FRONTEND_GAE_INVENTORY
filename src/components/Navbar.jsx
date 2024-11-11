@@ -19,7 +19,6 @@ export const Navbar = () => {
           return;
         }
 
-        // Si no hay reportes, pedir al backend que cree uno nuevo si es necesario
         if (response.data.reportes.length === 0) {
           // Hacer una llamada para crear un reporte si no existe
           await createReporteIfNotExist();

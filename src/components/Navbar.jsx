@@ -7,6 +7,16 @@ export const Navbar = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('attendanceRecords');
 
+    const [formState, setFormState] = useState({
+      todayDate: new Date().toISOString().split('T')[0],
+      currentTime: new Date().toTimeString().split(' ')[0]
+    });
+  
+    useEffect(() => {
+      const storedRecords = JSON.parse(localStorage.getItem(`attendanceRecords_${userId}`)) || [];
+      setAttendanceRecords(storedRecords);
+    }, [userId]);
+
     const userId = JSON.parse(localStorage.getItem('datosUsuario'))?.account?.homeAccountId;
     if (userId) {
       Object.keys(localStorage).forEach(key => {

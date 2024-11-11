@@ -1,13 +1,7 @@
 import { useState, useEffect } from "react";
 import logoGE from "../assets/img/SmallLogo.jpg";
-import { Input } from "./Input";
-import {
-  emailValidationMessage,
-  passwordValidationMessage,
-  validateEmail,
-  validatePassword,
-} from "../shared/validators";
-import { useLogin } from "../shared/hooks";
+import './login.css';
+/* import { useLogin } from "../shared/hooks"; */
 import * as msal from '@azure/msal-browser'; // Import MSAL
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
@@ -22,8 +16,8 @@ const msalConfig = {
 
 const msalInstance = new msal.PublicClientApplication(msalConfig);
 
-export const Login = ({ switchAuthHandler }) => {
-  const { login, isLoading } = useLogin();
+export const Login = () => {
+  /* const { login, isLoading } = useLogin(); */
   const navigate = useNavigate();
   const [error, setError] = useState(null);
 
@@ -44,36 +38,22 @@ export const Login = ({ switchAuthHandler }) => {
     initializeMSAL();
   }, []);
 
-  const handleInputValueChange = (value, field) => {
-    setFormState((prevState) => ({
-      ...prevState,
-      [field]: { ...prevState[field], value },
-    }));
-  };
-
-  const handleInputValidationOnBlur = (value, field) => {
-    let isValid = false;
-    switch (field) {
-      case "email":
-        isValid = validateEmail(value);
-        break;
-      case "password":
-        isValid = validatePassword(value);
-        break;
-      default:
-        break;
+  const getUserIP = async () => {
+    try {
+      const response = await fetch("https://api.ipify.org?format=json");
+      const data = await response.json();
+      return data.ip;
+    } catch (error) {
+      console.error("Error fetching IP:", error);
+      return null;
     }
-    setFormState((prevState) => ({
-      ...prevState,
-      [field]: { ...prevState[field], isValid, showError: !isValid },
-    }));
   };
 
   const handleLogin = async (event) => {
     event.preventDefault();
     const result = await login(formState.email.value, formState.password.value);
     if (result.error) {
-      setError("Login failed. Please check your credentials.");
+      setError(null);
     } else {
       setFormState({
         email: { value: "", isValid: false, showError: false },
@@ -88,49 +68,60 @@ export const Login = ({ switchAuthHandler }) => {
     const loginRequest = {
       scopes: ['openid', 'profile', 'email', 'User.Read'],
     };
-  
+
     try {
       const response = await msalInstance.loginPopup(loginRequest);
       const token = response.accessToken;
-  
+
       // Obtener la información del perfil del usuario
       const profileResponse = await msalInstance.acquireTokenSilent({
         scopes: ['User.Read'],
         account: response.account,
       });
-  
+
       // Llamada a Microsoft Graph para obtener detalles del usuario
       const userDetailsResponse = await fetch('https://graph.microsoft.com/v1.0/me', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-  
+
       if (!userDetailsResponse.ok) {
         throw new Error("Error fetching user details");
       }
-  
+
       const userDetails = await userDetailsResponse.json();
-      console.log('User Details:', userDetails); // Imprime los detalles del usuario
-  
-      // Guarda los datos relevantes en localStorage
+
+      // Llamada adicional para obtener la foto de perfil del usuario
+      const photoResponse = await fetch('https://graph.microsoft.com/v1.0/me/photo/$value', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      let profilePicture = null;
+      if (photoResponse.ok) {
+        // Convierte la respuesta en un formato de imagen (Blob)
+        const photoBlob = await photoResponse.blob();
+        profilePicture = URL.createObjectURL(photoBlob); // Crea una URL para la imagen
+      }
+
+      const userIP = await getUserIP();
+
+      // Guarda los datos relevantes en localStorage, incluyendo la IP
       localStorage.setItem('datosUsuario', JSON.stringify({
         account: response.account,
         accessToken: token,
-        profilePicture: profileResponse.idTokenClaims.picture,
+        profilePicture: profilePicture, // Aquí guardamos la imagen de perfil
         officeLocation: userDetails.officeLocation, // Almacena el officeLocation
+        ipAddress: userIP, // Aquí guardamos la IP
       }));
-  
+
       navigate('/dashboard/personal');
     } catch (error) {
       setError("Microsoft login failed: " + (error.message || "Unknown error"));
     }
   };
-  
-  
-
-  const isSubmitButtonDisabled =
-    isLoading || !formState.password.isValid || !formState.email.isValid;
 
   return (
     <div className="login-container">
@@ -146,38 +137,23 @@ export const Login = ({ switchAuthHandler }) => {
 
           {error && <div className="error-message">{error}</div>}
 
-          <div className="input-container">
-            <Input
-              field="email"
-              label="Email"
-              value={formState.email.value}
-              onChangeHandler={handleInputValueChange}
-              type="email"
-              onBlurHandler={handleInputValidationOnBlur}
-              showErrorMessage={formState.email.showError}
-              validationMessage={emailValidationMessage}
-            />
-          </div>
 
-          <div className="input-container">
-            <Input
-              field="password"
-              label="Password"
-              value={formState.password.value}
-              onChangeHandler={handleInputValueChange}
-              type="password"
-              onBlurHandler={handleInputValidationOnBlur}
-              showErrorMessage={formState.password.showError}
-              validationMessage={passwordValidationMessage}
-            />
-          </div>
-
-          <button type="submit" className="login-button" disabled={isSubmitButtonDisabled}>
-            {isLoading ? "Logging in..." : "Log in"}
-          </button>
-
-          <button type="button" className="microsoft-login-button" onClick={loginWithMicrosoft}>
-            Iniciar sesión con Microsoft
+          <button className="uiverse" onClick={loginWithMicrosoft}>
+            <div className="wrapper">
+              <span>Login</span>
+              <div className="circle circle-12"></div>
+              <div className="circle circle-11"></div>
+              <div className="circle circle-10"></div>
+              <div className="circle circle-9"></div>
+              <div className="circle circle-8"></div>
+              <div className="circle circle-7"></div>
+              <div className="circle circle-6"></div>
+              <div className="circle circle-5"></div>
+              <div className="circle circle-4"></div>
+              <div className="circle circle-3"></div>
+              <div className="circle circle-2"></div>
+              <div className="circle circle-1"></div>
+            </div>
           </button>
         </form>
       </div>

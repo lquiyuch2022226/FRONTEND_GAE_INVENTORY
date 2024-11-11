@@ -34,7 +34,7 @@ const handleError = (error) => {
 };
 
 
-export const login = async (token) => {
+/* export const login = async (token) => {
     try {
         const response = await apiClient.post('/auth/login/microsoft', { token });
         return response.data;
@@ -42,7 +42,7 @@ export const login = async (token) => {
         throw error;
     }
 };
-
+ */
 
 
 export const reportarEntrada = async (data) => {

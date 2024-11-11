@@ -10,7 +10,7 @@ import lateImage from '../../assets/img/cerca.png';
 
 export const Personal = () => {
   const user = JSON.parse(localStorage.getItem('datosUsuario')) || {};
-  cconst [attendanceRecords, setAttendanceRecords] = useState([]);
+  const [attendanceRecords, setAttendanceRecords] = useState([]);
   const userId = user.account?.homeAccountId || "Invitado";
   const userName = user.account?.name || "Invitado";
 

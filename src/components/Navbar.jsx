@@ -1,4 +1,4 @@
-import logo from "../assets/img/BigLogoWhite.png"; 
+import logo from "../assets/img/BigLogoWhite.png";  
 import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
 import { getReporteData } from '../services/api.jsx'; // Asegúrate de importar el método correctamente
@@ -48,8 +48,15 @@ export const Navbar = () => {
       return;
     }
 
-    // Eliminar el campo "_id" de cada registro
-    const recordsWithoutId = attendanceRecords.map(({ _id, ...rest }) => rest);
+    // Eliminar el campo "_id" de cada registro y renombrar las claves
+    const recordsWithoutId = attendanceRecords.map(({ _id, ...rest }) => ({
+      "Nombre": rest.name,
+      "Fecha": rest.date,
+      "Hora de Entrada": rest.time,
+      "Estado": rest.status,
+      "IP del dispositivo": rest.ip,
+      "Razón": rest.reason
+    }));
 
     // Crear el archivo Excel con los registros modificados
     const worksheet = XLSX.utils.json_to_sheet(recordsWithoutId);

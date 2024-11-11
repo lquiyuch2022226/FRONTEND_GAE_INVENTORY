@@ -47,14 +47,17 @@ const handleError = (error) => {
 
 export const reportarEntrada = async (data) => {
     try {
+        console.log('Datos que se enviarán:', data);  // Verifica qué datos estás enviando
         return await apiClient.post('/report/enviar', data);
     } catch (e) {
+        console.error('Error al enviar la solicitud:', e.response?.data || e.message);
         return {
             error: true,
             e
         };
     }
 };
+
 
 export const getUsers = async () => {
     try {

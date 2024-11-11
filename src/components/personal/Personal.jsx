@@ -39,6 +39,8 @@ export const Personal = () => {
         status,
         ip: userIp,
       };
+
+      console.log(record);
   
       // Enviar al backend
       const response = await reportarEntrada(record);

@@ -1,26 +1,27 @@
 import logo from "../assets/img/BigLogoWhite.png";
 import React, { useState, useEffect } from 'react';
+import * as XLSX from 'xlsx';
+
 export const Navbar = () => {
+  const userId = JSON.parse(localStorage.getItem('datosUsuario'))?.account?.homeAccountId;
+  
+  // Definir estados y efectos en el nivel del componente
+  const [attendanceRecords, setAttendanceRecords] = useState([]);
+  const [formState, setFormState] = useState({
+    todayDate: new Date().toISOString().split('T')[0],
+    currentTime: new Date().toTimeString().split(' ')[0]
+  });
+
+  useEffect(() => {
+    const storedRecords = JSON.parse(localStorage.getItem(`attendanceRecords_${userId}`)) || [];
+    setAttendanceRecords(storedRecords);
+  }, [userId]);
 
   const handleLogout = () => {
-    const userId = JSON.parse(localStorage.getItem('datosUsuario'))?.account?.homeAccountId;
     localStorage.removeItem('datosUsuario');
     localStorage.removeItem('userProfile');
     localStorage.removeItem('token');
-    const [attendanceRecords, setAttendanceRecords] = useState([]);
 
-
-    const [formState, setFormState] = useState({
-      todayDate: new Date().toISOString().split('T')[0],
-      currentTime: new Date().toTimeString().split(' ')[0]
-    });
-  
-    useEffect(() => {
-      const storedRecords = JSON.parse(localStorage.getItem(`attendanceRecords_${userId}`)) || [];
-      setAttendanceRecords(storedRecords);
-    }, [userId]);
-
-    
     if (userId) {
       Object.keys(localStorage).forEach(key => {
         if (key.startsWith(`attendanceRecords_${userId}`)) {
@@ -33,14 +34,7 @@ export const Navbar = () => {
   };
 
   const exportToExcel = () => {
-    const [attendanceRecords, setAttendanceRecords] = useState([]);
-
-    useEffect(() => {
-      const storedRecords = JSON.parse(localStorage.getItem(`attendanceRecords_${userId}`)) || [];
-      setAttendanceRecords(storedRecords);
-    }, [userId]);
-
-    const todayDate = new Date().toISOString().split('T')[0]; // Obtén la fecha de hoy en formato YYYY-MM-DD
+    const todayDate = new Date().toISOString().split('T')[0];
   
     // Filtra los registros que tengan la fecha de hoy
     const todayRecords = attendanceRecords.filter(record => {

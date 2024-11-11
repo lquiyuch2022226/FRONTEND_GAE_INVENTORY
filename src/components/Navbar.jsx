@@ -16,7 +16,7 @@ export const Navbar = () => {
       });
     }
     
-    window.location.href = 'http://localhost:5173/';
+    window.location.href = 'https://frontend-gae-inventory-rkmq.vercel.app/';
   };
 
   return (

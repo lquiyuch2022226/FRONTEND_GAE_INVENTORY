@@ -9,8 +9,8 @@ const msalConfig = {
   auth: {
     clientId: '7d105d0d-94ca-4645-873d-4bd5edf190bb', // Tu clientId
     authority: 'https://login.microsoftonline.com/a00e95d9-ed09-478e-9f3a-7aa025deb516', // Tu tenant ID
-    redirectUri: 'http://localhost:5173/dashboard/personal', // URI de redirección
-    postLogoutRedirectUri: 'http://localhost:5173/', // Opcional
+    redirectUri: 'https://frontend-gae-inventory-rkmq.vercel.app//dashboard/personal', // URI de redirección
+    postLogoutRedirectUri: 'https://frontend-gae-inventory-rkmq.vercel.app/', // Opcional
   },
 };
 

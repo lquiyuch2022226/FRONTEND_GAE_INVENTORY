@@ -10,8 +10,7 @@ import lateImage from '../../assets/img/cerca.png';
 
 export const Personal = () => {
   const user = JSON.parse(localStorage.getItem('datosUsuario')) || {};
-  const [attendanceRecords, setAttendanceRecords] = useState([]);
-  const navigate = useNavigate();
+  cconst [attendanceRecords, setAttendanceRecords] = useState([]);
   const userId = user.account?.homeAccountId || "Invitado";
   const userName = user.account?.name || "Invitado";
 
@@ -20,11 +19,6 @@ export const Personal = () => {
     todayDate: new Date().toISOString().split('T')[0],
     currentTime: new Date().toTimeString().split(' ')[0]
   });
-
-  useEffect(() => {
-    const storedRecords = JSON.parse(localStorage.getItem(`attendanceRecords_${userId}`)) || [];
-    setAttendanceRecords(storedRecords);
-  }, [userId]);
 
   const handleAttendance = async () => {
     const todayDate = formState.todayDate;
@@ -43,6 +37,7 @@ export const Personal = () => {
         status,
         ip: userIp,
       };
+      console.log(record)
 
       const response = await reportarEntrada(record);
 

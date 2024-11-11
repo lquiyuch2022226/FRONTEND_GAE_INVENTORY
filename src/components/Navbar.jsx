@@ -2,10 +2,12 @@ import logo from "../assets/img/BigLogoWhite.png";
 export const Navbar = () => {
 
   const handleLogout = () => {
+    const userId = JSON.parse(localStorage.getItem('datosUsuario'))?.account?.homeAccountId;
     localStorage.removeItem('datosUsuario');
     localStorage.removeItem('userProfile');
     localStorage.removeItem('token');
-    localStorage.removeItem('attendanceRecords');
+    const [attendanceRecords, setAttendanceRecords] = useState([]);
+
 
     const [formState, setFormState] = useState({
       todayDate: new Date().toISOString().split('T')[0],
@@ -17,7 +19,7 @@ export const Navbar = () => {
       setAttendanceRecords(storedRecords);
     }, [userId]);
 
-    const userId = JSON.parse(localStorage.getItem('datosUsuario'))?.account?.homeAccountId;
+    
     if (userId) {
       Object.keys(localStorage).forEach(key => {
         if (key.startsWith(`attendanceRecords_${userId}`)) {

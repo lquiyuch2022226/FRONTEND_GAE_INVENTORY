@@ -1,7 +1,7 @@
 import logo from "../assets/img/BigLogoWhite.png";  
 import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
-import { getReporteData } from '../services/api.jsx'; // Asegúrate de importar el método correctamente
+import { getReporteData, createReporteIfNotExist } from '../services/api.jsx'; // Asegúrate de importar el método correctamente
 
 export const Navbar = () => {
   const userId = JSON.parse(localStorage.getItem('datosUsuario'))?.account?.homeAccountId;
@@ -13,17 +13,30 @@ export const Navbar = () => {
     const fetchReporte = async () => {
       try {
         const response = await getReporteData();
+
         if (response.error) {
           console.error('Error al obtener el reporte:', response.e);
           return;
         }
-        setAttendanceRecords(response.data.reportes || []);
+
+        // Si no hay reportes, pedir al backend que cree uno nuevo si es necesario
+        if (response.data.reportes.length === 0) {
+          // Hacer una llamada para crear un reporte si no existe
+          await createReporteIfNotExist();
+          // Volver a obtener los reportes después de la creación
+          const updatedResponse = await getReporteData();
+          setAttendanceRecords(updatedResponse.data.reportes || []);
+        } else {
+          setAttendanceRecords(response.data.reportes || []);
+        }
+
       } catch (error) {
         console.error('Error al obtener el reporte:', error);
       }
     };
+
     fetchReporte();
-  }, []);
+  }, []); // Solo se ejecuta al montar el componente
 
   const handleLogout = () => {
     localStorage.removeItem('datosUsuario');

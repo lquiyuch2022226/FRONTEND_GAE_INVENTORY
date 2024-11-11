@@ -51,16 +51,35 @@ export const Login = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    const result = await login(formState.email.value, formState.password.value);
-    if (result.error) {
-      setError(null);
-    } else {
-      setFormState({
-        email: { value: "", isValid: false, showError: false },
-        password: { value: "", isValid: false, showError: false },
-      });
-      setError(null);
-      navigate('/dashboard/personal');
+
+    // Simulación de solicitud de login con un error siempre
+    const simulateLogin = () => new Promise((resolve) => {
+      setTimeout(() => resolve({ error: true }), 3000); // Simula un error tras 3 segundos
+    });
+
+    const timeout = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Timeout: La solicitud tomó demasiado tiempo.')), 60000)
+    );
+
+    try {
+      const result = await Promise.race([
+        simulateLogin(),
+        timeout
+      ]);
+
+      if (result.error) {
+        setError("Error: no se pudo completar el inicio de sesión simulado.");
+      } else {
+        setFormState({
+          email: { value: "", isValid: false, showError: false },
+          password: { value: "", isValid: false, showError: false },
+        });
+        setError(null);
+        navigate('/dashboard/personal');
+      }
+    } catch (error) {
+      console.error(error);
+      setError("La solicitud tomó demasiado tiempo o ocurrió un error.");
     }
   };
 

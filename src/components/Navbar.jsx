@@ -1,21 +1,31 @@
 import logo from "../assets/img/BigLogoWhite.png";
 import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
+import { getReporteData } from '../services/api.jsx'; // Cambia la ruta por la correcta
+
 
 export const Navbar = () => {
   const userId = JSON.parse(localStorage.getItem('datosUsuario'))?.account?.homeAccountId;
   
   // Definir estados y efectos en el nivel del componente
   const [attendanceRecords, setAttendanceRecords] = useState([]);
-  const [formState, setFormState] = useState({
-    todayDate: new Date().toISOString().split('T')[0],
-    currentTime: new Date().toTimeString().split(' ')[0]
-  });
-
+  
   useEffect(() => {
-    const storedRecords = JSON.parse(localStorage.getItem(`attendanceRecords_${userId}`)) || [];
-    setAttendanceRecords(storedRecords);
-  }, [userId]);
+    // Obtener el último reporte desde el backend
+    const fetchReporte = async () => {
+      try {
+        const response = await getReporteData();
+        if (response.error) {
+          console.error('Error al obtener el reporte:', response.e);
+          return;
+        }
+        setAttendanceRecords(response.data.reportes || []);
+      } catch (error) {
+        console.error('Error al obtener el reporte:', error);
+      }
+    };
+    fetchReporte();
+  }, []); // Solo se ejecuta una vez al montar el componente
 
   const handleLogout = () => {
     localStorage.removeItem('datosUsuario');
@@ -34,19 +44,17 @@ export const Navbar = () => {
   };
 
   const exportToExcel = () => {
-    const todayDate = new Date().toISOString().split('T')[0];
-  
-    // Filtra los registros que tengan la fecha de hoy
-    const todayRecords = attendanceRecords.filter(record => {
-      const recordDate = new Date(record.date).toISOString().split('T')[0];
-      return recordDate === todayDate;
-    });
-  
-    // Crea el archivo Excel solo con los registros del día actual
-    const worksheet = XLSX.utils.json_to_sheet(todayRecords);
+    // Si no hay registros, no hacer nada
+    if (attendanceRecords.length === 0) {
+      alert('No hay registros para exportar');
+      return;
+    }
+
+    // Crear el archivo Excel con los registros
+    const worksheet = XLSX.utils.json_to_sheet(attendanceRecords);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Reporte de Asistencia");
-    XLSX.writeFile(workbook, `Reporte_Asistencia_${todayDate}.xlsx`);
+    XLSX.writeFile(workbook, `Reporte_Asistencia_${new Date().toISOString().split('T')[0]}.xlsx`);
   };
 
   return (

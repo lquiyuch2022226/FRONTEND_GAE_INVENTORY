@@ -140,7 +140,7 @@ export const getNotesByCreator = async () => {
     }
 };
 
-/* export const getReporteData = async () => {
+export const getReporteData = async () => {
     try {
         return await apiClient.get('/report/');
     } catch (e) {
@@ -149,7 +149,7 @@ export const getNotesByCreator = async () => {
             e
         };
     }
-}; */
+};
 
 export const createNote = async (data) => {
     try {

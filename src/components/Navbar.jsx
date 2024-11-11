@@ -1,10 +1,11 @@
 import logo from "../assets/img/BigLogoWhite.png";
 import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
-import { getReporteData } from '../services/api.jsx'; // Solo importar getReporteData
+import { getReporteData } from '../services/api.jsx';
 
 export const Navbar = () => {
   const userId = JSON.parse(localStorage.getItem('datosUsuario'))?.account?.homeAccountId;
+  const userEmail = JSON.parse(localStorage.getItem('datosUsuario'))?.account?.username;
 
   const [attendanceRecords, setAttendanceRecords] = useState([]);
 
@@ -19,8 +20,7 @@ export const Navbar = () => {
         }
 
         if (response.data.reportes.length === 0) {
-          // Solo manejar el caso si no hay reportes
-          setAttendanceRecords([]); // O puedes manejarlo de otra manera si lo prefieres
+          setAttendanceRecords([]);
         } else {
           setAttendanceRecords(response.data.reportes || []);
         }
@@ -79,9 +79,11 @@ export const Navbar = () => {
       </div>
       <div className="navbar-center">
         <label>Registro de asistencia</label>
-        <button onClick={exportToExcel} className="export-btn">
-          Exportar a Excel
-        </button>
+        {userEmail === 'jose.delacerda@transparencia.gob.gt' && (
+          <button onClick={exportToExcel} className="export-btn">
+            Exportar a Excel
+          </button>
+        )}
         <button onClick={handleLogout}>Logout</button>
       </div>
     </nav>

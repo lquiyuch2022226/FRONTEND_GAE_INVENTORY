@@ -21,6 +21,7 @@ export const Personal = () => {
   });
 
   const [showPopup, setShowPopup] = useState(false); // Estado para controlar el popup
+  const [reason, setReason] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false); // Estado para evitar múltiples envíos
 
   const handleAttendance = async () => {
@@ -41,6 +42,7 @@ export const Personal = () => {
         time: currentTime,
         status,
         ip: userIp,
+        reason: reason
       };
 
       console.log(record);
@@ -65,6 +67,9 @@ export const Personal = () => {
     } catch (error) {
       console.error("Error al registrar la asistencia:", error);
       alert("Error al registrar la asistencia: " + error.message);
+    } finally {
+      setShowPopup(false);
+      setReason("");
     }
   };
 
@@ -113,6 +118,7 @@ export const Personal = () => {
 
   const handleCancelAttendance = () => {
     setShowPopup(false); // Cierra el pop-up sin hacer nada
+    setReason("");
   };
 
   return (
@@ -182,6 +188,13 @@ export const Personal = () => {
               <div className="popup">
                 <div className="popup-content">
                   <p>¿Estás seguro de que deseas registrar tu asistencia?</p>
+                  <textarea
+                    placeholder="Escribe aquí la razón de tu asistencia"
+                    value={reason}
+                    onChange={(e) => setReason(e.target.value)}
+                    rows="4"
+                    style={{ width: '100%', marginTop: '10px', padding: '8px' }}
+                  />
                   <div className="popup-actions">
                     <button onClick={handleConfirmAttendance}>Sí</button>
                     <button onClick={handleCancelAttendance}>No</button>

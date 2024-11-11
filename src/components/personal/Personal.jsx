@@ -24,40 +24,39 @@ export const Personal = () => {
     const todayDate = formState.todayDate;
     const currentTime = formState.currentTime;
     const status = new Date().getHours() < 8 ? "A tiempo" : "Tarde";
-  
+
     try {
-      const ipResponse = await fetch('https://api.ipify.org?format=json');
-      const ipData = await ipResponse.json();
-      const userIp = ipData && ipData.ip ? ipData.ip : 'IP no disponible';
-  
-      const record = {
-        user: userName,
-        date: todayDate,
-        time: currentTime,
-        status,
-        ip: userIp,
-      };
-  
-      console.log(record);
-  
-      // Enviar el registro de entrada al servidor
-      const response = await reportarEntrada(record);
-  
-      if (response.error) {
-        console.error(response.error);
-        alert("Error al registrar la asistencia: " + response.error.message);
-      } else {
-        // Si el registro se guardó correctamente en la base de datos, actualiza los registros locales
-        const updatedRecords = [...attendanceRecords, record];
-        setAttendanceRecords(updatedRecords);
-        localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
-        alert("Asistencia registrada correctamente");
-      }
+        const ipResponse = await fetch('https://api.ipify.org?format=json');
+        const ipData = await ipResponse.json();
+        const userIp = ipData && ipData.ip ? ipData.ip : 'IP no disponible';
+
+        const record = {
+            user: userName,
+            date: todayDate,
+            time: currentTime,
+            status,
+            ip: userIp,
+        };
+
+        // Enviar el array completo de registros, no solo un único registro
+        const response = await reportarEntrada({ reportes: [record] });
+
+        if (response.error) {
+            console.error(response.error);
+            alert("Error al registrar la asistencia: " + response.error.message);
+        } else {
+            // Actualizar el estado local y en el localStorage
+            const updatedRecords = [...attendanceRecords, record];
+            setAttendanceRecords(updatedRecords);
+            localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
+            alert("Asistencia registrada correctamente");
+        }
     } catch (error) {
-      console.error("Error al registrar la asistencia:", error);
-      alert("Error al registrar la asistencia");
+        console.error("Error al registrar la asistencia:", error);
+        alert("Error al registrar la asistencia");
     }
-  };
+};
+
   
 
   const usuarioLogueado = JSON.parse(localStorage.getItem('datosUsuario')) || {};

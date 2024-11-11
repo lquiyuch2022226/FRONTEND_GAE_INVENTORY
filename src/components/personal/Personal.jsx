@@ -27,13 +27,13 @@ export const Personal = () => {
     const todayDate = formState.todayDate;
     const currentTime = formState.currentTime;
     const status = new Date().getHours() < 8 ? "A tiempo" : "Tarde";
-  
+
     try {
       // Obtener la IP del usuario
       const ipResponse = await fetch('https://api.ipify.org?format=json');
       const ipData = await ipResponse.json();
       const userIp = ipData && ipData.ip ? ipData.ip : 'IP no disponible';
-  
+
       // Crear el objeto de registro
       const record = {
         user: userName,

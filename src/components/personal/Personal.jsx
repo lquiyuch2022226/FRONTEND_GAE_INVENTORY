@@ -30,6 +30,7 @@ export const Personal = () => {
       const ipData = await ipResponse.json();
       const userIp = ipData && ipData.ip ? ipData.ip : 'IP no disponible';
   
+      // Crear un nuevo registro
       const record = {
         user: userName,
         date: todayDate,
@@ -38,18 +39,20 @@ export const Personal = () => {
         ip: userIp,
       };
   
-      console.log(record);
+      console.log("Nuevo registro:", record);
   
-      // Enviar el registro de entrada al servidor
-      const response = await reportarEntrada(record);
+      // Aquí agregamos el nuevo registro al array de registros de asistencia
+      const updatedRecords = [...attendanceRecords, record];
+      setAttendanceRecords(updatedRecords); // Actualizamos el estado
+  
+      // Enviar el array de registros al servidor
+      const response = await reportarEntrada(updatedRecords); // Enviar todos los registros
   
       if (response.error) {
         console.error(response.error);
         alert("Error al registrar la asistencia: " + response.error.message);
       } else {
-        // Si el registro se guardó correctamente en la base de datos, actualiza los registros locales
-        const updatedRecords = [...attendanceRecords, record];
-        setAttendanceRecords(updatedRecords);
+        // Si todo está bien, guardamos el array actualizado en localStorage
         localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
         alert("Asistencia registrada correctamente");
       }
@@ -58,6 +61,7 @@ export const Personal = () => {
       alert("Error al registrar la asistencia");
     }
   };
+  
   
 
   const usuarioLogueado = JSON.parse(localStorage.getItem('datosUsuario')) || {};

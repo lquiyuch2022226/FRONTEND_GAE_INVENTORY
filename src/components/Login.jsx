@@ -70,10 +70,6 @@ export const Login = () => {
       if (result.error) {
         setError("Error: no se pudo completar el inicio de sesión simulado.");
       } else {
-        setFormState({
-          email: { value: "", isValid: false, showError: false },
-          password: { value: "", isValid: false, showError: false },
-        });
         setError(null);
         navigate('/dashboard/personal');
       }

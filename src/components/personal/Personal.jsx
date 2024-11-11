@@ -20,6 +20,9 @@ export const Personal = () => {
     currentTime: new Date().toTimeString().split(' ')[0]
   });
 
+  const [showPopup, setShowPopup] = useState(false); // Estado para controlar el popup
+  const [isSubmitting, setIsSubmitting] = useState(false); // Estado para evitar múltiples envíos
+
   const handleAttendance = async () => {
     const todayDate = formState.todayDate;
     const currentTime = formState.currentTime;
@@ -41,10 +44,10 @@ export const Personal = () => {
       };
 
       console.log(record);
-  
+
       // Enviar al backend
       const response = await reportarEntrada(record);
-  
+
       if (response && response.error) {
         console.error(response.error);
         alert("Error al registrar la asistencia: " + response.error.message || response.error);
@@ -52,10 +55,10 @@ export const Personal = () => {
         // Actualizar los registros en el frontend (localStorage)
         const updatedRecords = [...attendanceRecords, record];
         setAttendanceRecords(updatedRecords);
-  
+
         // Guardar los registros actualizados en localStorage
         localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
-  
+
         // Mostrar mensaje de éxito
         alert("Asistencia registrada correctamente");
       }
@@ -64,7 +67,6 @@ export const Personal = () => {
       alert("Error al registrar la asistencia: " + error.message);
     }
   };
-  
 
   const usuarioLogueado = JSON.parse(localStorage.getItem('datosUsuario')) || {};
   const currentHour = new Date().getHours();
@@ -99,6 +101,19 @@ export const Personal = () => {
 
     return () => clearInterval(interval);
   }, []);
+
+  const handleShowPopup = () => {
+    setShowPopup(true); // Muestra el pop-up
+  };
+
+  const handleConfirmAttendance = () => {
+    setShowPopup(false);
+    handleAttendance(); // Realiza el registro de asistencia
+  };
+
+  const handleCancelAttendance = () => {
+    setShowPopup(false); // Cierra el pop-up sin hacer nada
+  };
 
   return (
     <div className="personal">
@@ -145,7 +160,7 @@ export const Personal = () => {
                 </div>
               </div>
             </div>
-            <button onClick={handleAttendance}>
+            <button onClick={handleShowPopup}>
               <span>Enviar</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -161,6 +176,19 @@ export const Personal = () => {
                 ></path>
               </svg>
             </button>
+
+            {/* Pop-up para confirmar */}
+            {showPopup && (
+              <div className="popup">
+                <div className="popup-content">
+                  <p>¿Estás seguro de que deseas registrar tu asistencia?</p>
+                  <div className="popup-actions">
+                    <button onClick={handleConfirmAttendance}>Sí</button>
+                    <button onClick={handleCancelAttendance}>No</button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         ) : (
           <p>No hay datos del usuario disponibles.</p>

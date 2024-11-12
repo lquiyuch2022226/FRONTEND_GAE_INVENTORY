@@ -21,15 +21,12 @@ export const Personal = () => {
 
   const [showPopup, setShowPopup] = useState(false);
   const [reason, setReason] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false); // Nuevo estado para el botón
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-  // Verificar si ya se registró la asistencia hoy
+  // Verificar si ya se registró la asistencia hoy y actualizar al cambiar de día
   useEffect(() => {
     const lastAttendanceDate = localStorage.getItem(`lastAttendance_${userId}`);
-    if (lastAttendanceDate === formState.todayDate) {
-      setIsButtonDisabled(true); // Deshabilitar el botón si ya se registró hoy
-    }
+    setIsButtonDisabled(lastAttendanceDate === formState.todayDate);
   }, [formState.todayDate, userId]);
 
   const handleAttendance = async () => {
@@ -52,7 +49,7 @@ export const Personal = () => {
       };
 
       console.log(record);
-
+      
       const response = await reportarEntrada(record);
 
       if (response && response.error) {
@@ -80,7 +77,6 @@ export const Personal = () => {
     }
   };
 
-  const usuarioLogueado = JSON.parse(localStorage.getItem('datosUsuario')) || {};
   const currentHour = new Date().getHours();
   const isOnTime = currentHour < 8 ? "A tiempo" : "Tarde";
   const imageToShow = currentHour < 8 ? earlyImage : lateImage;
@@ -92,11 +88,11 @@ export const Personal = () => {
       const response = await fetch('http://worldtimeapi.org/api/timezone/America/Guatemala');
       const data = await response.json();
       const currentDateTime = new Date(data.datetime);
-      setFormState((prevState) => ({
-        ...prevState,
+
+      setFormState({
         todayDate: currentDateTime.toISOString().split('T')[0],
-        currentTime: currentDateTime.toTimeString().split(' ')[0],
-      }));
+        currentTime: currentDateTime.toTimeString().split(' ')[0]
+      });
     } catch (error) {
       console.error("Error fetching internet time:", error);
     }
@@ -130,10 +126,10 @@ export const Personal = () => {
 
   return (
     <div className="personal">
-      <Navbar user={usuarioLogueado} />
+      <Navbar user={user} />
 
       <div className="posts-personal">
-        {usuarioLogueado ? (
+        {user ? (
           <div className="e-card playing">
             <div className="image"></div>
             <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})` }}></div>
@@ -143,13 +139,13 @@ export const Personal = () => {
             <div className='content-user'>
               <div className="infotop">
                 <img
-                  src={usuarioLogueado.profilePicture || defaultAvatar}
+                  src={user.profilePicture || defaultAvatar}
                   alt="User Icon"
                   className="icon"
                 />
                 <div className="user-info text-white">
-                  <div className="user-name">{usuarioLogueado.account.name}</div>
-                  <div className="user-department">{usuarioLogueado.account.username}</div>
+                  <div className="user-name">{user.account.name}</div>
+                  <div className="user-department">{user.account.username}</div>
                 </div>
               </div>
               <div className="date-time">

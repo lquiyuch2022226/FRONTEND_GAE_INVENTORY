@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar } from '../Navbar.jsx';
-import { useNavigate } from "react-router-dom";
 import { reportarEntrada } from '../../services/api.jsx';
-import * as XLSX from 'xlsx';
 import './personal.css';
 import defaultAvatar from '../../assets/img/palmamorro.jpg';
 import earlyImage from '../../assets/img/comprobado.png';
@@ -23,10 +21,14 @@ export const Personal = () => {
   const [reason, setReason] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-  // Verificar si ya se registró la asistencia hoy y actualizar al cambiar de día
+  // Verificar si ya se registró la asistencia hoy y habilitar solo entre 7 a.m. y 10 a.m.
   useEffect(() => {
     const lastAttendanceDate = localStorage.getItem(`lastAttendance_${userId}`);
-    setIsButtonDisabled(lastAttendanceDate === formState.todayDate);
+    const currentHour = new Date().getHours();
+
+    // Permitir registrar asistencia solo entre las 7 y las 10 a.m. si no se ha registrado ya hoy
+    const isWithinAllowedTime = currentHour >= 7 && currentHour < 10;
+    setIsButtonDisabled(lastAttendanceDate === formState.todayDate || !isWithinAllowedTime);
   }, [formState.todayDate, userId]);
 
   const handleAttendance = async () => {

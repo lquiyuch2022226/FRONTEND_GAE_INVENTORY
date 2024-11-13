@@ -27,9 +27,9 @@ export const Personal = () => {
     const currentHour = new Date().getHours();
 
     // Permitir registrar asistencia solo entre las 7 y las 10 a.m. si no se ha registrado ya hoy
-    const isWithinAllowedTime = currentHour >= 20 && currentHour <= 21;
+    const isWithinAllowedTime = currentHour >= 7 && currentHour < 10;
     setIsButtonDisabled(lastAttendanceDate === formState.todayDate || !isWithinAllowedTime);
-  }, [formState.todayDate, userId]);  
+  }, [formState.todayDate, userId]);
 
   const handleAttendance = async () => {
     const todayDate = formState.todayDate;
@@ -85,28 +85,12 @@ export const Personal = () => {
   const backgroundColor = currentHour < 8 ? '#359100' : '#8b0000';
   const waveColors = currentHour < 8 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
 
-  const fetchInternetTime = async () => {
-    try {
-      const response = await fetch('http://worldtimeapi.org/api/timezone/America/Guatemala');
-      const data = await response.json();
-      const currentDateTime = new Date(data.datetime);
-
-      setFormState({
-        todayDate: currentDateTime.toISOString().split('T')[0],
-        currentTime: currentDateTime.toTimeString().split(' ')[0]
-      });
-    } catch (error) {
-      console.error("Error fetching internet time:", error);
-    }
-  };
-
   useEffect(() => {
-    fetchInternetTime();
     const interval = setInterval(() => {
-      setFormState((prevState) => ({
-        ...prevState,
+      setFormState({
+        todayDate: new Date().toISOString().split('T')[0],
         currentTime: new Date().toTimeString().split(' ')[0]
-      }));
+      });
     }, 1000);
 
     return () => clearInterval(interval);
@@ -203,7 +187,7 @@ export const Personal = () => {
                     <button onClick={handleConfirmAttendance}>Sí</button>
                     <button onClick={handleCancelAttendance}>No</button>
                   </div>
-                </div>
+                </div>            
               </div>
             )}
           </div>

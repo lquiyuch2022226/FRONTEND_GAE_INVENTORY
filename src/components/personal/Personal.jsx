@@ -25,14 +25,11 @@ export const Personal = () => {
   useEffect(() => {
     const lastAttendanceDate = localStorage.getItem(`lastAttendance_${userId}`);
     const currentHour = new Date().getHours();
-  
+
     // Permitir registrar asistencia solo entre las 7 y las 10 a.m. si no se ha registrado ya hoy
-    const isWithinAllowedTime = currentHour >= 19 && currentHour < 21;
-    const isToday = lastAttendanceDate === formState.todayDate;
-  
-    setIsButtonDisabled(isToday || !isWithinAllowedTime);
-  }, [formState.todayDate, userId]);
-  
+    const isWithinAllowedTime = currentHour >= 20 && currentHour <= 21;
+    setIsButtonDisabled(lastAttendanceDate === formState.todayDate || !isWithinAllowedTime);
+  }, [formState.todayDate, userId]);  
 
   const handleAttendance = async () => {
     const todayDate = formState.todayDate;
@@ -82,6 +79,12 @@ export const Personal = () => {
     }
   };
 
+  const currentHour = new Date().getHours();
+  const isOnTime = currentHour < 8 ? "A tiempo" : "Tarde";
+  const imageToShow = currentHour < 8 ? earlyImage : lateImage;
+  const backgroundColor = currentHour < 8 ? '#359100' : '#8b0000';
+  const waveColors = currentHour < 8 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
+
   const fetchInternetTime = async () => {
     try {
       const response = await fetch('http://worldtimeapi.org/api/timezone/America/Guatemala');
@@ -122,12 +125,6 @@ export const Personal = () => {
     setShowPopup(false);
     setReason("");
   };
-
-  const currentHour = new Date().getHours();
-  const isOnTime = currentHour < 8 ? "A tiempo" : "Tarde";
-  const imageToShow = currentHour < 8 ? earlyImage : lateImage;
-  const backgroundColor = currentHour < 8 ? '#359100' : '#8b0000';
-  const waveColors = currentHour < 8 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
 
   return (
     <div className="personal">
@@ -200,7 +197,7 @@ export const Personal = () => {
                     value={reason}
                     onChange={(e) => setReason(e.target.value)}
                     rows="4"
-                    style={{ width: '100%', marginTop:'10px', padding: '8px' }}
+                    style={{ width: '100%', marginTop: '10px', padding: '8px' }}
                   />
                   <div className="popup-actions">
                     <button onClick={handleConfirmAttendance}>Sí</button>

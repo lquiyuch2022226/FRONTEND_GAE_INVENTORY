@@ -28,7 +28,7 @@ export const Personal = () => {
   
     // Permitir registrar asistencia solo entre las 7 y las 10 a.m. si no se ha registrado ya hoy
     const isWithinAllowedTime = currentHour >= 19 && currentHour < 21;
-   /*  const isToday = lastAttendanceDate === formState.todayDate; */
+    const isToday = lastAttendanceDate === formState.todayDate;
   
     setIsButtonDisabled(isToday || !isWithinAllowedTime);
   }, [formState.todayDate, userId]);

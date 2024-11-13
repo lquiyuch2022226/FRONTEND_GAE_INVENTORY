@@ -12,36 +12,51 @@ body {
   max-width: 1200px;
   margin: auto;
   padding: 20px;
-}
-
-.header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  background-color: #f4f4f4;
-  padding: 20px;
-  border-bottom: 3px solid #e0e0e0;
+  min-height: 100vh;
 }
 
-.header img {
-  width: 60px;
-  height: auto;
-}
-
-.header-nav {
+/* Sección de Fecha, Hora, y Tarde */
+.date-time-container {
   display: flex;
+  justify-content: space-around;
   align-items: center;
-}
-
-.header-nav a {
-  margin-right: 20px;
-  text-decoration: none;
-  color: #333;
+  background-color: #2b3b4e;
+  padding: 10px;
+  border-radius: 12px;
+  color: #ffffff;
   font-weight: bold;
+  font-size: 1.1em;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 600px;
 }
 
-.header-nav a:hover {
-  color: #555;
+.date-time-container div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.date-time-container div label {
+  font-size: 0.8em;
+  color: #cccccc;
+}
+
+/* Icono de tarde */
+.late-icon {
+  background-color: #ff4b4b;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  font-weight: bold;
+  margin-left: 10px;
 }
 
 /* Tarjeta de usuario */
@@ -52,13 +67,13 @@ body {
   overflow: hidden;
   width: 90%;
   max-width: 400px;
-  margin: 50px auto;
   padding: 20px;
+  text-align: center;
 }
 
 .content-user {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
 }
 
@@ -67,7 +82,7 @@ body {
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  margin-right: 1em;
+  margin-bottom: 1em;
   border: 3px solid #ffffff;
 }
 
@@ -118,31 +133,6 @@ button:hover svg {
   transform: translateX(5px);
 }
 
-/* Contenedor de fecha y hora */
-.date-time {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  background-color: #2b3b4e;
-  padding: 10px;
-  border-radius: 12px;
-  color: #ffffff;
-  font-weight: bold;
-  font-size: 1.1em;
-  margin-top: 20px;
-}
-
-.date-time div {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.date-time div label {
-  font-size: 0.8em;
-  color: #cccccc;
-}
-
 /* Popup */
 .popup {
   position: fixed;
@@ -165,18 +155,3 @@ button:hover svg {
   max-width: 400px;
   width: 100%;
 }
-
-/* Icono de tarde */
-.late-icon {
-  background-color: #ff4b4b;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #ffffff;
-  font-weight: bold;
-  margin-left: 10px;
-}
-

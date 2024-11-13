@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 
+/* ----------------------------------- Configuración General ----------------------------------- */
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
 /* ----------------------------------- Carta de Asistencia ----------------------------------- */
 .e-card {
   margin: 100px auto;
@@ -7,6 +12,7 @@
   box-shadow: 0px 8px 28px -9px rgba(0, 0, 0, 0.45);
   position: relative;
   width: 100%;
+  max-width: 400px; /* Ajuste para que no ocupe todo el ancho */
   height: 530px;
   border-radius: 16px;
   overflow: hidden;
@@ -23,16 +29,12 @@
   margin-left: -50%;
   margin-top: -70%;
   z-index: 1;
-}
-
-.wave:nth-child(2),
-.wave:nth-child(3) {
-  top: 210px;
+  background: linear-gradient(744deg, #030e2e, #023a0e 60%, #05a00d);
 }
 
 .playing .wave {
   border-radius: 40%;
-  animation: wave 6000ms infinite linear;
+  animation: wave 6s infinite linear;
 }
 
 @keyframes wave {
@@ -46,63 +48,35 @@
   height: 6em;
   border-radius: 50%;
   object-fit: cover;
-  margin-right: 1em;
-}
-
-/* --------------------------------- Tarjeta de Tiempo ----------------------------------- */
-.card {
-  width: 320px;
-  color: black;
-  position: relative;
-  border-radius: 2.5em;
-  padding: 2em;
-  transition: transform 0.4s ease;
-}
-
-.card .card-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 5em;
-  height: 100%;
-  transition: transform 0.4s ease;
-}
-
-.card:hover {
-  transform: scale(0.97);
-}
-
-.card:hover .card-content {
-  transform: scale(0.96);
+  margin-top: -1em;
+  padding-bottom: 1em;
 }
 
 /* --------------------------------- Información del Usuario -------------------------------- */
 .content-user {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding: 20px;
   position: relative;
   z-index: 2;
+  flex-direction: column;
 }
 
 .infotop {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  z-index: 2;
+  text-align: center;
+  color: white;
 }
 
 .user-info {
-  text-align: center;
-  font-size: 30px;
+  font-size: 20px;
   color: #fff;
+  margin-top: 10px;
 }
 
 .user-name {
-  font-size: 20px;
   font-weight: 600;
+  font-size: 24px;
 }
 
 .user-department {
@@ -110,8 +84,74 @@
   font-weight: 400;
 }
 
+/* --------------------------------- Tarjeta de Tiempo ----------------------------------- */
+.card {
+  width: 320px;
+  background-color: #fff;
+  color: black;
+  position: relative;
+  border-radius: 2.5em;
+  padding: 2em;
+  margin: 20px auto;
+  transition: transform 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card .card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1em;
+  width: 100%;
+  text-align: center;
+}
+
+.card .card-top p {
+  margin: 0;
+  font-weight: bold;
+  font-size: 18px;
+  color: #fff;
+}
+
+.card .card-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.card .card-bottom p {
+  margin: 0;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.card .card-image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.status-icon {
+  width: 4em;
+  height: 4em;
+  z-index: 2;
+}
+
+/* Cambios de tamaño en hover */
+.card:hover {
+  transform: scale(0.97);
+}
+
 /* -------------------------------- Botón de Enviar -------------------------------- */
-button {
+.attendance-button {
   cursor: pointer;
   font-weight: 700;
   transition: all 0.2s;
@@ -124,13 +164,16 @@ button {
   font-size: 15px;
   position: relative;
   z-index: 3;
+  color: #333;
+  text-transform: uppercase;
+  margin: 20px auto;
 }
 
-button:hover {
+.attendance-button:hover {
   background: #c4e201;
 }
 
-button:active {
+.attendance-button:active {
   transform: scale(0.95);
 }
 
@@ -157,13 +200,27 @@ button:active {
   width: 100%;
 }
 
-.popup-actions {
+.popup-content p {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.popup-content textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  resize: none;
+}
+
+.popup-buttons {
   display: flex;
   justify-content: space-around;
   margin-top: 20px;
 }
 
-.popup-actions button {
+.popup-buttons button {
   padding: 10px 20px;
   border: none;
   background-color: #3498db;
@@ -173,14 +230,10 @@ button:active {
   transition: background-color 0.3s;
 }
 
-.popup-actions button:hover {
+.popup-buttons button:hover {
   background-color: #2980b9;
 }
 
-
-.popup-actions button:focus {
+.popup-buttons button:focus {
   outline: none;
 }
-
-
-

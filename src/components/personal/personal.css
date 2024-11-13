@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 
-/*------------------------------------------ CARTA ------------------------------------------------------------*/
+/* ----------------------------------- Carta de Asistencia ----------------------------------- */
 .e-card {
   margin: 100px auto;
   background: transparent;
@@ -12,6 +12,7 @@
   overflow: hidden;
 }
 
+/* Ondas de fondo en la carta */
 .wave {
   position: absolute;
   width: 200%;
@@ -21,13 +22,7 @@
   top: 0;
   margin-left: -50%;
   margin-top: -70%;
-  z-index: 1; /* Set z-index for waves */
-}
-
-.icon {
-  width: 3em;
-  margin-top: -1em;
-  padding-bottom: 1em;
+  z-index: 1;
 }
 
 .wave:nth-child(2),
@@ -37,49 +32,24 @@
 
 .playing .wave {
   border-radius: 40%;
-  animation: wave 6000ms infinite linear; /* 3000 */
-}
-
-.wave {
-  border-radius: 40%;
-  animation: wave 120s infinite linear; /* 55 */
-}
-
-.playing .wave:nth-child(2) {
-  animation-duration: 8000ms; /* 4000 */
-}
-
-.wave:nth-child(2) {
-  animation-duration: 100s; /* 50 */
-}
-
-.playing .wave:nth-child(3) {
-  animation-duration: 10000ms; /* 5000 */
-}
-
-.wave:nth-child(3) {
-  animation-duration: 80s; /* 45 */
+  animation: wave 6000ms infinite linear;
 }
 
 @keyframes wave {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
+/* --------------------------------- Icono del Usuario ---------------------------------- */
 .icon {
-  width: 6em; /* Maintain the width */
-  height: 6em; /* Maintain the height */
-  border-radius: 50%; /* Make it circular */
-  object-fit: cover; /* Ensure it covers the area without distortion */
-  margin-right: 1em; /* Add some space between the image and text */
+  width: 6em;
+  height: 6em;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 1em;
 }
 
-/* ---------------------------------TIEMPO --------------------------------------------------*/
+/* --------------------------------- Tarjeta de Tiempo ----------------------------------- */
 .card {
   width: 320px;
   color: black;
@@ -98,48 +68,6 @@
   transition: transform 0.4s ease;
 }
 
-.card .card-top, .card .card-bottom {
-  display: flex;
-  justify-content: space-between;
-}
-
-.card .card-top p, .card .card-top .card-title, .card .card-bottom p, .card .card-bottom .card-title {
-  margin: 0;
-}
-
-.card .card-title {
-  font-weight: bold;
-}
-
-.card .card-top p, .card .card-bottom p {
-  font-weight: 600;
-}
-
-.card .card-bottom {
-  align-items: flex-end;
-}
-
-.card .card-image {
-  position: absolute;
-  width: 100%; /* Asegura que ocupe el ancho del contenedor */
-  height: 100%; /* Asegura que ocupe el alto del contenedor */
-  top: 0;
-  left: 0;
-  display: grid;
-  place-items: center;
-  pointer-events: none;
-}
-
-.card .status-icon {
-  width: 4em; /* Ajusta el ancho */
-  height: 4em; /* Ajusta el alto */
-  transition: transform 0.4s ease;
-}
-
-.card:hover .status-icon {
-  transform: scale(1.05); /* Efecto al hacer hover */
-}
-
 .card:hover {
   transform: scale(0.97);
 }
@@ -148,73 +76,41 @@
   transform: scale(0.96);
 }
 
-.card:hover .card-image svg {
-  transform: scale(1.05);
-}
-
-.card:active {
-  transform: scale(0.9);
-}
-
-/* ------- ACOMODAR DATOS -------------------------------------------------------*/
+/* --------------------------------- Información del Usuario -------------------------------- */
 .content-user {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  position: relative; /* Ensure content user is positioned correctly */
-  z-index: 2; /* Ensure it’s above waves */
-}
-
-.infotop {
-  display: flex; /* Use flexbox for layout */
-  flex-direction: column; /* Stack elements vertically */
-  align-items: center; /* Center items horizontally */
   position: relative;
   z-index: 2;
 }
 
-.icon {
-  width: 20em; /* Maintain the width */
-  height: 20em; /* Maintain the height */
-  border-radius: 10%; /* Make it circular */
-  object-fit: cover; /* Ensure it covers the area without distortion */
-  margin-bottom: 0.5em; /* Space between the image and text */
+.infotop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
 }
 
-
-
 .user-info {
-  text-align: center; /* Center text */
+  text-align: center;
   font-size: 30px;
   color: #fff;
 }
 
 .user-name {
-  font-size: 20px; /* Adjust as needed */
-  font-weight: 600; /* Bold weight */
+  font-size: 20px;
+  font-weight: 600;
 }
-
 
 .user-department {
-  font-size: 14px; /* Adjust as needed */
-  font-weight: 400; /* Normal weight */
-}
-
-.name {
   font-size: 14px;
-  font-weight: 100;
+  font-weight: 400;
 }
 
-.date-time {
-  flex: 1; /* Allow date-time to take available space */
-  display: flex; /* Enable flexbox for the card */
-  justify-content: flex-end; /* Align the card to the right */
-}
-
-/* ------------------------------------------ Boton de enviar ---------------------------------------*/
-
-/* From Uiverse.io by alexmaracinaru */
+/* -------------------------------- Botón de Enviar -------------------------------- */
 button {
   cursor: pointer;
   font-weight: 700;
@@ -226,41 +122,30 @@ button {
   display: flex;
   align-items: center;
   font-size: 15px;
-  position: relative; /* Asegura que el botón esté posicionado en el flujo de la página */
-  z-index: 3; /* Asegura que esté por encima de las olas */
+  position: relative;
+  z-index: 3;
 }
 
 button:hover {
   background: #c4e201;
 }
 
-button > svg {
-  width: 34px;
-  margin-left: 10px;
-  transition: transform 0.3s ease-in-out;
-}
-
-button:hover svg {
-  transform: translateX(5px);
-}
-
 button:active {
   transform: scale(0.95);
 }
 
-/*----------------------------------------- pop-ups -----------------------------------------*/
-
+/* --------------------------------- Pop-Up -------------------------------------- */
 .popup {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Asegura que el pop-up esté encima del resto del contenido */
+  z-index: 1000;
 }
 
 .popup-content {
@@ -291,6 +176,7 @@ button:active {
 .popup-actions button:hover {
   background-color: #2980b9;
 }
+
 
 .popup-actions button:focus {
   outline: none;

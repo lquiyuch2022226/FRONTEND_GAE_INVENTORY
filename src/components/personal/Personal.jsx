@@ -25,11 +25,14 @@ export const Personal = () => {
   useEffect(() => {
     const lastAttendanceDate = localStorage.getItem(`lastAttendance_${userId}`);
     const currentHour = new Date().getHours();
-
+  
     // Permitir registrar asistencia solo entre las 7 y las 10 a.m. si no se ha registrado ya hoy
-    const isWithinAllowedTime = currentHour >= 19 && currentHour < 21;
-    setIsButtonDisabled(lastAttendanceDate === formState.todayDate || !isWithinAllowedTime);
+    const isWithinAllowedTime = currentHour >= 7 && currentHour < 10;
+    const isToday = lastAttendanceDate === formState.todayDate;
+  
+    setIsButtonDisabled(isToday || !isWithinAllowedTime);
   }, [formState.todayDate, userId]);
+  
 
   const handleAttendance = async () => {
     const todayDate = formState.todayDate;

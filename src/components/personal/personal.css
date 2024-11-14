@@ -137,7 +137,7 @@
 }
 
 .card:hover .status-icon {
-  transform: scale(1.05); /* Efecto al hacer hover */
+  transform: scale(1.05); 
 }
 
 .card:hover {

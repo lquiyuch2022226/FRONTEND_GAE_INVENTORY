@@ -7,6 +7,22 @@ body {
   color: white;
 }
 
+/*------------------ Cuadro de Fecha y Hora Independiente ------------------*/
+.date-time-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 200px;
+  background-color: #b71c1c; /* Color rojo oscuro */
+  padding: 10px;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  z-index: 3;
+}
+
 /*------------------ CARTA ------------------*/
 .e-card {
   margin: 50px auto;
@@ -16,29 +32,9 @@ body {
   width: 350px; /* Ajusta el ancho si es necesario */
   height: auto;
   padding: 20px;
-  padding-top: 80px; /* Espacio para la "barra" */
   border-radius: 16px;
   overflow: hidden;
   color: white; /* Texto blanco para contraste */
-}
-
-/*------------------ Barra de Fecha y Hora (Estilo Navbar) ------------------*/
-.date-time-container {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  background-color: #b71c1c; /* Color rojo oscuro */
-  padding: 10px;
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: 600;
-  z-index: 2;
 }
 
 /* Ondas en el fondo */

@@ -12,6 +12,25 @@
   overflow: hidden;
 }
 
+/* Encabezado de la tarjeta */
+.card-header {
+  background-color: #f0f0f0; /* Color de fondo del encabezado */
+  padding: 10px;
+  border-radius: 16px 16px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.card-header-info {
+  display: flex;
+  gap: 10px;
+}
+
 .wave {
   position: absolute;
   width: 200%;
@@ -86,20 +105,6 @@
   border-radius: 2.5em;
   padding: 2em;
   transition: transform 0.4s ease;
-}
-
-.card .card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  background-color: #f0f0f0; /* Ajusta según prefieras */
-  border-radius: 16px 16px 0 0; /* Ajusta las esquinas */
-}
-
-.card .card-header-info {
-  display: flex;
-  gap: 10px; /* Ajusta el espaciado entre la fecha y la hora */
 }
 
 .card .card-content {

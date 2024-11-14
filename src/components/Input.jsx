@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+
 export const Input = ({
     field,
     label,
@@ -11,43 +13,39 @@ export const Input = ({
     disabled
 }) => {
     const handleValueChange = (event) => {
-        onChangeHandler(event.target.value, field);
-    };
+        onChangeHandler(event.target.value, field)
+    }
 
     const handleInputBlur = (event) => {
-        onBlurHandler(event.target.value, field);
-    };
+        onBlurHandler(event.target.value, field)
+    }
 
-    return (
-        <div className="input-group-createUser">
-            <label className="auth-form-label">{label}</label>
-            {textarea ? (
-                <textarea
-                    type={type}
-                    value={value}
-                    onChange={handleValueChange}
-                    onBlur={handleInputBlur}
-                    rows={5}
-                    className="auth-form-input"
-                    disabled={disabled}
-                />
-            ) : (
-                <input
-                    type={type}
-                    value={value}
-                    onChange={handleValueChange}
-                    onBlur={handleInputBlur}
-                    className="auth-form-input"
-                    disabled={disabled}
-                />
-            )}
-            <span
-                className={`auth-form-validations-message ${
-                    showErrorMessage ? "show" : ""
-                }`}
-            >
-                {validationMessage}
-            </span>
+  return (
+    <>
+        <div className="auth-form-label">
+            <span>{label}</span>
         </div>
-    );
-};
+        {textarea ? (
+            <textarea
+                type={type}
+                value={value}
+                onChange={handleValueChange}
+                onBlur={handleInputBlur}
+                rows={5}
+                style={{maxWidth: '400px'}}
+            />
+        ) : (
+            <input
+                type={type}
+                value={value}
+                onChange={handleValueChange}
+                onBlur={handleInputBlur}
+                disabled={disabled}
+            />
+        )}
+        <span className="auth-form-validations-message">
+            {showErrorMessage && validationMessage}
+        </span>
+    </>
+  )
+}

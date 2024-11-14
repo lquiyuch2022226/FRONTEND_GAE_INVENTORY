@@ -8,29 +8,22 @@ body {
   padding: 0;
 }
 
-.navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #f3f3f3;
-  padding: 15px;
-  color: #000;
-}
-
-.header-bar {
+/* Barra de estado para Fecha, Hora y Estatus */
+.status-bar {
   display: flex;
   justify-content: space-around;
   align-items: center;
   background-color: #28A745;
   padding: 15px;
-  border-radius: 20px;
+  border-radius: 10px;
   margin: 20px auto;
   width: 90%;
   font-size: 1rem;
 }
 
-.header-item {
+.status-item {
   text-align: center;
+  font-weight: bold;
 }
 
 .status {
@@ -45,7 +38,8 @@ body {
   color: #28A745;
 }
 
-.card {
+/* Tarjeta de usuario */
+.user-card {
   background-color: #C82333;
   padding: 20px;
   border-radius: 15px;
@@ -54,16 +48,16 @@ body {
   align-items: center;
   text-align: center;
   max-width: 300px;
-  margin: 20px auto;
+  margin: 0 auto;
 }
 
 .icon {
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid #ffffff;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .user-info {
@@ -74,6 +68,11 @@ body {
 .user-name {
   font-weight: bold;
   margin-bottom: 5px;
+}
+
+.user-email {
+  font-size: 0.9rem;
+  color: #d1d1d1;
 }
 
 button {
@@ -93,6 +92,7 @@ button:hover {
   background-color: #f1f1f1;
 }
 
+/* Pop-ups */
 .popup {
   position: fixed;
   top: 0;

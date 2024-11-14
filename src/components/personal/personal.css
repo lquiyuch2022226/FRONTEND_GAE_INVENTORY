@@ -137,7 +137,7 @@
 }
 
 .card:hover .status-icon {
-  transform: scale(1.05); 
+  transform: scale(1.05); /* Efecto al hacer hover */
 }
 
 .card:hover {
@@ -182,8 +182,6 @@
   margin-bottom: 0.5em; /* Space between the image and text */
 }
 
-
-
 .user-info {
   text-align: center; /* Center text */
   font-size: 30px;
@@ -194,7 +192,6 @@
   font-size: 20px; /* Adjust as needed */
   font-weight: 600; /* Bold weight */
 }
-
 
 .user-department {
   font-size: 14px; /* Adjust as needed */
@@ -295,6 +292,3 @@ button:active {
 .popup-actions button:focus {
   outline: none;
 }
-
-
-

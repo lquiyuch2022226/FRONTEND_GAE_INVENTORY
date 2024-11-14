@@ -7,89 +7,61 @@ body {
   color: white;
   margin: 0;
   padding: 0;
-}
-
-/*------------------ Barra de Navegación ------------------*/
-.navbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background-color: #f3f3f3;
-  padding: 15px;
-  color: #000;
+  justify-content: center;
+  height: 100vh;
 }
 
-.navbar img {
-  height: 40px;
-}
-
-.navbar a {
-  color: #000;
-  text-decoration: none;
-  margin-left: 20px;
-}
-
-/*------------------ Barra Superior ------------------*/
-.header-bar {
+/*------------------ Contenedor Principal ------------------*/
+.container {
   width: 100%;
-  padding: 15px;
+  max-width: 400px;
+  background-color: #FFFFFF;
+  border-radius: 15px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-align: center;
+}
+
+/*------------------ Encabezado Rojo ------------------*/
+.header-bar {
   background-color: #C82333; /* Rojo */
   color: white;
+  padding: 15px;
+  font-size: 1.1rem;
   font-weight: bold;
-  text-align: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 10;
-  font-size: 1rem;
 }
 
 /*------------------ Tarjeta de Información Personal ------------------*/
-.personal-info-card {
-  background-color: #FFFFFF;
-  color: #333;
+.personal-info {
   padding: 20px;
-  border-radius: 15px;
-  display: flex;
-  align-items: center;
-  text-align: left;
-  max-width: 300px;
-  margin: 70px auto 20px; /* Ajusta el margen superior para evitar superposición con el header-bar */
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
-.personal-info-card .icon {
+.personal-info .icon {
   width: 80px;
   height: 80px;
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid #ffffff;
-  margin-right: 15px;
+  margin-bottom: 10px;
 }
 
-.personal-info-card .user-info {
-  font-size: 1rem;
-  color: #333;
-}
-
-.personal-info-card .user-name {
+.personal-info .user-name {
   font-weight: bold;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
+  color: #333;
   margin-bottom: 5px;
 }
 
-.personal-info-card .user-email {
+.personal-info .user-email {
   font-size: 0.9rem;
   color: #666;
+  margin-bottom: 15px;
 }
 
 /*------------------ Botón de Enviar Asistencia ------------------*/
-.card {
-  background-color: transparent;
-  display: flex;
-  justify-content: center;
-}
-
 button {
   background-color: #004080;
   color: white;
@@ -99,8 +71,8 @@ button {
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  margin-top: 20px;
   transition: background-color 0.3s;
+  margin-top: 10px;
 }
 
 button:hover {
@@ -158,3 +130,4 @@ button:hover {
 .popup-actions button:hover {
   background-color: #2980b9;
 }
+

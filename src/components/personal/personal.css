@@ -16,9 +16,29 @@ body {
   width: 350px; /* Ajusta el ancho si es necesario */
   height: auto;
   padding: 20px;
+  padding-top: 80px; /* Espacio para la "barra" */
   border-radius: 16px;
   overflow: hidden;
   color: white; /* Texto blanco para contraste */
+}
+
+/*------------------ Barra de Fecha y Hora (Estilo Navbar) ------------------*/
+.date-time-container {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  background-color: #b71c1c; /* Color rojo oscuro */
+  padding: 10px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  z-index: 2;
 }
 
 /* Ondas en el fondo */
@@ -130,24 +150,6 @@ body {
   font-size: 14px;
   font-weight: 400;
   color: #d1d1d1;
-}
-
-/*------------------ Fecha y Hora ------------------*/
-.date-time {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  text-align: right;
-  color: #cfef00;
-  position: absolute;
-  top: 10px; /* Colocado en la parte superior derecha */
-  right: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  background-color: rgba(255, 255, 255, 0.2); /* Fondo más claro para contraste */
-  padding: 8px;
-  border-radius: 8px;
-  z-index: 3;
 }
 
 /*------------------ Botón de enviar ------------------*/

@@ -132,6 +132,24 @@ body {
   color: #d1d1d1;
 }
 
+/*------------------ Fecha y Hora ------------------*/
+.date-time {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  color: #cfef00;
+  position: absolute;
+  top: 10px; /* Colocado en la parte superior derecha */
+  right: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  background-color: rgba(255, 255, 255, 0.2); /* Fondo más claro para contraste */
+  padding: 8px;
+  border-radius: 8px;
+  z-index: 3;
+}
+
 /*------------------ Botón de enviar ------------------*/
 button {
   cursor: pointer;

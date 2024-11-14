@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;600;700;800&display=swap');
 
-/*------------------ Estilos generales ------------------*/
 body {
   background-color: #004080;
   font-family: 'Plus Jakarta Sans', sans-serif;
@@ -9,7 +8,6 @@ body {
   padding: 0;
 }
 
-/*------------------ Barra de Navegación ------------------*/
 .navbar {
   display: flex;
   align-items: center;
@@ -19,22 +17,11 @@ body {
   color: #000;
 }
 
-.navbar img {
-  height: 40px;
-}
-
-.navbar a {
-  color: #000;
-  text-decoration: none;
-  margin-left: 20px;
-}
-
-/*------------------ Barra Superior ------------------*/
 .header-bar {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background-color: #28A745; /* Verde */
+  background-color: #28A745;
   padding: 15px;
   border-radius: 20px;
   margin: 20px auto;
@@ -42,20 +29,24 @@ body {
   font-size: 1rem;
 }
 
-.header-bar div {
+.header-item {
   text-align: center;
+}
+
+.status {
   font-weight: bold;
 }
 
-.header-bar label {
-  display: block;
-  font-size: 0.9rem;
-  color: #f3f3f3;
+.status.late {
+  color: #ff4d4d;
 }
 
-/*------------------ Carta de Usuario ------------------*/
+.status.on-time {
+  color: #28A745;
+}
+
 .card {
-  background-color: #C82333; /* Rojo */
+  background-color: #C82333;
   padding: 20px;
   border-radius: 15px;
   display: flex;
@@ -63,7 +54,7 @@ body {
   align-items: center;
   text-align: center;
   max-width: 300px;
-  margin: 0 auto;
+  margin: 20px auto;
 }
 
 .icon {
@@ -85,25 +76,6 @@ body {
   margin-bottom: 5px;
 }
 
-.user-email {
-  font-size: 0.9rem;
-  color: #d1d1d1;
-}
-
-.attendance-status {
-  font-size: 1rem;
-  margin-top: 10px;
-}
-
-.attendance-status.late {
-  color: #ff4d4d;
-}
-
-.attendance-status.on-time {
-  color: #28A745;
-}
-
-/*------------------ Botón de Enviar ------------------*/
 button {
   background-color: white;
   color: #000;
@@ -121,7 +93,6 @@ button:hover {
   background-color: #f1f1f1;
 }
 
-/*------------------ Pop-ups ------------------*/
 .popup {
   position: fixed;
   top: 0;

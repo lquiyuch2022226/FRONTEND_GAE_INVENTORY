@@ -27,7 +27,7 @@ export const Personal = () => {
     const currentHour = new Date().getHours();
 
     // Permitir registrar asistencia solo entre las 7 y las 10 a.m. si no se ha registrado ya hoy
-    const isWithinAllowedTime = currentHour >= 7 && currentHour < 10;
+    const isWithinAllowedTime = currentHour >= 20 && currentHour < 22;
     setIsButtonDisabled(lastAttendanceDate === formState.todayDate || !isWithinAllowedTime);
   }, [formState.todayDate, userId]);
 
@@ -182,12 +182,13 @@ export const Personal = () => {
                     onChange={(e) => setReason(e.target.value)}
                     rows="4"
                     style={{ width: '100%', marginTop: '10px', padding: '8px' }}
-                  />
+                  />z
                   <div className="popup-actions">
                     <button onClick={handleConfirmAttendance}>Sí</button>
                     <button onClick={handleCancelAttendance}>No</button>
                   </div>
-                </div>            
+                </div>
+            
               </div>
             )}
           </div>

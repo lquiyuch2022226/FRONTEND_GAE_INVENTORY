@@ -2,15 +2,21 @@
 
 /*------------------------------------------ CARTA ------------------------------------------------------------*/
 .e-card {
-  margin: 100px auto;
+  margin: auto; /* Centra horizontalmente */
+  margin-top: 50px; /* Añade un espacio superior opcional */
   background: transparent;
   box-shadow: 0px 8px 28px -9px rgba(0, 0, 0, 0.45);
   position: relative;
-  width: 100%;
-  height: 530px;
+  width: 80%; /* Reduce el ancho al 80% del contenedor */
+  max-width: 400px; /* Fija un ancho máximo para pantallas más grandes */
+  height: auto; /* Ajusta la altura automáticamente */
   border-radius: 16px;
   overflow: hidden;
+  display: flex; /* Centra el contenido de la tarjeta */
+  flex-direction: column; /* Asegura que los elementos dentro estén en columna */
+  align-items: center; /* Centra horizontalmente el contenido */
 }
+
 
 .wave {
   position: absolute;
@@ -175,30 +181,26 @@
 }
 
 .icon {
-  width: 20em; /* Maintain the width */
-  height: 20em; /* Maintain the height */
-  border-radius: 10%; /* Make it circular */
-  object-fit: cover; /* Ensure it covers the area without distortion */
-  margin-bottom: 0.5em; /* Space between the image and text */
+  width: 80px; /* Tamaño reducido para íconos */
+  height: 80px;
+  border-radius: 50%; /* Mantén el borde circular */
+  object-fit: cover;  /* Asegura que las imágenes no se distorsionen */
 }
+
 
 
 
 .user-info {
-  text-align: center; /* Center text */
-  font-size: 30px;
-  color: #fff;
+  font-size: 14px; /* Reduce el tamaño del texto */
 }
 
 .user-name {
-  font-size: 20px; /* Adjust as needed */
-  font-weight: 600; /* Bold weight */
+  font-size: 16px; /* Tamaño ajustado */
+  font-weight: bold;
 }
 
-
 .user-department {
-  font-size: 14px; /* Adjust as needed */
-  font-weight: 400; /* Normal weight */
+  font-size: 12px; /* Ajuste adicional */
 }
 
 .name {

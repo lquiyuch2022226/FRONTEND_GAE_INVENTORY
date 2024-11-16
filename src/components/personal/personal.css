@@ -12,25 +12,6 @@
   overflow: hidden;
 }
 
-/* Encabezado de la tarjeta */
-.card-header {
-  background-color: #f0f0f0; /* Color de fondo del encabezado */
-  padding: 10px;
-  border-radius: 16px 16px 0 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 10px;
-}
-
-.card-header-info {
-  display: flex;
-  gap: 10px;
-}
-
 .wave {
   position: absolute;
   width: 200%;
@@ -56,45 +37,46 @@
 
 .playing .wave {
   border-radius: 40%;
-  animation: wave 6000ms infinite linear;
+  animation: wave 6000ms infinite linear; /* 3000 */
 }
 
 .wave {
   border-radius: 40%;
-  animation: wave 120s infinite linear;
+  animation: wave 120s infinite linear; /* 55 */
 }
 
 .playing .wave:nth-child(2) {
-  animation-duration: 8000ms;
+  animation-duration: 8000ms; /* 4000 */
 }
 
 .wave:nth-child(2) {
-  animation-duration: 100s;
+  animation-duration: 100s; /* 50 */
 }
 
 .playing .wave:nth-child(3) {
-  animation-duration: 10000ms;
+  animation-duration: 10000ms; /* 5000 */
 }
 
 .wave:nth-child(3) {
-  animation-duration: 80s;
+  animation-duration: 80s; /* 45 */
 }
 
 @keyframes wave {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
 }
 
 .icon {
-  width: 6em;
-  height: 6em;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 1em;
+  width: 6em; /* Maintain the width */
+  height: 6em; /* Maintain the height */
+  border-radius: 50%; /* Make it circular */
+  object-fit: cover; /* Ensure it covers the area without distortion */
+  margin-right: 1em; /* Add some space between the image and text */
 }
 
 /* ---------------------------------TIEMPO --------------------------------------------------*/
@@ -116,10 +98,31 @@
   transition: transform 0.4s ease;
 }
 
+.card .card-top, .card .card-bottom {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card .card-top p, .card .card-top .card-title, .card .card-bottom p, .card .card-bottom .card-title {
+  margin: 0;
+}
+
+.card .card-title {
+  font-weight: bold;
+}
+
+.card .card-top p, .card .card-bottom p {
+  font-weight: 600;
+}
+
+.card .card-bottom {
+  align-items: flex-end;
+}
+
 .card .card-image {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  width: 100%; /* Asegura que ocupe el ancho del contenedor */
+  height: 100%; /* Asegura que ocupe el alto del contenedor */
   top: 0;
   left: 0;
   display: grid;
@@ -128,13 +131,13 @@
 }
 
 .card .status-icon {
-  width: 4em;
-  height: 4em;
+  width: 4em; /* Ajusta el ancho */
+  height: 4em; /* Ajusta el alto */
   transition: transform 0.4s ease;
 }
 
 .card:hover .status-icon {
-  transform: scale(1.05);
+  transform: scale(1.05); /* Efecto al hacer hover */
 }
 
 .card:hover {
@@ -159,40 +162,43 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  position: relative;
-  z-index: 2;
+  position: relative; /* Ensure content user is positioned correctly */
+  z-index: 2; /* Ensure it’s above waves */
 }
 
 .infotop {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: flex; /* Use flexbox for layout */
+  flex-direction: column; /* Stack elements vertically */
+  align-items: center; /* Center items horizontally */
   position: relative;
   z-index: 2;
 }
 
 .icon {
-  width: 20em;
-  height: 20em;
-  border-radius: 10%;
-  object-fit: cover;
-  margin-bottom: 0.5em;
+  width: 20em; /* Maintain the width */
+  height: 20em; /* Maintain the height */
+  border-radius: 10%; /* Make it circular */
+  object-fit: cover; /* Ensure it covers the area without distortion */
+  margin-bottom: 0.5em; /* Space between the image and text */
 }
 
+
+
 .user-info {
-  text-align: center;
+  text-align: center; /* Center text */
   font-size: 30px;
   color: #fff;
 }
 
 .user-name {
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 20px; /* Adjust as needed */
+  font-weight: 600; /* Bold weight */
 }
 
+
 .user-department {
-  font-size: 14px;
-  font-weight: 400;
+  font-size: 14px; /* Adjust as needed */
+  font-weight: 400; /* Normal weight */
 }
 
 .name {
@@ -201,9 +207,9 @@
 }
 
 .date-time {
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
+  flex: 1; /* Allow date-time to take available space */
+  display: flex; /* Enable flexbox for the card */
+  justify-content: flex-end; /* Align the card to the right */
 }
 
 /* ------------------------------------------ Boton de enviar ---------------------------------------*/
@@ -220,8 +226,8 @@ button {
   display: flex;
   align-items: center;
   font-size: 15px;
-  position: relative;
-  z-index: 3;
+  position: relative; /* Asegura que el botón esté posicionado en el flujo de la página */
+  z-index: 3; /* Asegura que esté por encima de las olas */
 }
 
 button:hover {
@@ -250,11 +256,11 @@ button:active {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 1000; /* Asegura que el pop-up esté encima del resto del contenido */
 }
 
 .popup-content {
@@ -289,3 +295,6 @@ button:active {
 .popup-actions button:focus {
   outline: none;
 }
+
+
+

@@ -155,13 +155,13 @@ export const Personal = () => {
                       <p>{formState.currentTime}</p>
                     </div>
                   </div>
-{/*                   <div className="card-image">
+                  <div className="card-image">
                     <img
                       src={imageToShow}
                       alt="Status Icon"
                       className="status-icon"
                     />
-                  </div> */}
+                  </div>
                 </div>
               </div>
             </div>

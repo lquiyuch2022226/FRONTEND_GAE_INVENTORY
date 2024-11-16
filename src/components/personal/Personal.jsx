@@ -20,7 +20,6 @@ export const Personal = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [reason, setReason] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const [isSalidaButtonDisabled, setIsSalidaButtonDisabled] = useState(true); // Estado para botón de salida
   const [salida, setSalida] = useState(""); // Nuevo estado para la salida
 
   useEffect(() => {
@@ -29,24 +28,6 @@ export const Personal = () => {
     const isWithinAllowedTime = currentHour >= 7 && currentHour < 10;
     setIsButtonDisabled(lastAttendanceDate === formState.todayDate || !isWithinAllowedTime);
   }, [formState.todayDate, userId]);
-
-  useEffect(() => {
-    const checkSalidaTime = () => {
-      const currentTime = new Date();
-      const currentHour = currentTime.getHours();
-      const currentMinutes = currentTime.getMinutes();
-
-      // Habilita el botón entre las 15:30 y las 6:00 del día siguiente
-      const isSalidaTime = (currentHour === 15 && currentMinutes >= 30) || (currentHour >= 16 || currentHour < 6);
-      setIsSalidaButtonDisabled(!isSalidaTime);
-    };
-
-    checkSalidaTime();
-
-    const interval = setInterval(checkSalidaTime, 60000); // Revisa cada minuto
-
-    return () => clearInterval(interval);
-  }, []);
 
   const handleAttendance = async () => {
     const todayDate = formState.todayDate;
@@ -165,11 +146,12 @@ export const Personal = () => {
                 </div>
               </div>
             </div>
-            <button onClick={handleShowPopup} disabled={isButtonDisabled} className={isButtonDisabled ? "disabled" : ""}>
+
+            <button onClick={handleShowPopup} disabled={isButtonDisabled}>
               <span>Enviar</span>
             </button>
-
-            <button onClick={handleSalida} disabled={isSalidaButtonDisabled} className={`salida-button ${isSalidaButtonDisabled ? "disabled" : ""}`}>
+            
+            <button onClick={handleSalida} disabled={!salida && isButtonDisabled}>
               <span>Salida</span>
             </button>
 
@@ -194,7 +176,7 @@ export const Personal = () => {
               </div>
             )}
           </div>
-        ) : ( 
+        ) : (
           <p>No hay datos del usuario disponibles.</p>
         )}
       </div>

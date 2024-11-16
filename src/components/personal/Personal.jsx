@@ -134,7 +134,7 @@ export const Personal = () => {
                   <div className="user-department">{user.account.username}</div>
                 </div>
               </div>
-              <div className="date-time">
+{/*               <div className="date-time">
                 <div className="card" style={{ background: backgroundColor }}>
                   <div className="card-content">
                     <div className="card-top">
@@ -153,7 +153,7 @@ export const Personal = () => {
                     />
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
             <button onClick={handleShowPopup} disabled={isButtonDisabled}>
               <span>Enviar</span>

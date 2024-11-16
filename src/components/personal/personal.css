@@ -3,11 +3,11 @@
 /*------------------------------------------ CARTA ------------------------------------------------------------*/
 .e-card {
   margin: auto; /* Centra horizontalmente */
-  margin-top: 50px; /* Añade un espacio superior opcional */
+  margin-top: 70px; /* Añade un espacio superior opcional */
   background: transparent;
   box-shadow: 0px 8px 28px -9px rgba(0, 0, 0, 0.45);
   position: relative;
-  width: 80%; /* Reduce el ancho al 80% del contenedor */
+  width: 70%; /* Reduce el ancho al 80% del contenedor */
   max-width: 400px; /* Fija un ancho máximo para pantallas más grandes */
   height: auto; /* Ajusta la altura automáticamente */
   border-radius: 16px;

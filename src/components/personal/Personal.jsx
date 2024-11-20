@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar } from '../Navbar.jsx';
+import { useNavigate } from "react-router-dom";
 import { reportarEntrada } from '../../services/api.jsx';
-import { Header } from "../header/Header.jsx"; // Importamos el Header
+import * as XLSX from 'xlsx';
 import './personal.css';
 import defaultAvatar from '../../assets/img/palmamorro.jpg';
 import earlyImage from '../../assets/img/comprobado.png';
@@ -13,25 +14,15 @@ export const Personal = () => {
   const userId = user.account?.homeAccountId || "Invitado";
   const userName = user.account?.name || "Invitado";
 
+  // Definimos el estado formState
   const [formState, setFormState] = useState({
     todayDate: new Date().toISOString().split('T')[0],
     currentTime: new Date().toTimeString().split(' ')[0]
   });
 
-  const [showPopup, setShowPopup] = useState(false);
+  const [showPopup, setShowPopup] = useState(false); // Estado para controlar el popup
   const [reason, setReason] = useState("");
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-
-  useEffect(() => {
-    const lastAttendanceDate = localStorage.getItem(`lastAttendance_${userId}`);
-    const currentHour = new Date().getHours();
-    const isWithinAllowedTime = currentHour >= 20 && currentHour < 22;
-    setIsButtonDisabled(lastAttendanceDate === formState.todayDate || !isWithinAllowedTime);
-  }, [formState.todayDate, userId]);
-
-  // Definimos waveColors aquí
-  const currentHour = new Date().getHours();
-  const waveColors = currentHour < 8 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
+  const [isSubmitting, setIsSubmitting] = useState(false); // Estado para evitar múltiples envíos
 
   const handleAttendance = async () => {
     const todayDate = formState.todayDate;
@@ -39,33 +30,38 @@ export const Personal = () => {
     const status = new Date().getHours() < 8 ? "A tiempo" : "Tarde";
 
     try {
+      // Obtener la IP del usuario
       const ipResponse = await fetch('https://api.ipify.org?format=json');
       const ipData = await ipResponse.json();
       const userIp = ipData && ipData.ip ? ipData.ip : 'IP no disponible';
 
+      // Crear el objeto de registro
       const record = {
         user: userName,
         date: todayDate,
         time: currentTime,
         status,
-        reason: reason,
-        ip: userIp        
+        ip: userIp,
+        reason: reason
       };
 
       console.log(record);
 
+      // Enviar al backend
       const response = await reportarEntrada(record);
 
       if (response && response.error) {
         console.error(response.error);
         alert("Error al registrar la asistencia: " + response.error.message || response.error);
       } else {
+        // Actualizar los registros en el frontend (localStorage)
         const updatedRecords = [...attendanceRecords, record];
         setAttendanceRecords(updatedRecords);
+
+        // Guardar los registros actualizados en localStorage
         localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
 
-        localStorage.setItem(`lastAttendance_${userId}`, todayDate);
-        setIsButtonDisabled(true);
+        // Mostrar mensaje de éxito
         alert("Asistencia registrada correctamente");
       }
     } catch (error) {
@@ -77,40 +73,60 @@ export const Personal = () => {
     }
   };
 
+  const usuarioLogueado = JSON.parse(localStorage.getItem('datosUsuario')) || {};
+  const currentHour = new Date().getHours();
+  const isOnTime = currentHour < 8 ? "A tiempo" : "Tarde";
+  const imageToShow = currentHour < 8 ? earlyImage : lateImage;
+  const backgroundColor = currentHour < 8 ? '#359100' : '#8b0000';
+  const waveColors = currentHour < 8 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
+
+  const fetchInternetTime = async () => {
+    try {
+      const response = await fetch('http://worldtimeapi.org/api/timezone/America/Guatemala');
+      const data = await response.json();
+      const currentDateTime = new Date(data.datetime);
+      setFormState((prevState) => ({
+        ...prevState,
+        todayDate: currentDateTime.toISOString().split('T')[0],
+        currentTime: currentDateTime.toTimeString().split(' ')[0],
+      }));
+    } catch (error) {
+      console.error("Error fetching internet time:", error);
+    }
+  };
+
   useEffect(() => {
+    fetchInternetTime();
     const interval = setInterval(() => {
-      setFormState({
-        todayDate: new Date().toISOString().split('T')[0],
+      setFormState((prevState) => ({
+        ...prevState,
         currentTime: new Date().toTimeString().split(' ')[0]
-      });
+      }));
     }, 1000);
 
     return () => clearInterval(interval);
   }, []);
 
   const handleShowPopup = () => {
-    setShowPopup(true);
+    setShowPopup(true); // Muestra el pop-up
   };
 
   const handleConfirmAttendance = () => {
     setShowPopup(false);
-    handleAttendance();
+    handleAttendance(); // Realiza el registro de asistencia
   };
 
   const handleCancelAttendance = () => {
-    setShowPopup(false);
+    setShowPopup(false); // Cierra el pop-up sin hacer nada
     setReason("");
   };
 
   return (
     <div className="personal">
-      <Navbar user={user} />
-      
-      {/* Agregamos el Header aquí */}
+      <Navbar user={usuarioLogueado} />
       <Header />
-
       <div className="posts-personal">
-        {user ? (
+        {usuarioLogueado ? (
           <div className="e-card playing">
             <div className="image"></div>
             <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})` }}></div>
@@ -120,17 +136,37 @@ export const Personal = () => {
             <div className='content-user'>
               <div className="infotop">
                 <img
-                  src={user.profilePicture || defaultAvatar}
+                  src={usuarioLogueado.profilePicture || defaultAvatar}
                   alt="User Icon"
                   className="icon"
                 />
                 <div className="user-info text-white">
-                  <div className="user-name">{user.account.name}</div>
-                  <div className="user-department">{user.account.username}</div>
+                  <div className="user-name">{usuarioLogueado.account.name}</div>
+                  <div className="user-department">{usuarioLogueado.account.username}</div>
+                </div>
+              </div>
+              <div className="date-time">
+                <div className="card" style={{ background: backgroundColor }}>
+                  <div className="card-content">
+                    <div className="card-top">
+                      <p>{isOnTime}</p>
+                    </div>
+                    <div className="card-bottom">
+                      <p>{formState.todayDate}</p>
+                      <p>{formState.currentTime}</p>
+                    </div>
+                  </div>
+                  {/* <div className="card-image">
+                    <img
+                      src={imageToShow}
+                      alt="Status Icon"
+                      className="status-icon"
+                    />
+                  </div> */}
                 </div>
               </div>
             </div>
-            <button onClick={handleShowPopup} disabled={isButtonDisabled}>
+            <button onClick={handleShowPopup}>
               <span>Enviar</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -147,6 +183,7 @@ export const Personal = () => {
               </svg>
             </button>
 
+            {/* Pop-up para confirmar */}
             {showPopup && (
               <div className="popup">
                 <div className="popup-content">
@@ -157,9 +194,7 @@ export const Personal = () => {
                     onChange={(e) => setReason(e.target.value)}
                     rows="4"
                     style={{ width: '100%', marginTop: '10px', padding: '8px' }}
-                    disabled={isOnTime === "A tiempo"}
                   />
-
                   <div className="popup-actions">
                     <button onClick={handleConfirmAttendance}>Sí</button>
                     <button onClick={handleCancelAttendance}>No</button>

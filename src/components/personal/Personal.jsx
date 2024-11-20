@@ -57,7 +57,7 @@ export const Personal = () => {
 
   const handleAttendance = async () => {
     const todayDate = formState.todayDate;
-    const currentTime = formState.currentTime;
+    const currentTime = formState.fetchGuatemalaTime;
     const status = currentTime && new Date(currentTime).getHours() < 8 ? "A tiempo" : "Tarde"; // Usar la hora de la API
 
     try {

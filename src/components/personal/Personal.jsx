@@ -33,8 +33,8 @@ export const Personal = () => {
       const ipData = await ipResponse.json();
       const userIp = ipData && ipData.ip ? ipData.ip : 'IP no disponible';
   
-      // Obtener la hora y fecha del servidor (esto debería ser proporcionado por el servidor)
-      const serverTimeResponse = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC'); // Aquí se puede usar una API de tiempo como World Time API
+      // Obtener la hora y fecha del servidor con HTTPS
+      const serverTimeResponse = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala'); // Usar HTTPS
       const serverTimeData = await serverTimeResponse.json();
       const serverDateTime = new Date(serverTimeData.utc_datetime);
   
@@ -79,6 +79,7 @@ export const Personal = () => {
       setReason("");
     }
   };
+  
   
   const usuarioLogueado = JSON.parse(localStorage.getItem('datosUsuario')) || {};
   const currentHour = new Date().getHours();

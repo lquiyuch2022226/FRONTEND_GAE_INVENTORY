@@ -6,10 +6,10 @@ import defaultAvatar from '../../assets/img/palmamorro.jpg';
 
 export const Personal = () => {
   const user = JSON.parse(localStorage.getItem('datosUsuario')) || {};
-  const [attendanceRecords, setAttendanceRecords] = useState([]);
   const userId = user.account?.homeAccountId || "Invitado";
   const userName = user.account?.name || "Invitado";
 
+  const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [formState, setFormState] = useState({
     todayDate: new Date().toISOString().split('T')[0],
     currentTime: new Date().toTimeString().split(' ')[0]
@@ -71,9 +71,21 @@ export const Personal = () => {
         ip: userIp,
       };
 
+      // Enviar registro al backend
+      const response = await fetch('/api/attendance', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(record),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al enviar los datos al servidor');
+      }
+
       const updatedRecords = [...attendanceRecords, record];
       setAttendanceRecords(updatedRecords);
-      localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
       alert("Asistencia registrada correctamente");
 
       // Desactivar botón de envío y habilitar "Marcar Salida"
@@ -88,22 +100,41 @@ export const Personal = () => {
     }
   };
 
-  const handleMarkExit = () => {
+  const handleMarkExit = async () => {
     const exitTime = new Date().toTimeString().split(' ')[0];
+    const todayDate = formState.todayDate;
 
-    const updatedRecords = attendanceRecords.map(record =>
-      record.date === formState.todayDate && !record.exitTime
-        ? { ...record, exitTime }
-        : record
-    );
+    try {
+      const updatedRecords = attendanceRecords.map(record =>
+        record.date === todayDate && !record.exitTime
+          ? { ...record, exitTime }
+          : record
+      );
 
-    setAttendanceRecords(updatedRecords);
-    localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
+      const exitRecord = updatedRecords.find(record => record.date === todayDate && record.exitTime);
 
-    alert("Hora de salida registrada correctamente");
+      // Enviar hora de salida al backend
+      const response = await fetch(`/api/attendance/${userId}/exit`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ exitTime }),
+      });
 
-    // Desactivar botón de "Marcar Salida"
-    setIsExitButtonDisabled(true);
+      if (!response.ok) {
+        throw new Error('Error al enviar la hora de salida al servidor');
+      }
+
+      setAttendanceRecords(updatedRecords);
+      alert("Hora de salida registrada correctamente");
+
+      // Desactivar botón de "Marcar Salida"
+      setIsExitButtonDisabled(true);
+    } catch (error) {
+      console.error("Error al registrar la hora de salida:", error);
+      alert("Hubo un error al registrar la hora de salida");
+    }
   };
 
   return (
@@ -131,8 +162,8 @@ export const Personal = () => {
             <button onClick={handleAttendance} disabled={isSendButtonDisabled}>
               <span>{isSendButtonDisabled ? "Asistencia Registrada" : "Enviar"}</span>
             </button>
-            <button 
-              onClick={handleMarkExit} 
+            <button
+              onClick={handleMarkExit}
               disabled={isExitButtonDisabled}>
               Marcar Salida
             </button>

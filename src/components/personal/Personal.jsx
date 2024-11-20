@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { reportarEntrada } from '../../services/api.jsx';
 import * as XLSX from 'xlsx';
 import './personal.css';
+import {Header} from '../header/Header.jsx';
 import defaultAvatar from '../../assets/img/palmamorro.jpg';
 import earlyImage from '../../assets/img/comprobado.png';
 import lateImage from '../../assets/img/cerca.png';

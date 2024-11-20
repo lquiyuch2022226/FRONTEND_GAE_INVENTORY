@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { reportarEntrada } from '../../services/api.jsx';
 import * as XLSX from 'xlsx';
 import './personal.css';
-import { Header } from '../header/Header.jsx';
+import {Header} from '../header/Header.jsx';
 import defaultAvatar from '../../assets/img/palmamorro.jpg';
 import earlyImage from '../../assets/img/comprobado.png';
 import lateImage from '../../assets/img/cerca.png';
@@ -15,42 +15,29 @@ export const Personal = () => {
   const userId = user.account?.homeAccountId || "Invitado";
   const userName = user.account?.name || "Invitado";
 
-  const [showPopup, setShowPopup] = useState(false);
+  // Definimos el estado formState
+  const [formState, setFormState] = useState({
+    todayDate: new Date().toISOString().split('T')[0],
+    currentTime: new Date().toTimeString().split(' ')[0]
+  });
+
+  const [showPopup, setShowPopup] = useState(false); // Estado para controlar el popup
   const [reason, setReason] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // Estado para evitar múltiples envíos
 
-  // Llamada para obtener la hora de Guatemala desde la API
-  const fetchGuatemalaTime = async () => {
-    try {
-      // Usando HTTPS para evitar el error de Mixed Content
-      const response = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala');
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${response.statusText}`);
-      }
-      const data = await response.json();
-      return new Date(data.datetime);  // Devolvemos el objeto Date
-    } catch (error) {
-      console.error("Error fetching Guatemala time:", error);
-      alert("No se pudo obtener la hora de Guatemala. Intenta nuevamente más tarde.");
-      return null;
-    }
-  };
   
-
   const handleAttendance = async () => {
-    // Obtener la hora de Guatemala en este momento
-    const guatemalaTime = await fetchGuatemalaTime();
-    if (!guatemalaTime) return;  // Si no pudimos obtener la hora, no procedemos
-
-    const todayDate = guatemalaTime.toISOString().split('T')[0]; // Fecha en formato YYYY-MM-DD
-    const currentTime = guatemalaTime.toTimeString().split(' ')[0]; // Hora en formato HH:MM:SS
-    const status = new Date(currentTime).getHours() < 8 ? "A tiempo" : "Tarde"; // Usar la hora de la API
+    const todayDate = formState.todayDate;
+    const currentTime = formState.currentTime;
+    const status = new Date().getHours() < 8 ? "A tiempo" : "Tarde";
 
     try {
+      // Obtener la IP del usuario
       const ipResponse = await fetch('https://api.ipify.org?format=json');
       const ipData = await ipResponse.json();
       const userIp = ipData && ipData.ip ? ipData.ip : 'IP no disponible';
 
+      // Crear el objeto de registro
       const record = {
         user: userName,
         date: todayDate,
@@ -62,15 +49,21 @@ export const Personal = () => {
 
       console.log(record);
 
+      // Enviar al backend
       const response = await reportarEntrada(record);
 
       if (response && response.error) {
         console.error(response.error);
         alert("Error al registrar la asistencia: " + response.error.message || response.error);
       } else {
+        // Actualizar los registros en el frontend (localStorage)
         const updatedRecords = [...attendanceRecords, record];
         setAttendanceRecords(updatedRecords);
+
+        // Guardar los registros actualizados en localStorage
         localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
+
+        // Mostrar mensaje de éxito
         alert("Asistencia registrada correctamente");
       }
     } catch (error) {
@@ -83,19 +76,50 @@ export const Personal = () => {
   };
 
   const usuarioLogueado = JSON.parse(localStorage.getItem('datosUsuario')) || {};
-  
-  // Aquí usamos directamente la fecha y hora de Guatemala obtenida desde la API
+  const currentHour = new Date().getHours();
+  const isOnTime = currentHour < 8 ? "A tiempo" : "Tarde";
+  const imageToShow = currentHour < 8 ? earlyImage : lateImage;
+  const backgroundColor = currentHour < 8 ? '#359100' : '#8b0000';
+  const waveColors = currentHour < 8 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
+
+  const fetchInternetTime = async () => {
+    try {
+      const response = await fetch('http://worldtimeapi.org/api/timezone/America/Guatemala');
+      const data = await response.json();
+      const currentDateTime = new Date(data.datetime);
+      setFormState((prevState) => ({
+        ...prevState,
+        todayDate: currentDateTime.toISOString().split('T')[0],
+        currentTime: currentDateTime.toTimeString().split(' ')[0],
+      }));
+    } catch (error) {
+      console.error("Error fetching internet time:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchInternetTime();
+    const interval = setInterval(() => {
+      setFormState((prevState) => ({
+        ...prevState,
+        currentTime: new Date().toTimeString().split(' ')[0]
+      }));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   const handleShowPopup = () => {
-    setShowPopup(true);
+    setShowPopup(true); // Muestra el pop-up
   };
 
   const handleConfirmAttendance = () => {
     setShowPopup(false);
-    handleAttendance();
+    handleAttendance(); // Realiza el registro de asistencia
   };
 
   const handleCancelAttendance = () => {
-    setShowPopup(false);
+    setShowPopup(false); // Cierra el pop-up sin hacer nada
     setReason("");
   };
 
@@ -107,9 +131,9 @@ export const Personal = () => {
         {usuarioLogueado ? (
           <div className="e-card playing">
             <div className="image"></div>
-            <div className="wave" style={{ background: `linear-gradient(744deg, #359100, #023a0e, #05a00d)` }}></div>
-            <div className="wave" style={{ background: `linear-gradient(744deg, #359100, #023a0e, #05a00d)`, top: '210px' }}></div>
-            <div className="wave" style={{ background: `linear-gradient(744deg, #359100, #023a0e, #05a00d)`, top: '420px' }}></div>
+            <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})` }}></div>
+            <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '210px' }}></div>
+            <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '420px' }}></div>
 
             <div className='content-user'>
               <div className="infotop">
@@ -126,9 +150,18 @@ export const Personal = () => {
             </div>
             <button onClick={handleShowPopup}>
               <span>Enviar</span>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 74 74" height="34" width="34">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 74 74"
+                height="34"
+                width="34"
+              >
                 <circle strokeWidth="3" stroke="black" r="35.5" cy="37" cx="37"></circle>
-                <path fill="black" d="M25 35.5C24.1716 35.5 23.5 36.1716 23.5 37C23.5 37.8284 24.1716 38.5 25 38.5V35.5ZM49.0607 38.0607C49.6464 37.4749 49.6464 36.5251 49.0607 35.9393L39.5147 26.3934C38.9289 25.8076 37.9792 25.8076 37.3934 26.3934C36.8076 26.9792 36.8076 27.9289 37.3934 28.5147L45.8787 37L37.3934 45.4853C36.8076 46.0711 36.8076 47.0208 37.3934 47.6066C37.9792 48.1924 38.9289 48.1924 39.5147 47.6066L49.0607 38.0607ZM25 38.5L48 38.5V35.5L25 35.5V38.5Z"></path>
+                <path
+                  fill="black"
+                  d="M25 35.5C24.1716 35.5 23.5 36.1716 23.5 37C23.5 37.8284 24.1716 38.5 25 38.5V35.5ZM49.0607 38.0607C49.6464 37.4749 49.6464 36.5251 49.0607 35.9393L39.5147 26.3934C38.9289 25.8076 37.9792 25.8076 37.3934 26.3934C36.8076 26.9792 36.8076 27.9289 37.3934 28.5147L45.8787 37L37.3934 45.4853C36.8076 46.0711 36.8076 47.0208 37.3934 47.6066C37.9792 48.1924 38.9289 48.1924 39.5147 47.6066L49.0607 38.0607ZM25 38.5L48 38.5V35.5L25 35.5V38.5Z"
+                ></path>
               </svg>
             </button>
 

@@ -15,50 +15,36 @@ export const Personal = () => {
   const userId = user.account?.homeAccountId || "Invitado";
   const userName = user.account?.name || "Invitado";
 
-  const [formState, setFormState] = useState({
-    todayDate: '',
-    currentTime: ''
-  });
-
   const [showPopup, setShowPopup] = useState(false);
   const [reason, setReason] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Llamada para obtener la hora de Guatemala desde la API
   const fetchGuatemalaTime = async () => {
     try {
+      // Usando HTTPS para evitar el error de Mixed Content
       const response = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala');
       if (!response.ok) {
         throw new Error(`Error: ${response.status} ${response.statusText}`);
       }
       const data = await response.json();
-      const currentDateTime = new Date(data.datetime);
-      
-      setFormState({
-        todayDate: currentDateTime.toISOString().split('T')[0],
-        currentTime: currentDateTime.toTimeString().split(' ')[0]
-      });
+      return new Date(data.datetime);  // Devolvemos el objeto Date
     } catch (error) {
       console.error("Error fetching Guatemala time:", error);
-      setFormState({ todayDate: 'Error', currentTime: 'Error' });
       alert("No se pudo obtener la hora de Guatemala. Intenta nuevamente más tarde.");
+      return null;
     }
   };
   
 
-  useEffect(() => {
-    fetchGuatemalaTime();  // Llamada inicial para obtener la hora
-    const interval = setInterval(() => {
-      fetchGuatemalaTime();
-    }, 60000);  // Actualiza cada minuto (60,000 ms)
-  
-    return () => clearInterval(interval);  // Limpiar el intervalo al desmontar el componente
-  }, []);
-  
-
   const handleAttendance = async () => {
-    const todayDate = formState.todayDate;
-    const currentTime = formState.fetchGuatemalaTime;
-    const status = currentTime && new Date(currentTime).getHours() < 8 ? "A tiempo" : "Tarde"; // Usar la hora de la API
+    // Obtener la hora de Guatemala en este momento
+    const guatemalaTime = await fetchGuatemalaTime();
+    if (!guatemalaTime) return;  // Si no pudimos obtener la hora, no procedemos
+
+    const todayDate = guatemalaTime.toISOString().split('T')[0]; // Fecha en formato YYYY-MM-DD
+    const currentTime = guatemalaTime.toTimeString().split(' ')[0]; // Hora en formato HH:MM:SS
+    const status = new Date(currentTime).getHours() < 8 ? "A tiempo" : "Tarde"; // Usar la hora de la API
 
     try {
       const ipResponse = await fetch('https://api.ipify.org?format=json');
@@ -98,14 +84,7 @@ export const Personal = () => {
 
   const usuarioLogueado = JSON.parse(localStorage.getItem('datosUsuario')) || {};
   
-  // Usar la hora de la API (de formState) en lugar de la hora local
-  const currentHour = formState.currentTime ? new Date(`1970-01-01T${formState.currentTime}Z`).getHours() : new Date().getHours(); 
-
-  const isOnTime = currentHour < 8 ? "A tiempo" : "Tarde";
-  const imageToShow = currentHour < 8 ? earlyImage : lateImage;
-  const backgroundColor = currentHour < 8 ? '#359100' : '#8b0000';
-  const waveColors = currentHour < 8 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
-
+  // Aquí usamos directamente la fecha y hora de Guatemala obtenida desde la API
   const handleShowPopup = () => {
     setShowPopup(true);
   };
@@ -128,9 +107,9 @@ export const Personal = () => {
         {usuarioLogueado ? (
           <div className="e-card playing">
             <div className="image"></div>
-            <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})` }}></div>
-            <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '210px' }}></div>
-            <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '420px' }}></div>
+            <div className="wave" style={{ background: `linear-gradient(744deg, #359100, #023a0e, #05a00d)` }}></div>
+            <div className="wave" style={{ background: `linear-gradient(744deg, #359100, #023a0e, #05a00d)`, top: '210px' }}></div>
+            <div className="wave" style={{ background: `linear-gradient(744deg, #359100, #023a0e, #05a00d)`, top: '420px' }}></div>
 
             <div className='content-user'>
               <div className="infotop">

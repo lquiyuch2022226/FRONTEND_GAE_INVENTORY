@@ -28,6 +28,9 @@ export const Personal = () => {
   const fetchGuatemalaTime = async () => {
     try {
       const response = await fetch('http://worldtimeapi.org/api/timezone/America/Guatemala');
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      }
       const data = await response.json();
       const currentDateTime = new Date(data.datetime);
       
@@ -37,8 +40,11 @@ export const Personal = () => {
       });
     } catch (error) {
       console.error("Error fetching Guatemala time:", error);
+      // Maneja el error visualmente en la interfaz de usuario
+      alert("No se pudo obtener la hora de Guatemala. Intenta nuevamente más tarde.");
     }
   };
+  
 
   useEffect(() => {
     fetchGuatemalaTime();  // Llamada inicial para obtener la hora

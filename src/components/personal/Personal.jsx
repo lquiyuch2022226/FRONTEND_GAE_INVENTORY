@@ -26,7 +26,60 @@ export const Personal = () => {
   const [isSubmitting, setIsSubmitting] = useState(false); // Estado para evitar múltiples envíos
 
   
-  C:\Users\Administrador\Desktop\prueba\FRONTEND_GAE_INVENTORY
+  const handleAttendance = async () => {
+    try {
+      // Obtener la IP del usuario
+      const ipResponse = await fetch('https://api.ipify.org?format=json');
+      const ipData = await ipResponse.json();
+      const userIp = ipData && ipData.ip ? ipData.ip : 'IP no disponible';
+  
+      // Obtener la hora y fecha del servidor (esto debería ser proporcionado por el servidor)
+      const serverTimeResponse = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC'); // Aquí se puede usar una API de tiempo como World Time API
+      const serverTimeData = await serverTimeResponse.json();
+      const serverDateTime = new Date(serverTimeData.utc_datetime);
+  
+      // Calcular el estado basado en la hora del servidor
+      const currentHour = serverDateTime.getHours();
+      const status = currentHour < 8 ? "A tiempo" : "Tarde";
+  
+      // Crear el objeto de registro
+      const record = {
+        user: userName,
+        date: formState.todayDate,
+        time: formState.currentTime,
+        status,
+        ip: userIp,
+        reason: reason
+      };
+  
+      console.log(record);
+  
+      // Enviar al backend
+      const response = await reportarEntrada(record);
+  
+      if (response && response.error) {
+        console.error(response.error);
+        alert("Error al registrar la asistencia: " + response.error.message || response.error);
+      } else {
+        // Actualizar los registros en el frontend (localStorage)
+        const updatedRecords = [...attendanceRecords, record];
+        setAttendanceRecords(updatedRecords);
+  
+        // Guardar los registros actualizados en localStorage
+        localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
+  
+        // Mostrar mensaje de éxito
+        alert("Asistencia registrada correctamente");
+      }
+    } catch (error) {
+      console.error("Error al registrar la asistencia:", error);
+      alert("Error al registrar la asistencia: " + error.message);
+    } finally {
+      setShowPopup(false);
+      setReason("");
+    }
+  };
+  
   const usuarioLogueado = JSON.parse(localStorage.getItem('datosUsuario')) || {};
   const currentHour = new Date().getHours();
   const isOnTime = currentHour < 8 ? "A tiempo" : "Tarde";

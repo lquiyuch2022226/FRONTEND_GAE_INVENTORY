@@ -24,10 +24,8 @@ export const Personal = () => {
   const [reason, setReason] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Llamada para obtener la hora de Guatemala desde la API
   const fetchGuatemalaTime = async () => {
     try {
-      // Usando HTTPS para evitar el error de Mixed Content
       const response = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala');
       if (!response.ok) {
         throw new Error(`Error: ${response.status} ${response.statusText}`);
@@ -41,6 +39,7 @@ export const Personal = () => {
       });
     } catch (error) {
       console.error("Error fetching Guatemala time:", error);
+      setFormState({ todayDate: 'Error', currentTime: 'Error' });
       alert("No se pudo obtener la hora de Guatemala. Intenta nuevamente más tarde.");
     }
   };
@@ -48,10 +47,13 @@ export const Personal = () => {
 
   useEffect(() => {
     fetchGuatemalaTime();  // Llamada inicial para obtener la hora
-    const interval = setInterval(fetchGuatemalaTime, 1000);  // Actualiza cada segundo la hora
-
+    const interval = setInterval(() => {
+      fetchGuatemalaTime();
+    }, 60000);  // Actualiza cada minuto (60,000 ms)
+  
     return () => clearInterval(interval);  // Limpiar el intervalo al desmontar el componente
   }, []);
+  
 
   const handleAttendance = async () => {
     const todayDate = formState.todayDate;

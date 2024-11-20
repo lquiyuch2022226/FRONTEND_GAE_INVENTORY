@@ -50,7 +50,7 @@ export const Personal = () => {
   const handleAttendance = async () => {
     const todayDate = formState.todayDate;
     const currentTime = formState.currentTime;
-    const status = new Date().getHours() < 8 ? "A tiempo" : "Tarde";
+    const status = currentTime && new Date(currentTime).getHours() < 8 ? "A tiempo" : "Tarde"; // Usar la hora de la API
 
     try {
       const ipResponse = await fetch('https://api.ipify.org?format=json');
@@ -89,7 +89,10 @@ export const Personal = () => {
   };
 
   const usuarioLogueado = JSON.parse(localStorage.getItem('datosUsuario')) || {};
-  const currentHour = new Date().getHours();
+  
+  // Usar la hora de la API (de formState) en lugar de la hora local
+  const currentHour = formState.currentTime ? new Date(`1970-01-01T${formState.currentTime}Z`).getHours() : new Date().getHours(); 
+
   const isOnTime = currentHour < 8 ? "A tiempo" : "Tarde";
   const imageToShow = currentHour < 8 ? earlyImage : lateImage;
   const backgroundColor = currentHour < 8 ? '#359100' : '#8b0000';

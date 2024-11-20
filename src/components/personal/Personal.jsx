@@ -152,12 +152,12 @@ export const Personal = () => {
                     <div className="card-top">
                       <p>{isOnTime}</p>
                     </div>
-                    <div className="card-bottom">
+             {/*        <div className="card-bottom">
                       <p>{formState.todayDate}</p>
                       <p>{formState.currentTime}</p>
                     </div>
                   </div>
-                  {/* <div className="card-image">
+                  <div className="card-image">
                     <img
                       src={imageToShow}
                       alt="Status Icon"

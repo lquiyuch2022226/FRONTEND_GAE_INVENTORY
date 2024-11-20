@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { reportarEntrada } from '../../services/api.jsx';
 import * as XLSX from 'xlsx';
 import './personal.css';
-import { Header } from '../header/Header.jsx';
+import {Header} from '../header/Header.jsx';
 import defaultAvatar from '../../assets/img/palmamorro.jpg';
 import earlyImage from '../../assets/img/comprobado.png';
 import lateImage from '../../assets/img/cerca.png';
@@ -32,7 +32,8 @@ export const Personal = () => {
 
     try {
       // Obtener la IP del usuario
-      const ipResponse = await fetch('https://api.ipify.org?format=json');
+   /*    const ipResponse = await fetch('https://api.ipify.org?format=json'); */
+   const currentTime = new Date();
       const ipData = await ipResponse.json();
       const userIp = ipData && ipData.ip ? ipData.ip : 'IP no disponible';
 
@@ -81,17 +82,31 @@ export const Personal = () => {
   const backgroundColor = currentHour < 8 ? '#359100' : '#8b0000';
   const waveColors = currentHour < 8 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
 
-  // Update time every second based on the user's local time
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const currentDateTime = new Date();
-      setFormState({
+  const fetchInternetTime = async () => {
+    try {
+      const response = await fetch('http://worldtimeapi.org/api/timezone/America/Guatemala');
+      const data = await response.json();
+      const currentDateTime = new Date(data.datetime);
+      setFormState((prevState) => ({
+        ...prevState,
         todayDate: currentDateTime.toISOString().split('T')[0],
-        currentTime: currentDateTime.toTimeString().split(' ')[0]
-      });
+        currentTime: currentDateTime.toTimeString().split(' ')[0],
+      }));
+    } catch (error) {
+      console.error("Error fetching internet time:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchInternetTime();
+    const interval = setInterval(() => {
+      setFormState((prevState) => ({
+        ...prevState,
+        currentTime: new Date().toTimeString().split(' ')[0]
+      }));
     }, 1000);
 
-    return () => clearInterval(interval); // Cleanup on unmount
+    return () => clearInterval(interval);
   }, []);
 
   const handleShowPopup = () => {
@@ -133,7 +148,6 @@ export const Personal = () => {
                 </div>
               </div>
             </div>
-
             <button onClick={handleShowPopup}>
               <span>Enviar</span>
               <svg

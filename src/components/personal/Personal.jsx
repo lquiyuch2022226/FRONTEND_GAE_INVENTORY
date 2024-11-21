@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar } from '../Navbar.jsx';
 import { reportarEntrada } from '../../services/api.jsx';
-import { Header } from "../header/Header.jsx";
+import { Header } from './Header'; // Importamos el Header
 import './personal.css';
 import defaultAvatar from '../../assets/img/palmamorro.jpg';
 import earlyImage from '../../assets/img/comprobado.png';
@@ -28,6 +28,10 @@ export const Personal = () => {
     const isWithinAllowedTime = currentHour >= 20 && currentHour < 22;
     setIsButtonDisabled(lastAttendanceDate === formState.todayDate || !isWithinAllowedTime);
   }, [formState.todayDate, userId]);
+
+  // Definimos waveColors aquí
+  const currentHour = new Date().getHours();
+  const waveColors = currentHour < 8 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
 
   const handleAttendance = async () => {
     const todayDate = formState.todayDate;

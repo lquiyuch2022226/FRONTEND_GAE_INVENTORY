@@ -5,7 +5,7 @@ import './header.css';
 export const Header = () => {
   const [currentDate, setCurrentDate] = useState('');
   const [currentTime, setCurrentTime] = useState('');
-  const [isOnTime, setIsOnTime] = useState('');
+  const [isLate, setIsLate] = useState(false);
 
   useEffect(() => {
     const updateDateTime = () => {
@@ -16,7 +16,7 @@ export const Header = () => {
       const formattedDate = now.toLocaleDateString('es-ES');
       setCurrentDate(formattedDate);
       setCurrentTime(formattedTime);
-      setIsOnTime(hours < 8 ? "A tiempo" : "Tarde");
+      setIsLate(hours >= 8); // Determina si está tarde
     };
 
     updateDateTime();
@@ -26,41 +26,18 @@ export const Header = () => {
 
   return (
     <div className="header">
-      <div className="header-content">
-        {/* Fecha */}
-        <div className="header-item">
-          <Input
-            field="date"
-            label="Fecha"
-            value={currentDate}
-            onChangeHandler={() => {}}
-            type="text"
-            disabled={true}
-          />
-        </div>
-        
-        {/* Hora */}
-        <div className="header-item">
-          <Input
-            field="time"
-            label="Hora"
-            value={currentTime}
-            onChangeHandler={() => {}}
-            type="text"
-            disabled={true}
-          />
-        </div>
-
-        {/* Estado de la asistencia */}
-        <div className="header-item">
-          <Input
-            field="status"
-            label="Estado"
-            value={isOnTime}
-            onChangeHandler={() => {}}
-            type="text"
-            disabled={true}
-          />
+      <div className="header-item">
+        <span className="header-label">Fecha</span>
+        <div className="header-value">{currentDate}</div>
+      </div>
+      <div className="header-item">
+        <span className="header-label">Hora</span>
+        <div className="header-value">{currentTime}</div>
+      </div>
+      <div className="header-item">
+        <span className="header-label">Tarde</span>
+        <div className={`status-icon ${isLate ? 'late' : 'on-time'}`}>
+          {isLate ? '✘' : '✔'}
         </div>
       </div>
     </div>

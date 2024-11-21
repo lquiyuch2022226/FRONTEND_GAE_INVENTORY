@@ -1,86 +1,62 @@
-/* Estilo general del header */
+/* Header general */
 .header {
-    background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradiente vibrante */
-    padding: 20px 40px;
-    border-radius: 50px; /* Bordes muy redondeados para un estilo circular */
-    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.15); /* Sombra más suave para profundidad */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    width: 100%;
-    max-width: 1100px; /* Limitar el ancho máximo */
-    margin: 20px auto;
-    transition: all 0.3s ease-in-out;
-  }
-  
-  /* Contenedor de los elementos dentro del header */
-  .header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
-    gap: 20px;
+    background-color: #6fcf97; /* Verde claro */
+    padding: 15px 30px;
+    border-radius: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 1200px;
   }
   
-  /* Estilo para cada item del header */
+  /* Elementos del header */
   .header-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
-    width: 30%; /* Ajustamos para que no ocupe todo el espacio */
-  }
-  
-  /* Etiquetas de los inputs */
-  .header-item label {
-    font-size: 14px; /* Tamaño de fuente más pequeño */
-    font-weight: 600; /* Peso de fuente medio */
-    color: #f39c12; /* Color dorado */
-    text-transform: uppercase; /* Mayúsculas */
-    letter-spacing: 1px;
-    margin-bottom: 5px;
-  }
-  
-  /* Estilo de los inputs (Fecha, Hora, Estado) */
-  .header-item input {
-    padding: 10px 15px;
-    font-size: 14px; /* Tamaño de fuente más pequeño */
-    font-weight: 600;
-    border: 2px solid #f39c12;
-    border-radius: 20px; /* Bordes redondeados */
-    background-color: #34495e; /* Fondo gris oscuro */
-    color: white;
-    width: 100%;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15); /* Sombra sutil */
-    transition: all 0.3s ease;
-  }
-  
-  /* Efecto de hover y focus en los inputs */
-  .header-item input:focus {
-    border-color: #e74c3c;
-    background-color: #2c3e50;
-    box-shadow: 0px 4px 12px rgba(231, 76, 60, 0.5); /* Sombra más intensa */
-    outline: none;
-  }
-  
-  /* Inputs deshabilitados (con color más suave) */
-  .header-item input[disabled] {
-    background-color: #7F8C8D;
-    color: #BDC3C7;
-    border-color: #BDC3C7;
-    cursor: not-allowed;
-    box-shadow: none;
-  }
-  
-  /* Efecto de hover sobre el header para animación */
-  .header:hover {
-    transform: translateY(-5px);
-    box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.2);
-  }
-  
-  /* Estilo de los elementos al centrarlos */
-  .header-content > .header-item {
     text-align: center;
+    color: #fff; /* Texto blanco */
+  }
+  
+  /* Etiquetas de cada sección */
+  .header-label {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  /* Valores de cada sección */
+  .header-value {
+    font-size: 16px;
+    background: #0b2447; /* Azul oscuro */
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    min-width: 100px;
+    text-align: center;
+  }
+  
+  /* Icono de estado (Tarde o A tiempo) */
+  .status-icon {
+    font-size: 20px;
+    font-weight: bold;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    border: 2px solid white;
+    background-color: #ff7675; /* Rojo claro */
+  }
+  
+  .status-icon.on-time {
+    background-color: #6fcf97; /* Verde claro */
+  }
+  
+  .status-icon.late {
+    background-color: #ff7675; /* Rojo */
   }
   

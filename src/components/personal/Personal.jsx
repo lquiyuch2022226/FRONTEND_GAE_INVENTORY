@@ -104,7 +104,9 @@ export const Personal = () => {
 
   return (
     <div className="personal">
-           <Navbar user={user} />
+      <Navbar user={user} />
+      
+      {/* Agregamos el Header aquí */}
       <Header />
 
       <div className="posts-personal">

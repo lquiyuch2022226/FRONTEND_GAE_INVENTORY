@@ -165,41 +165,32 @@
 /* ------- ACOMODAR DATOS -------------------------------------------------------*/
 /* ------------------------------------------ ACOMODAR DATOS --------------------------------------------*/
 .content-user {
-  display: flex;
-  justify-content: flex-start;  /* Alinea a la izquierda */
-  align-items: center;  /* Alinea verticalmente en el centro */
+  display: flex; /* Mantiene la imagen y la información en la misma línea */
+  align-items: center; /* Centra verticalmente la imagen y el texto */
   padding: 20px;
-  position: relative; /* Asegura que el contenido esté correctamente posicionado */
-  z-index: 2; /* Asegura que esté por encima de las olas */
-}
-
-.icon {
-  width: 80px; /* Tamaño reducido para íconos */
-  height: 80px;
-  border-radius: 50%; /* Mantén el borde circular */
-  object-fit: cover;  /* Asegura que las imágenes no se distorsionen */
-  margin-right: 15px; /* Añade espacio entre la imagen y la información */
-}
-
-.infotop {
-  display: flex;
-  flex-direction: column;  /* Mantén la información en columna */
-  align-items: flex-start;  /* Alinea a la izquierda */
-  position: relative;
   z-index: 2;
 }
 
-.user-info {
-  font-size: 14px; /* Reduce el tamaño del texto */
+.icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%; /* Imagen circular */
+  margin-right: 15px; /* Espacio entre la imagen y el texto */
+  object-fit: cover; /* Asegura que la imagen no se deforme */
+}
+
+.infotop {
+  text-align: left; /* Alinea la información del texto a la izquierda */
 }
 
 .user-name {
-  font-size: 16px; /* Tamaño ajustado */
+  font-size: 16px;
   font-weight: bold;
 }
 
 .user-department {
-  font-size: 12px; /* Ajuste adicional */
+  font-size: 12px;
+  margin-top: 5px; /* Espacio entre líneas de texto */
 }
 
 .name {

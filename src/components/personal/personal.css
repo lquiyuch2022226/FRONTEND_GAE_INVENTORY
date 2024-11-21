@@ -178,23 +178,32 @@
 }
 
 .icon {
-  width: 80px;
+  width: 80px; /* Tamaño reducido para íconos */
   height: 80px;
-  border-radius: 50%;
-  margin-right: 15px;
+  border-radius: 50%; /* Mantén el borde circular */
+  object-fit: cover;  /* Asegura que las imágenes no se distorsionen */
+  margin-right: 15px; /* Añade espacio entre la imagen y la información */
 }
 
 .infotop {
-  text-align: left;
+  display: flex;
+  flex-direction: column;  /* Mantén la información en columna */
+  align-items: flex-start;  /* Alinea a la izquierda */
+  position: relative;
+  z-index: 2;
+}
+
+.user-info {
+  font-size: 14px; /* Reduce el tamaño del texto */
 }
 
 .user-name {
-  font-size: 16px;
+  font-size: 16px; /* Tamaño ajustado */
   font-weight: bold;
 }
 
 .user-department {
-  font-size: 12px;
+  font-size: 12px; /* Ajuste adicional */
 }
 
 .name {
@@ -213,23 +222,22 @@
 
 /* From Uiverse.io by alexmaracinaru */
 button {
-  margin: 10px;
-  padding: 10px 20px;
-  background-color: #0056b3;
-  color: white;
-  border: none;
-  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-button:disabled {
-  background-color: gray;
-  cursor: not-allowed;
+  font-weight: 700;
+  transition: all 0.2s;
+  padding: 10px 20px;
+  border-radius: 100px;
+  background: #cfef00;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  position: relative; /* Asegura que el botón esté posicionado en el flujo de la página */
+  z-index: 3; /* Asegura que esté por encima de las olas */
 }
 
 button:hover {
-  background-color: #004494;
+  background: #c4e201;
 }
 
 button > svg {

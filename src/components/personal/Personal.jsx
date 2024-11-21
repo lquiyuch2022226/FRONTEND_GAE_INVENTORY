@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar } from '../Navbar.jsx';
-import { Header } from "../header/Header.jsx";
+import { Header } from "../header/Header.jsx"; // Importamos el Header
 import './personal.css';
 import defaultAvatar from '../../assets/img/palmamorro.jpg';
 
@@ -33,17 +33,16 @@ export const Personal = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Verificar disponibilidad de botones según la hora y registros
+  // Verificar disponibilidad de botones según la hora
   useEffect(() => {
     const currentDate = new Date();
     const currentTimeInMinutes = currentDate.getHours() * 60 + currentDate.getMinutes();
 
     const isWithinSendTime = currentTimeInMinutes >= 7 * 60 && currentTimeInMinutes <= 10 * 60;
-    const hasRecordToday = attendanceRecords.some(record => record.date === formState.todayDate);
     const hasRecordWithoutExit = attendanceRecords.some(record => record.date === formState.todayDate && !record.exitTime);
     const isWithinExitTime = currentTimeInMinutes >= 15 * 60 + 30 && currentTimeInMinutes <= 20 * 60;
 
-    setIsSendButtonDisabled(!isWithinSendTime || hasRecordToday);
+    setIsSendButtonDisabled(!isWithinSendTime);
     setIsExitButtonDisabled(!(isWithinExitTime && hasRecordWithoutExit));
   }, [attendanceRecords, formState.todayDate]);
 
@@ -53,6 +52,7 @@ export const Personal = () => {
     const status = new Date().getHours() < 8 ? "A tiempo" : "Tarde";
 
     if (status === "Tarde" && !reason) {
+      // Mostrar popup si es tarde y no se ha proporcionado una razón
       setShowPopup(true);
       return;
     }
@@ -75,10 +75,6 @@ export const Personal = () => {
       setAttendanceRecords(updatedRecords);
       localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
       alert("Asistencia registrada correctamente");
-
-      // Desactivar botón de envío y habilitar "Marcar Salida"
-      setIsSendButtonDisabled(true);
-      setIsExitButtonDisabled(false);
     } catch (error) {
       console.error("Error al registrar asistencia:", error);
       alert("Hubo un error al registrar la asistencia");
@@ -101,9 +97,6 @@ export const Personal = () => {
     localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
 
     alert("Hora de salida registrada correctamente");
-
-    // Desactivar botón de "Marcar Salida"
-    setIsExitButtonDisabled(true);
   };
 
   return (
@@ -129,10 +122,10 @@ export const Personal = () => {
               </div>
             </div>
             <button onClick={handleAttendance} disabled={isSendButtonDisabled}>
-              <span>{isSendButtonDisabled ? "Asistencia Registrada" : "Enviar"}</span>
+              <span>Enviar</span>
             </button>
-            <button
-              onClick={handleMarkExit}
+            <button 
+              onClick={handleMarkExit} 
               disabled={isExitButtonDisabled}>
               Marcar Salida
             </button>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar } from '../Navbar.jsx';
 import { reportarEntrada } from '../../services/api.jsx';
-import { Header } from './Header'; // Importamos el Header
 import './personal.css';
 import defaultAvatar from '../../assets/img/palmamorro.jpg';
 import earlyImage from '../../assets/img/comprobado.png';
@@ -22,9 +21,12 @@ export const Personal = () => {
   const [reason, setReason] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
+  // Verificar si ya se registró la asistencia hoy y habilitar solo entre 7 a.m. y 10 a.m.
   useEffect(() => {
     const lastAttendanceDate = localStorage.getItem(`lastAttendance_${userId}`);
     const currentHour = new Date().getHours();
+
+    // Permitir registrar asistencia solo entre las 7 y las 10 a.m. si no se ha registrado ya hoy
     const isWithinAllowedTime = currentHour >= 20 && currentHour < 22;
     setIsButtonDisabled(lastAttendanceDate === formState.todayDate || !isWithinAllowedTime);
   }, [formState.todayDate, userId]);
@@ -60,8 +62,12 @@ export const Personal = () => {
         setAttendanceRecords(updatedRecords);
         localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
 
+        // Guardar la fecha de la asistencia registrada en localStorage
         localStorage.setItem(`lastAttendance_${userId}`, todayDate);
+
+        // Deshabilitar el botón
         setIsButtonDisabled(true);
+
         alert("Asistencia registrada correctamente");
       }
     } catch (error) {
@@ -72,6 +78,12 @@ export const Personal = () => {
       setReason("");
     }
   };
+
+  const currentHour = new Date().getHours();
+  const isOnTime = currentHour < 8 ? "A tiempo" : "Tarde";
+  const imageToShow = currentHour < 8 ? earlyImage : lateImage;
+  const backgroundColor = currentHour < 8 ? '#359100' : '#8b0000';
+  const waveColors = currentHour < 8 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -101,9 +113,6 @@ export const Personal = () => {
   return (
     <div className="personal">
       <Navbar user={user} />
-      
-      {/* Agregamos el Header aquí */}
-      <Header />
 
       <div className="posts-personal">
         {user ? (
@@ -153,7 +162,7 @@ export const Personal = () => {
                     onChange={(e) => setReason(e.target.value)}
                     rows="4"
                     style={{ width: '100%', marginTop: '10px', padding: '8px' }}
-                    disabled={isOnTime === "A tiempo"}
+                    disabled={isOnTime === "A tiempo"} // Deshabilita si llegó "A tiempo"
                   />
 
                   <div className="popup-actions">
@@ -161,6 +170,7 @@ export const Personal = () => {
                     <button onClick={handleCancelAttendance}>No</button>
                   </div>
                 </div>
+
               </div>
             )}
           </div>

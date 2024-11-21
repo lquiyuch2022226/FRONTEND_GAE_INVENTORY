@@ -156,18 +156,15 @@
 }
 
 /* ------------------------------------------ ACOMODAR DATOS --------------------------------------------*/
-/* ------------------------------------------ ACOMODAR DATOS --------------------------------------------*/
 .content-user {
   display: flex;
-  align-items: center;
+  align-items: center; /* Alinea verticalmente los elementos al centro */
   padding: 20px;
   z-index: 2;
   position: relative;
-  justify-content: flex-start; /* Asegura que los elementos estén alineados a la izquierda */
-  width: 100%; /* Asegura que ocupe todo el ancho del contenedor */
+  width: 100%; /* Asegura que ocupe todo el ancho disponible */
 }
 
-/* Imagen circular */
 .icon {
   width: 80px; /* Tamaño de la imagen */
   height: 80px; /* Tamaño de la imagen */
@@ -176,12 +173,11 @@
   object-fit: cover; /* Asegura que la imagen no se deforme */
 }
 
-/* Información del usuario */
 .infotop {
   display: flex;
-  flex-direction: column; /* Alinea el nombre y el departamento de manera vertical */
-  text-align: left;
-  color: white; /* Asegura que el texto sea blanco */
+  flex-direction: column; /* Organiza el texto en una columna */
+  text-align: left; /* Alinea el texto a la izquierda */
+  color: white; /* Cambia el color del texto a blanco */
 }
 
 .user-name {
@@ -198,6 +194,7 @@
   display: flex;
   justify-content: flex-end; /* Alinea la fecha a la derecha */
 }
+
 
 
 /* ------------------------------------------ Boton de enviar ---------------------------------------*/

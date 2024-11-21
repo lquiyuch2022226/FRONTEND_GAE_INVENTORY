@@ -21,13 +21,11 @@ export const Personal = () => {
   const [reason, setReason] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-  // Verificar si ya se registró la asistencia hoy y habilitar solo entre 7 a.m. y 10 a.m.
   useEffect(() => {
     const lastAttendanceDate = localStorage.getItem(`lastAttendance_${userId}`);
     const currentHour = new Date().getHours();
+    const isWithinAllowedTime = currentHour >= 7 && currentHour < 10;
 
-    // Permitir registrar asistencia solo entre las 7 y las 10 a.m. si no se ha registrado ya hoy
-    const isWithinAllowedTime = currentHour >= 20 && currentHour < 22;
     setIsButtonDisabled(lastAttendanceDate === formState.todayDate || !isWithinAllowedTime);
   }, [formState.todayDate, userId]);
 
@@ -39,7 +37,7 @@ export const Personal = () => {
     try {
       const ipResponse = await fetch('https://api.ipify.org?format=json');
       const ipData = await ipResponse.json();
-      const userIp = ipData && ipData.ip ? ipData.ip : 'IP no disponible';
+      const userIp = ipData?.ip || 'IP no disponible';
 
       const record = {
         user: userName,
@@ -47,31 +45,22 @@ export const Personal = () => {
         time: currentTime,
         status,
         reason: reason,
-        ip: userIp        
+        ip: userIp
       };
-
-      console.log(record);
 
       const response = await reportarEntrada(record);
 
-      if (response && response.error) {
-        console.error(response.error);
+      if (response?.error) {
         alert("Error al registrar la asistencia: " + response.error.message || response.error);
       } else {
         const updatedRecords = [...attendanceRecords, record];
         setAttendanceRecords(updatedRecords);
         localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
-
-        // Guardar la fecha de la asistencia registrada en localStorage
         localStorage.setItem(`lastAttendance_${userId}`, todayDate);
-
-        // Deshabilitar el botón
         setIsButtonDisabled(true);
-
         alert("Asistencia registrada correctamente");
       }
     } catch (error) {
-      console.error("Error al registrar la asistencia:", error);
       alert("Error al registrar la asistencia: " + error.message);
     } finally {
       setShowPopup(false);
@@ -82,7 +71,6 @@ export const Personal = () => {
   const currentHour = new Date().getHours();
   const isOnTime = currentHour < 8 ? "A tiempo" : "Tarde";
   const imageToShow = currentHour < 8 ? earlyImage : lateImage;
-  const backgroundColor = currentHour < 8 ? '#359100' : '#8b0000';
   const waveColors = currentHour < 8 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
 
   useEffect(() => {
@@ -96,14 +84,9 @@ export const Personal = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleShowPopup = () => {
-    setShowPopup(true);
-  };
+  const handleShowPopup = () => setShowPopup(true);
 
-  const handleConfirmAttendance = () => {
-    setShowPopup(false);
-    handleAttendance();
-  };
+  const handleConfirmAttendance = () => handleAttendance();
 
   const handleCancelAttendance = () => {
     setShowPopup(false);
@@ -113,45 +96,24 @@ export const Personal = () => {
   return (
     <div className="personal">
       <Navbar user={user} />
-
       <div className="posts-personal">
         {user ? (
           <div className="e-card playing">
-            <div className="image"></div>
             <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})` }}></div>
-            <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '210px' }}></div>
-            <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '420px' }}></div>
-
-            <div className='content-user'>
+            <div className="content-user">
+              <img
+                src={user.profilePicture || defaultAvatar}
+                alt="User Icon"
+                className="icon"
+              />
               <div className="infotop">
-                <img
-                  src={user.profilePicture || defaultAvatar}
-                  alt="User Icon"
-                  className="icon"
-                />
-                <div className="user-info text-white">
-                  <div className="user-name">{user.account.name}</div>
-                  <div className="user-department">{user.account.username}</div>
-                </div>
+                <div className="user-name">{userName}</div>
+                <div className="user-department">{user.account?.username || "Invitado"}</div>
               </div>
             </div>
             <button onClick={handleShowPopup} disabled={isButtonDisabled}>
-              <span>Enviar</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 74 74"
-                height="34"
-                width="34"
-              >
-                <circle strokeWidth="3" stroke="black" r="35.5" cy="37" cx="37"></circle>
-                <path
-                  fill="black"
-                  d="M25 35.5C24.1716 35.5 23.5 36.1716 23.5 37C23.5 37.8284 24.1716 38.5 25 38.5V35.5ZM49.0607 38.0607C49.6464 37.4749 49.6464 36.5251 49.0607 35.9393L39.5147 26.3934C38.9289 25.8076 37.9792 25.8076 37.3934 26.3934C36.8076 26.9792 36.8076 27.9289 37.3934 28.5147L45.8787 37L37.3934 45.4853C36.8076 46.0711 36.8076 47.0208 37.3934 47.6066C37.9792 48.1924 38.9289 48.1924 39.5147 47.6066L49.0607 38.0607ZM25 38.5L48 38.5V35.5L25 35.5V38.5Z"
-                ></path>
-              </svg>
+              Enviar
             </button>
-
             {showPopup && (
               <div className="popup">
                 <div className="popup-content">
@@ -162,15 +124,13 @@ export const Personal = () => {
                     onChange={(e) => setReason(e.target.value)}
                     rows="4"
                     style={{ width: '100%', marginTop: '10px', padding: '8px' }}
-                    disabled={isOnTime === "A tiempo"} // Deshabilita si llegó "A tiempo"
+                    disabled={isOnTime === "A tiempo"}
                   />
-
                   <div className="popup-actions">
                     <button onClick={handleConfirmAttendance}>Sí</button>
                     <button onClick={handleCancelAttendance}>No</button>
                   </div>
                 </div>
-
               </div>
             )}
           </div>

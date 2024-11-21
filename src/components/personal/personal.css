@@ -2,19 +2,20 @@
 
 /*------------------------------------------ CARTA ------------------------------------------------------------*/
 .e-card {
-  margin: auto; /* Centra horizontalmente */
-  margin-top: 50px; /* Añade un espacio superior opcional */
+  margin: auto; /* Centra la tarjeta horizontalmente */
+  margin-top: 50px; /* Espacio superior opcional */
   background: transparent;
   box-shadow: 0px 8px 28px -9px rgba(0, 0, 0, 0.45);
   position: relative;
-  width: 80%; /* Reduce el ancho al 80% del contenedor */
-  max-width: 400px; /* Fija un ancho máximo para pantallas más grandes */
-  height: auto; /* Ajusta la altura automáticamente */
+  width: 80%; /* El ancho ocupa el 80% del contenedor */
+  max-width: 400px; /* Fija un ancho máximo */
+  height: auto; /* Altura automática para adaptarse al contenido */
   border-radius: 16px;
   overflow: hidden;
-  display: flex; /* Centra el contenido de la tarjeta */
-  flex-direction: column; /* Asegura que los elementos dentro estén en columna */
-  align-items: center; /* Centra horizontalmente el contenido */
+  display: flex;
+  flex-direction: column; /* Organiza el contenido en columna */
+  align-items: center; /* Centra el contenido horizontalmente */
+  justify-content: flex-start; /* Alinea los elementos hacia el inicio (arriba) */
 }
 
 .wave {
@@ -155,22 +156,22 @@
   transform: scale(0.9);
 }
 
-/* ------------------------------------------ ACOMODAR DATOS --------------------------------------------*/
 .content-user {
   display: flex;
-  align-items: center; /* Alinea verticalmente los elementos al centro */
+  align-items: center; /* Alinea verticalmente los elementos */
   padding: 20px;
   z-index: 2;
   position: relative;
-  width: 100%; /* Asegura que ocupe todo el ancho disponible */
+  width: 100%; /* Ocupa todo el ancho del contenedor */
+  justify-content: flex-start; /* Alinea los elementos al inicio (izquierda) */
 }
 
 .icon {
-  width: 80px; /* Tamaño de la imagen */
-  height: 80px; /* Tamaño de la imagen */
-  border-radius: 50%; /* Hace que la imagen sea circular */
-  margin-right: 15px; /* Espacio entre la imagen y el texto */
-  object-fit: cover; /* Asegura que la imagen no se deforme */
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-right: 15px; /* Añade espacio entre la imagen y el texto */
+  object-fit: cover; /* Evita la deformación de la imagen */
 }
 
 .infotop {

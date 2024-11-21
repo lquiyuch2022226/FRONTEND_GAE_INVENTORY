@@ -1,15 +1,17 @@
- import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar } from '../Navbar.jsx';
-import { Header } from "../header/Header.jsx";
+import { reportarEntrada } from '../../services/api.jsx';
 import './personal.css';
 import defaultAvatar from '../../assets/img/palmamorro.jpg';
+import earlyImage from '../../assets/img/comprobado.png';
+import lateImage from '../../assets/img/cerca.png';
 
 export const Personal = () => {
   const user = JSON.parse(localStorage.getItem('datosUsuario')) || {};
+  const [attendanceRecords, setAttendanceRecords] = useState([]);
   const userId = user.account?.homeAccountId || "Invitado";
   const userName = user.account?.name || "Invitado";
 
-  const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [formState, setFormState] = useState({
     todayDate: new Date().toISOString().split('T')[0],
     currentTime: new Date().toTimeString().split(' ')[0]
@@ -17,45 +19,22 @@ export const Personal = () => {
 
   const [showPopup, setShowPopup] = useState(false);
   const [reason, setReason] = useState("");
-  const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
-  const [isExitButtonDisabled, setIsExitButtonDisabled] = useState(true);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-  // Actualizar la hora actual cada minuto
+  // Verificar si ya se registró la asistencia hoy y habilitar solo entre 7 a.m. y 10 a.m.
   useEffect(() => {
-    const interval = setInterval(() => {
-      const now = new Date();
-      setFormState({
-        todayDate: now.toISOString().split('T')[0],
-        currentTime: now.toTimeString().split(' ')[0]
-      });
-    }, 60000);
+    const lastAttendanceDate = localStorage.getItem(`lastAttendance_${userId}`);
+    const currentHour = new Date().getHours();
 
-    return () => clearInterval(interval);
-  }, []);
-
-  // Verificar disponibilidad de botones según la hora y registros
-  useEffect(() => {
-    const currentDate = new Date();
-    const currentTimeInMinutes = currentDate.getHours() * 60 + currentDate.getMinutes();
-
-    const isWithinSendTime = currentTimeInMinutes >= 7 * 60 && currentTimeInMinutes <= 10 * 60;
-    const hasRecordToday = attendanceRecords.some(record => record.date === formState.todayDate);
-    const hasRecordWithoutExit = attendanceRecords.some(record => record.date === formState.todayDate && !record.exitTime);
-    const isWithinExitTime = currentTimeInMinutes >= 15 * 60 + 30 && currentTimeInMinutes <= 20 * 60;
-
-    setIsSendButtonDisabled(lastAttendanceDate === formState.todayDate || !isWithinAllowedTime);
-    setIsExitButtonDisabled(!(isWithinExitTime && hasRecordWithoutExit));
-  }, [attendanceRecords, formState.todayDate]);
+    // Permitir registrar asistencia solo entre las 7 y las 10 a.m. si no se ha registrado ya hoy
+    const isWithinAllowedTime = currentHour >= 20 && currentHour < 21;
+    setIsButtonDisabled(lastAttendanceDate === formState.todayDate || !isWithinAllowedTime);
+  }, [formState.todayDate, userId]);
 
   const handleAttendance = async () => {
     const todayDate = formState.todayDate;
     const currentTime = formState.currentTime;
     const status = new Date().getHours() < 8 ? "A tiempo" : "Tarde";
-
-    if (status === "Tarde" && !reason) {
-      setShowPopup(true);
-      return;
-    }
 
     try {
       const ipResponse = await fetch('https://api.ipify.org?format=json');
@@ -67,86 +46,99 @@ export const Personal = () => {
         date: todayDate,
         time: currentTime,
         status,
-        reason: status === "Tarde" ? reason : "",
         ip: userIp,
+        reason: reason
       };
 
-      // Enviar registro al backend
-      const response = await fetch('/api/attendance', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(record),
-      });
+      console.log(record);
+      
+      const response = await reportarEntrada(record);
 
-      if (!response.ok) {
-        throw new Error('Error al enviar los datos al servidor');
+      if (response && response.error) {
+        console.error(response.error);
+        alert("Error al registrar la asistencia: " + response.error.message || response.error);
+      } else {
+        const updatedRecords = [...attendanceRecords, record];
+        setAttendanceRecords(updatedRecords);
+        localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
+
+        // Guardar la fecha de la asistencia registrada en localStorage
+        localStorage.setItem(`lastAttendance_${userId}`, todayDate);
+
+        // Deshabilitar el botón
+        setIsButtonDisabled(true);
+
+        alert("Asistencia registrada correctamente");
       }
-
-      const updatedRecords = [...attendanceRecords, record];
-      setAttendanceRecords(updatedRecords);
-      alert("Asistencia registrada correctamente");
-
-      // Desactivar botón de envío y habilitar "Marcar Salida"
-      setIsSendButtonDisabled(true);
-      setIsExitButtonDisabled(false);
     } catch (error) {
-      console.error("Error al registrar asistencia:", error);
-      alert("Hubo un error al registrar la asistencia");
+      console.error("Error al registrar la asistencia:", error);
+      alert("Error al registrar la asistencia: " + error.message);
     } finally {
       setShowPopup(false);
       setReason("");
     }
   };
 
-  const handleMarkExit = async () => {
-    const exitTime = new Date().toTimeString().split(' ')[0];
-    const todayDate = formState.todayDate;
+  const currentHour = new Date().getHours();
+  const isOnTime = currentHour < 8 ? "A tiempo" : "Tarde";
+  const imageToShow = currentHour < 8 ? earlyImage : lateImage;
+  const backgroundColor = currentHour < 8 ? '#359100' : '#8b0000';
+  const waveColors = currentHour < 8 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
 
+  const fetchInternetTime = async () => {
     try {
-      const updatedRecords = attendanceRecords.map(record =>
-        record.date === todayDate && !record.exitTime
-          ? { ...record, exitTime }
-          : record
-      );
+      const response = await fetch('http://worldtimeapi.org/api/timezone/America/Guatemala');
+      const data = await response.json();
+      const currentDateTime = new Date(data.datetime);
 
-      const exitRecord = updatedRecords.find(record => record.date === todayDate && record.exitTime);
-
-      // Enviar hora de salida al backend
-      const response = await fetch(`/api/attendance/${userId}/exit`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ exitTime }),
+      setFormState({
+        todayDate: currentDateTime.toISOString().split('T')[0],
+        currentTime: currentDateTime.toTimeString().split(' ')[0]
       });
-
-      if (!response.ok) {
-        throw new Error('Error al enviar la hora de salida al servidor');
-      }
-
-      setAttendanceRecords(updatedRecords);
-      alert("Hora de salida registrada correctamente");
-
-      // Desactivar botón de "Marcar Salida"
-      setIsExitButtonDisabled(true);
     } catch (error) {
-      console.error("Error al registrar la hora de salida:", error);
-      alert("Hubo un error al registrar la hora de salida");
+      console.error("Error fetching internet time:", error);
     }
+  };
+
+  useEffect(() => {
+    fetchInternetTime();
+    const interval = setInterval(() => {
+      setFormState((prevState) => ({
+        ...prevState,
+        currentTime: new Date().toTimeString().split(' ')[0]
+      }));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleShowPopup = () => {
+    setShowPopup(true);
+  };
+
+  const handleConfirmAttendance = () => {
+    setShowPopup(false);
+    handleAttendance();
+  };
+
+  const handleCancelAttendance = () => {
+    setShowPopup(false);
+    setReason("");
   };
 
   return (
     <div className="personal">
       <Navbar user={user} />
-      <Header />
+
       <div className="posts-personal">
         {user ? (
           <div className="e-card playing">
             <div className="image"></div>
-            <div className="wave" style={{ background: `linear-gradient(744deg, #030e2e, #023a0e, #05a00d)` }}></div>
-            <div className="content-user">
+            <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})` }}></div>
+            <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '210px' }}></div>
+            <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '420px' }}></div>
+
+            <div className='content-user'>
               <div className="infotop">
                 <img
                   src={user.profilePicture || defaultAvatar}
@@ -158,44 +150,65 @@ export const Personal = () => {
                   <div className="user-department">{user.account.username}</div>
                 </div>
               </div>
+              <div className="date-time">
+                <div className="card" style={{ background: backgroundColor }}>
+                  <div className="card-content">
+                    <div className="card-top">
+                      <p>{isOnTime}</p>
+                    </div>
+                    <div className="card-bottom">
+                      <p>{formState.todayDate}</p>
+                      <p>{formState.currentTime}</p>
+                    </div>
+                  </div>
+                  <div className="card-image">
+                    <img
+                      src={imageToShow}
+                      alt="Status Icon"
+                      className="status-icon"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
-            <button onClick={handleAttendance} disabled={isSendButtonDisabled}>
-              <span>{isSendButtonDisabled ? "Asistencia Registrada" : "Enviar"}</span>
-            </button>
-            <button
-              onClick={handleMarkExit}
-              disabled={isExitButtonDisabled}>
-              Marcar Salida
+            <button onClick={handleShowPopup} disabled={isButtonDisabled}>
+              <span>Enviar</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 74 74"
+                height="34"
+                width="34"
+              >
+                <circle strokeWidth="3" stroke="black" r="35.5" cy="37" cx="37"></circle>
+                <path
+                  fill="black"
+                  d="M25 35.5C24.1716 35.5 23.5 36.1716 23.5 37C23.5 37.8284 24.1716 38.5 25 38.5V35.5ZM49.0607 38.0607C49.6464 37.4749 49.6464 36.5251 49.0607 35.9393L39.5147 26.3934C38.9289 25.8076 37.9792 25.8076 37.3934 26.3934C36.8076 26.9792 36.8076 27.9289 37.3934 28.5147L45.8787 37L37.3934 45.4853C36.8076 46.0711 36.8076 47.0208 37.3934 47.6066C37.9792 48.1924 38.9289 48.1924 39.5147 47.6066L49.0607 38.0607ZM25 38.5L48 38.5V35.5L25 35.5V38.5Z"
+                ></path>
+              </svg>
             </button>
 
             {showPopup && (
               <div className="popup">
-                <textarea
-                  placeholder="Escribe la razón..."
-                  value={reason}
-                  onChange={(e) => setReason(e.target.value)}
-                />
-                <button onClick={handleAttendance}>Confirmar</button>
-                <button onClick={() => setShowPopup(false)}>Cancelar</button>
+                <div className="popup-content">
+                  <p>¿Estás seguro de que deseas registrar tu asistencia?</p>
+                  <textarea
+                    placeholder="Escribe aquí la razón de tu asistencia"
+                    value={reason}
+                    onChange={(e) => setReason(e.target.value)}
+                    rows="4"
+                    style={{ width: '100%', marginTop: '10px', padding: '8px' }}
+                  />
+                  <div className="popup-actions">
+                    <button onClick={handleConfirmAttendance}>Sí</button>
+                    <button onClick={handleCancelAttendance}>No</button>
+                  </div>
+                </div>
               </div>
             )}
-
-            <div className="attendance-records">
-              {attendanceRecords.map((record, index) => (
-                <div key={index} className="attendance-record">
-                  <div>Fecha: {record.date}</div>
-                  <div>Hora de Entrada: {record.time}</div>
-                  {record.exitTime ? (
-                    <div>Hora de Salida: {record.exitTime}</div>
-                  ) : (
-                    <div>Esperando Hora de Salida...</div>
-                  )}
-                </div>
-              ))}
-            </div>
           </div>
         ) : (
-          <p>Usuario no autenticado</p>
+          <p>No hay datos del usuario disponibles.</p>
         )}
       </div>
     </div>

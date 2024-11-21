@@ -100,7 +100,7 @@ export const Personal = () => {
   };
 
   const handleShowPopup = () => {
-    setShowPopup(true);
+    setShowPopup(true); // Muestra el popup si es necesario
   };
 
   return (

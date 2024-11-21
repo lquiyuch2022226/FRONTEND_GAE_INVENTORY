@@ -33,7 +33,7 @@ export const Personal = () => {
     try {
       // Obtener la IP del usuario
    /*    const ipResponse = await fetch('https://api.ipify.org?format=json'); */
-   const currentTime = new Date();
+   const ipResponse = new Date();
       const ipData = await ipResponse.json();
       const userIp = ipData && ipData.ip ? ipData.ip : 'IP no disponible';
 

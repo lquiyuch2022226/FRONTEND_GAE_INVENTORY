@@ -2,19 +2,15 @@
 
 /*------------------------------------------ CARTA ------------------------------------------------------------*/
 .e-card {
-  margin: auto; /* Centra horizontalmente */
-  margin-top: 50px; /* Añade un espacio superior opcional */
+  margin: auto;
+  margin-top: 50px;
   background: transparent;
-  box-shadow: 0px 8px 28px -9px rgba(0, 0, 0, 0.45);
-  position: relative;
-  width: 80%; /* Reduce el ancho al 80% del contenedor */
-  max-width: 400px; /* Fija un ancho máximo para pantallas más grandes */
-  height: auto; /* Ajusta la altura automáticamente */
+  width: 80%;
+  max-width: 400px;
   border-radius: 16px;
   overflow: hidden;
-  display: flex; /* Centra el contenido de la tarjeta */
-  flex-direction: column; /* Asegura que los elementos dentro estén en columna */
-  align-items: center; /* Centra horizontalmente el contenido */
+  text-align: center;
+  position: relative;
 }
 
 
@@ -23,22 +19,12 @@
   width: 200%;
   height: 300%;
   opacity: 0.6;
-  left: 0;
-  top: 0;
-  margin-left: -50%;
-  margin-top: -70%;
-  z-index: 1; /* Set z-index for waves */
-}
-
-.icon {
-  width: 3em;
-  margin-top: -1em;
-  padding-bottom: 1em;
-}
-
-.wave:nth-child(2),
-.wave:nth-child(3) {
-  top: 210px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  border-radius: 40%;
+  animation: wave 120s infinite linear;
 }
 
 .playing .wave {
@@ -46,27 +32,15 @@
   animation: wave 6000ms infinite linear; /* 3000 */
 }
 
-.wave {
-  border-radius: 40%;
-  animation: wave 120s infinite linear; /* 55 */
-}
-
-.playing .wave:nth-child(2) {
-  animation-duration: 8000ms; /* 4000 */
-}
-
 .wave:nth-child(2) {
-  animation-duration: 100s; /* 50 */
-}
-
-.playing .wave:nth-child(3) {
-  animation-duration: 10000ms; /* 5000 */
+  animation-duration: 100s;
+  opacity: 0.4;
 }
 
 .wave:nth-child(3) {
-  animation-duration: 80s; /* 45 */
+  animation-duration: 140s;
+  opacity: 0.2;
 }
-
 @keyframes wave {
   0% {
     transform: rotate(0deg);
@@ -165,22 +139,22 @@
 /* ------- ACOMODAR DATOS -------------------------------------------------------*/
 /* ------------------------------------------ ACOMODAR DATOS --------------------------------------------*/
 .content-user {
-  display: flex; /* Mantiene la imagen y la información en la misma línea */
-  align-items: center; /* Centra verticalmente la imagen y el texto */
+  display: flex;
+  align-items: center;
   padding: 20px;
   z-index: 2;
+  position: relative;
 }
 
 .icon {
   width: 80px;
   height: 80px;
-  border-radius: 50%; /* Imagen circular */
-  margin-right: 15px; /* Espacio entre la imagen y el texto */
-  object-fit: cover; /* Asegura que la imagen no se deforme */
+  border-radius: 50%;
+  margin-right: 15px;
 }
 
 .infotop {
-  text-align: left; /* Alinea la información del texto a la izquierda */
+  text-align: left;
 }
 
 .user-name {
@@ -190,7 +164,6 @@
 
 .user-department {
   font-size: 12px;
-  margin-top: 5px; /* Espacio entre líneas de texto */
 }
 
 .name {

@@ -17,7 +17,6 @@
   align-items: center; /* Centra horizontalmente el contenido */
 }
 
-
 .wave {
   position: absolute;
   width: 200%;
@@ -28,12 +27,6 @@
   margin-left: -50%;
   margin-top: -70%;
   z-index: 1; /* Set z-index for waves */
-}
-
-.icon {
-  width: 3em;
-  margin-top: -1em;
-  padding-bottom: 1em;
 }
 
 .wave:nth-child(2),
@@ -78,11 +71,11 @@
 }
 
 .icon {
-  width: 6em; /* Maintain the width */
-  height: 6em; /* Maintain the height */
-  border-radius: 50%; /* Make it circular */
-  object-fit: cover; /* Ensure it covers the area without distortion */
-  margin-right: 1em; /* Add some space between the image and text */
+  width: 6em; /* Mantiene el tamaño del ícono */
+  height: 6em;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 1em;
 }
 
 /* ---------------------------------TIEMPO --------------------------------------------------*/
@@ -127,8 +120,8 @@
 
 .card .card-image {
   position: absolute;
-  width: 100%; /* Asegura que ocupe el ancho del contenedor */
-  height: 100%; /* Asegura que ocupe el alto del contenedor */
+  width: 100%;
+  height: 100%;
   top: 0;
   left: 0;
   display: grid;
@@ -137,13 +130,13 @@
 }
 
 .card .status-icon {
-  width: 4em; /* Ajusta el ancho */
-  height: 4em; /* Ajusta el alto */
+  width: 4em;
+  height: 4em;
   transition: transform 0.4s ease;
 }
 
 .card:hover .status-icon {
-  transform: scale(1.05); /* Efecto al hacer hover */
+  transform: scale(1.05);
 }
 
 .card:hover {
@@ -163,7 +156,6 @@
 }
 
 /* ------- ACOMODAR DATOS -------------------------------------------------------*/
-/* ------------------------------------------ ACOMODAR DATOS --------------------------------------------*/
 .content-user {
   display: flex;
   align-items: center;
@@ -194,6 +186,149 @@
 .user-department {
   font-size: 12px;
 }
+
+.name {
+  font-size: 14px;
+  font-weight: 100;
+}
+
+.date-time {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ------------------------------------------ Boton de enviar ---------------------------------------*/
+
+/* From Uiverse.io by alexmaracinaru */
+button {
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.2s;
+  padding: 10px 20px;
+  border-radius: 100px;
+  background: #cfef00;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  position: relative; /* Asegura que el botón esté posicionado en el flujo de la página */
+  z-index: 3; /* Asegura que esté por encima de las olas */
+}
+
+button:disabled {
+  background: gray;
+  cursor: not-allowed;
+}
+
+button:hover {
+  background: #c4e201;
+}
+
+button > svg {
+  width: 34px;
+  margin-left: 10px;
+  transition: transform 0.3s ease-in-out;
+}
+
+button:hover svg {
+  transform: translateX(5px);
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+/*----------------------------------------- pop-ups -----------------------------------------*/
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Asegura que el pop-up esté encima del resto del contenido */
+}
+
+.popup-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.popup-actions button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #3498db;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.popup-actions button:hover {
+  background-color: #2980b9;
+}
+
+.popup-actions button:focus {
+  outline: none;
+}
+
+/* ----------------------------------- Estilos Dinámicos de Olas ---------------------------------*/
+.e-card.playing .wave {
+  background: linear-gradient(744deg, #030e2e, #023a0e, #05a00d); /* Estos colores se definen dinámicamente en React */
+}
+
+.e-card.playing .wave:nth-child(2) {
+  top: 210px;
+}
+
+.e-card.playing .wave:nth-child(3) {
+  top: 420px;
+}
+
+.e-card.tarde .wave {
+  background: linear-gradient(744deg, #8b0000, #b22222, #ff4500);
+}
+
+/* -------------------------------------------------- Media Queries ----------------------------*/
+@media (max-width: 768px) {
+  .e-card {
+    width: 95%;
+    max-width: none;
+  }
+
+  .icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .user-name {
+    font-size: 16px;
+  }
+
+  .user-department {
+    font-size: 12px;
+  }
+
+  button {
+    width: 100%;
+  }
+}
+
 
 .name {
   font-size: 14px;

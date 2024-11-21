@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+ import React, { useState, useEffect } from 'react';
 import { Navbar } from '../Navbar.jsx';
 import { Header } from "../header/Header.jsx";
 import './personal.css';
@@ -43,7 +43,7 @@ export const Personal = () => {
     const hasRecordWithoutExit = attendanceRecords.some(record => record.date === formState.todayDate && !record.exitTime);
     const isWithinExitTime = currentTimeInMinutes >= 15 * 60 + 30 && currentTimeInMinutes <= 20 * 60;
 
-    setIsSendButtonDisabled(!isWithinSendTime || hasRecordToday);
+    setIsSendButtonDisabled(lastAttendanceDate === formState.todayDate || !isWithinAllowedTime);
     setIsExitButtonDisabled(!(isWithinExitTime && hasRecordWithoutExit));
   }, [attendanceRecords, formState.todayDate]);
 

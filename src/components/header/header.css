@@ -5,7 +5,7 @@
     justify-content: center; /* Centra horizontalmente */
     align-items: center; /* Alinea verticalmente */
     background-color: #000; /* Fondo del header */
-    padding: 5px; /* Espaciado interno mínimo */
+    padding: 3px; /* Espaciado interno mínimo */
     border-radius: 15px; /* Bordes redondeados */
     gap: 0px; /* Sin separación entre elementos */
   }

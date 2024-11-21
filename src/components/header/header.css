@@ -1,39 +1,38 @@
-/* Header general */
+/* Centrado del contenedor */
 .header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* Centra horizontalmente */
     align-items: center;
     background-color: #6fcf97; /* Verde claro */
-    padding: 15px 30px;
-    border-radius: 20px;
+    padding: 20px 40px;
+    border-radius: 30px; /* Bordes redondeados */
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    margin: 20px auto;
-    max-width: 1200px;
+    max-width: 80%; /* Reduce el ancho para mantenerlo centrado */
+    margin: 20px auto; /* Centra el contenedor */
   }
   
-  /* Elementos del header */
+  /* Elementos internos del header */
   .header-item {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    color: #fff; /* Texto blanco */
+    align-items: center; /* Alinea los labels y los valores horizontalmente */
+    margin: 0 15px; /* Espaciado entre elementos */
   }
   
-  /* Etiquetas de cada sección */
+  /* Etiquetas (labels) */
   .header-label {
     font-size: 18px;
     font-weight: bold;
-    margin-bottom: 8px;
+    color: #fff;
+    margin-right: 10px; /* Espacio entre el label y el valor */
   }
   
-  /* Valores de cada sección */
+  /* Valores (campos) */
   .header-value {
     font-size: 16px;
     background: #0b2447; /* Azul oscuro */
     color: white;
-    padding: 5px 10px;
-    border-radius: 15px;
+    padding: 10px 15px;
+    border-radius: 15px; /* Bordes suaves */
     min-width: 100px;
     text-align: center;
   }
@@ -49,14 +48,10 @@
     align-items: center;
     border-radius: 50%;
     border: 2px solid white;
-    background-color: #ff7675; /* Rojo claro */
-  }
-  
-  .status-icon.on-time {
-    background-color: #6fcf97; /* Verde claro */
+    background-color: #6fcf97; /* Verde por defecto */
   }
   
   .status-icon.late {
-    background-color: #ff7675; /* Rojo */
+    background-color: #ff7675; /* Rojo si está tarde */
   }
   

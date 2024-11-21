@@ -35,7 +35,7 @@ export const Header = () => {
         <div className="header-value">{currentTime}</div>
       </div>
       <div className="header-item">
-        <span className="header-label">Tarde</span>
+        <span className="header-label">Pendejoo</span>
         <div className={`status-icon ${isLate ? 'late' : 'on-time'}`}>
           {isLate ? '✘' : '✔'}
         </div>

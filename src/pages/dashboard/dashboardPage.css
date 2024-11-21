@@ -6,6 +6,7 @@
   font-family: 'Plus Jakarta Sans', sans-serif;
   overflow: hidden;
   background-color: #1A2854;
+  height: max-content;
 }
 
 .navbar-container {

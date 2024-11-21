@@ -1,9 +1,59 @@
+/* Contenedor principal del header */
 .header {
+    background-color: #1E2A38; /* Color oscuro para el fondo */
+    padding: 20px;
+    border-radius: 15px; /* Bordes redondeados */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+  }
+  
+  /* Contenedor de los elementos dentro del header */
+  .header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #0e0e87;
-    padding: 20px;
-    border-radius: 10px;
-    color: white;
+    width: 100%;
+    max-width: 900px; /* Ancho máximo para mantenerlo centrado */
   }
+  
+  /* Estilo de cada item dentro del header */
+  .header-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    width: 30%; /* Cada item ocupará un 30% del espacio */
+  }
+  
+  .header-item label {
+    font-size: 14px;
+    color: #BDC3C7; /* Color de las etiquetas */
+  }
+  
+  .header-item input {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 1px solid #BDC3C7;
+    border-radius: 8px;
+    background-color: #34495E; /* Fondo oscuro para los inputs */
+    color: white;
+    width: 100%;
+    transition: all 0.3s ease;
+  }
+  
+  .header-item input:focus {
+    border-color: #3498db; /* Bordes azules cuando el input tiene el foco */
+    outline: none;
+    box-shadow: 0 0 6px rgba(52, 152, 219, 0.6); /* Sombra de enfoque */
+  }
+  
+  /* Estilo cuando los inputs están deshabilitados */
+  .header-item input[disabled] {
+    background-color: #7F8C8D; /* Fondo gris para inputs deshabilitados */
+    color: #BDC3C7; /* Color gris claro para el texto */
+    cursor: not-allowed; /* Cambia el cursor cuando no está permitido */
+  }
+      

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Input } from "../Input"; // Asegúrate de que la ruta de Input sea correcta
-import "./header.css"
+import './header.css';
+
 export const Header = () => {
   const [currentDate, setCurrentDate] = useState('');
   const [currentTime, setCurrentTime] = useState('');

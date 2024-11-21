@@ -1,57 +1,49 @@
-/* Centrado del contenedor */
+/* header.css */
+
 .header {
     display: flex;
-    justify-content: center; /* Centra horizontalmente */
-    align-items: center;
-    background-color: #6fcf97; /* Verde claro */
-    padding: 20px 40px;
-    border-radius: 30px; /* Bordes redondeados */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    max-width: 80%; /* Reduce el ancho para mantenerlo centrado */
-    margin: 20px auto; /* Centra el contenedor */
+    justify-content: space-around; /* Centra los elementos horizontalmente */
+    align-items: center; /* Alinea verticalmente */
+    background-color: #000; /* Color del fondo */
+    padding: 10px 20px; /* Ajusta el espacio interno */
+    border-radius: 8px; /* Bordes redondeados */
   }
   
-  /* Elementos internos del header */
   .header-item {
     display: flex;
-    align-items: center; /* Alinea los labels y los valores horizontalmente */
-    margin: 0 15px; /* Espaciado entre elementos */
+    flex-direction: column;
+    align-items: center; /* Centra el contenido de cada elemento */
+    margin: 0 10px; /* Reduce el espacio entre los elementos */
   }
   
-  /* Etiquetas (labels) */
   .header-label {
-    font-size: 18px;
-    font-weight: bold;
-    color: #fff;
-    margin-right: 10px; /* Espacio entre el label y el valor */
+    font-size: 0.9rem; /* Ajusta el tamaño de la etiqueta */
+    color: #fff; /* Color del texto */
+    margin-bottom: 4px; /* Reduce el espacio entre el label y el valor */
   }
   
-  /* Valores (campos) */
   .header-value {
-    font-size: 16px;
-    background: #0b2447; /* Azul oscuro */
-    color: white;
-    padding: 10px 15px;
-    border-radius: 15px; /* Bordes suaves */
-    min-width: 100px;
+    font-size: 1rem; /* Ajusta el tamaño del valor */
+    color: #fff; /* Color del texto */
+    padding: 4px 8px; /* Ajusta el relleno */
+    background-color: #001f3f; /* Fondo del valor */
+    border-radius: 4px; /* Bordes redondeados */
     text-align: center;
   }
   
-  /* Icono de estado (Tarde o A tiempo) */
   .status-icon {
-    font-size: 20px;
-    font-weight: bold;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    border: 2px solid white;
-    background-color: #6fcf97; /* Verde por defecto */
+    font-size: 1.2rem; /* Tamaño del ícono */
+    padding: 4px; /* Relleno interno */
+    border-radius: 50%; /* Redondea el ícono */
   }
   
   .status-icon.late {
-    background-color: #ff7675; /* Rojo si está tarde */
+    color: #ff4136; /* Rojo para tarde */
+    background-color: #ffeaea; /* Fondo claro */
+  }
+  
+  .status-icon.on-time {
+    color: #2ecc40; /* Verde para a tiempo */
+    background-color: #eaffea; /* Fondo claro */
   }
   

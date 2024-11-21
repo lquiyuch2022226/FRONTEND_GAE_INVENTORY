@@ -43,7 +43,7 @@ export const Personal = () => {
         date: todayDate,
         time: currentTime,
         status,
-        ip: userIp,
+     /*    ip: userIp, */
         reason: reason
       };
 

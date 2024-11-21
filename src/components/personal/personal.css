@@ -176,9 +176,7 @@
 
 /* Información del usuario */
 .infotop {
-  text-align: left;
-  display: flex;
-  flex-direction: column;
+  text-align: left; /* Alinea la información del texto a la izquierda */
 }
 
 .user-name {

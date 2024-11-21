@@ -155,13 +155,14 @@
   transform: scale(0.9);
 }
 
-/* ------- ACOMODAR DATOS -------------------------------------------------------*/
+/* ------------------------------------------ ACOMODAR DATOS --------------------------------------------*/
 .content-user {
   display: flex;
   align-items: center;
   padding: 20px;
   z-index: 2;
   position: relative;
+  justify-content: flex-start; /* Asegura que todo esté alineado hacia la izquierda */
 }
 
 /* Imagen circular */
@@ -169,13 +170,15 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  margin-right: 15px;
+  margin-right: 15px; /* Agrega un margen derecho para separar la foto del texto */
   object-fit: cover;
 }
 
 /* Información del usuario */
 .infotop {
   text-align: left;
+  display: flex;
+  flex-direction: column;
 }
 
 .user-name {

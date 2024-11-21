@@ -157,15 +157,12 @@
 
 /* ------------------------------------------ ACOMODAR DATOS --------------------------------------------*/
 .content-user {
-  display: flex;
-  align-items: center;
+  display: flex; /* Mantiene la imagen y la información en la misma línea */
+  align-items: center; /* Centra verticalmente la imagen y el texto */
   padding: 20px;
   z-index: 2;
-  position: relative;
-  justify-content: flex-start; /* Asegura que todo esté alineado hacia la izquierda */
 }
 
-/* Imagen circular */
 .icon {
   width: 80px;
   height: 80px;
@@ -174,7 +171,6 @@
   object-fit: cover; /* Asegura que la imagen no se deforme */
 }
 
-/* Información del usuario */
 .infotop {
   text-align: left; /* Alinea la información del texto a la izquierda */
 }
@@ -186,18 +182,15 @@
 
 .user-department {
   font-size: 12px;
+  margin-top: 5px; /* Espacio entre líneas de texto */
 }
 
-.name {
-  font-size: 14px;
-  font-weight: 100;
+/* Ajustar posición de `posts-personal` */
+.posts-personal {
+  margin-top: 50px; /* Ajusta el margen superior para bajarlo más */
+  text-align: center; /* Centra el texto en su contenedor */
 }
 
-.date-time {
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
-}
 
 /* ------------------------------------------ Boton de enviar ---------------------------------------*/
 

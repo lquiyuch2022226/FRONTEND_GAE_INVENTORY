@@ -106,21 +106,8 @@ export const Personal = () => {
     <div className="personal">
       <Navbar user={user} />
       
-      {/* Header con la clase header-container */}
-      <div className="header-container">
-        <div className="date-time">
-          <span>{formState.todayDate}</span>
-          <span>{formState.currentTime}</span>
-        </div>
-        <div className="input-group">
-          <input
-            type="text"
-            placeholder="Razón"
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-          />
-        </div>
-      </div>
+      {/* Agregamos el Header aquí */}
+      <Header />
 
       <div className="posts-personal">
         {user ? (

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-
+import "./input.css";
 export const Input = ({
     field,
     label,

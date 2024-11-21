@@ -188,6 +188,7 @@
 
 .user-department {
   font-size: 12px;
+  margin-top: 5px; /* Espacio entre líneas de texto */
 }
 
 .date-time {

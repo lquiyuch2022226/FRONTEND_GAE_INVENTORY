@@ -1,22 +1,40 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 
+
+.personal {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
 /*------------------------------------------ CARTA ------------------------------------------------------------*/
 .e-card {
-  margin: auto; /* Centra horizontalmente */
-  margin-top: 50px; /* Añade un espacio superior opcional */
+  margin: auto;
+  margin-top: 50px;
   background: transparent;
-  box-shadow: 0px 8px 28px -9px rgba(0, 0, 0, 0.45);
-  position: relative;
-  width: 80%; /* Reduce el ancho al 80% del contenedor */
-  max-width: 400px; /* Fija un ancho máximo para pantallas más grandes */
-  height: auto; /* Ajusta la altura automáticamente */
+  width: 80%;
+  max-width: 400px;
   border-radius: 16px;
   overflow: hidden;
-  display: flex; /* Centra el contenido de la tarjeta */
-  flex-direction: column; /* Asegura que los elementos dentro estén en columna */
-  align-items: center; /* Centra horizontalmente el contenido */
+  text-align: center;
+  position: relative;
 }
 
+.wave {
+  position: absolute;
+  width: 200%;
+  height: 300%;
+  opacity: 0.6;
+  left: 0;
+  top: 0;
+  margin-left: -50%;
+  margin-top: -70%;
+  z-index: 1;
+  border-radius: 40%;
+  animation: wave 120s infinite linear;
+}
+
+@keyframes wave {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
 .wave {
   position: absolute;
@@ -63,19 +81,7 @@
   animation-duration: 10000ms; /* 5000 */
 }
 
-.wave:nth-child(3) {
-  animation-duration: 80s; /* 45 */
-}
-
-@keyframes wave {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
+/*  */
 
 .icon {
   width: 6em; /* Maintain the width */
@@ -166,40 +172,29 @@
 /* ------------------------------------------ ACOMODAR DATOS --------------------------------------------*/
 .content-user {
   display: flex;
-  justify-content: flex-start;  /* Alinea a la izquierda */
-  align-items: center;  /* Alinea verticalmente en el centro */
+  align-items: center;
   padding: 20px;
-  position: relative; /* Asegura que el contenido esté correctamente posicionado */
-  z-index: 2; /* Asegura que esté por encima de las olas */
-}
-
-.icon {
-  width: 80px; /* Tamaño reducido para íconos */
-  height: 80px;
-  border-radius: 50%; /* Mantén el borde circular */
-  object-fit: cover;  /* Asegura que las imágenes no se distorsionen */
-  margin-right: 15px; /* Añade espacio entre la imagen y la información */
-}
-
-.infotop {
-  display: flex;
-  flex-direction: column;  /* Mantén la información en columna */
-  align-items: flex-start;  /* Alinea a la izquierda */
-  position: relative;
   z-index: 2;
 }
 
-.user-info {
-  font-size: 14px; /* Reduce el tamaño del texto */
+.icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.infotop {
+  text-align: left;
 }
 
 .user-name {
-  font-size: 16px; /* Tamaño ajustado */
+  font-size: 16px;
   font-weight: bold;
 }
 
 .user-department {
-  font-size: 12px; /* Ajuste adicional */
+  font-size: 12px;
 }
 
 .name {
@@ -218,22 +213,23 @@
 
 /* From Uiverse.io by alexmaracinaru */
 button {
-  cursor: pointer;
-  font-weight: 700;
-  transition: all 0.2s;
+  margin: 10px;
   padding: 10px 20px;
-  border-radius: 100px;
-  background: #cfef00;
-  border: 1px solid transparent;
-  display: flex;
-  align-items: center;
-  font-size: 15px;
-  position: relative; /* Asegura que el botón esté posicionado en el flujo de la página */
-  z-index: 3; /* Asegura que esté por encima de las olas */
+  background-color: #0056b3;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:disabled {
+  background-color: gray;
+  cursor: not-allowed;
 }
 
 button:hover {
-  background: #c4e201;
+  background-color: #004494;
 }
 
 button > svg {

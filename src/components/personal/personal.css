@@ -156,23 +156,32 @@
 }
 
 /* ------------------------------------------ ACOMODAR DATOS --------------------------------------------*/
+/* ------------------------------------------ ACOMODAR DATOS --------------------------------------------*/
 .content-user {
-  display: flex; /* Mantiene la imagen y la información en la misma línea */
-  align-items: center; /* Centra verticalmente la imagen y el texto */
+  display: flex;
+  align-items: center;
   padding: 20px;
   z-index: 2;
+  position: relative;
+  justify-content: flex-start; /* Asegura que los elementos estén alineados a la izquierda */
+  width: 100%; /* Asegura que ocupe todo el ancho del contenedor */
 }
 
+/* Imagen circular */
 .icon {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%; /* Imagen circular */
+  width: 80px; /* Tamaño de la imagen */
+  height: 80px; /* Tamaño de la imagen */
+  border-radius: 50%; /* Hace que la imagen sea circular */
   margin-right: 15px; /* Espacio entre la imagen y el texto */
   object-fit: cover; /* Asegura que la imagen no se deforme */
 }
 
+/* Información del usuario */
 .infotop {
-  text-align: left; /* Alinea la información del texto a la izquierda */
+  display: flex;
+  flex-direction: column; /* Alinea el nombre y el departamento de manera vertical */
+  text-align: left;
+  color: white; /* Asegura que el texto sea blanco */
 }
 
 .user-name {
@@ -182,13 +191,12 @@
 
 .user-department {
   font-size: 12px;
-  margin-top: 5px; /* Espacio entre líneas de texto */
 }
 
-/* Ajustar posición de `posts-personal` */
-.posts-personal {
-  margin-top: 50px; /* Ajusta el margen superior para bajarlo más */
-  text-align: center; /* Centra el texto en su contenedor */
+.date-time {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end; /* Alinea la fecha a la derecha */
 }
 
 

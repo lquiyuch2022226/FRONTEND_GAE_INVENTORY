@@ -5,13 +5,14 @@
   flex-direction: column;
   font-family: 'Plus Jakarta Sans', sans-serif;
   overflow: hidden;
+  background-color: #1A2854;
 }
 
 .navbar-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #1A2854;
+  background-color: #f2f3f3;
   color: #000000;
   position: fixed;
   top: 0;

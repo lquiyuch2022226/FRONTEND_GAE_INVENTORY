@@ -17,19 +17,14 @@
 .wave {
   position: absolute;
   width: 200%;
-  height: 300%;
+  height: 200%;
   opacity: 0.6;
-  left: 50%;
   top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1;
   border-radius: 40%;
   animation: wave 120s infinite linear;
-}
-
-.playing .wave {
-  border-radius: 40%;
-  animation: wave 6000ms infinite linear; /* 3000 */
 }
 
 .wave:nth-child(2) {
@@ -41,13 +36,14 @@
   animation-duration: 140s;
   opacity: 0.2;
 }
+
+/* Animación de las olas */
 @keyframes wave {
   0% {
-    transform: rotate(0deg);
+    transform: translate(-50%, -50%) rotate(0deg);
   }
-
   100% {
-    transform: rotate(360deg);
+    transform: translate(-50%, -50%) rotate(360deg);
   }
 }
 
@@ -146,13 +142,16 @@
   position: relative;
 }
 
+/* Imagen circular */
 .icon {
   width: 80px;
   height: 80px;
   border-radius: 50%;
   margin-right: 15px;
+  object-fit: cover;
 }
 
+/* Información del usuario */
 .infotop {
   text-align: left;
 }

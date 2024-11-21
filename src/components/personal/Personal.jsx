@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar } from '../Navbar.jsx';
+import { reportarEntrada } from '../../services/api.jsx';
 import { Header } from "../header/Header.jsx"; // Importamos el Header
 import './personal.css';
 import defaultAvatar from '../../assets/img/palmamorro.jpg';
+import earlyImage from '../../assets/img/comprobado.png';
+import lateImage from '../../assets/img/cerca.png';
 
 export const Personal = () => {
   const user = JSON.parse(localStorage.getItem('datosUsuario')) || {};
@@ -18,22 +21,23 @@ export const Personal = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [reason, setReason] = useState("");
   const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
-  const [isExitButtonDisabled, setIsExitButtonDisabled] = useState(true);
+  const [isExitButtonDisabled, setIsExitButtonDisabled] = useState(true); // Inicialmente deshabilitado
+  const [exitTime, setExitTime] = useState(null); // Nueva variable para la hora de salida
 
-  // Actualizar la hora actual cada minuto
+  // Función para verificar la disponibilidad de los botones según la hora
   useEffect(() => {
+    // Actualizar la hora actual cada minuto
     const interval = setInterval(() => {
       const now = new Date();
       setFormState({
         todayDate: now.toISOString().split('T')[0],
         currentTime: now.toTimeString().split(' ')[0]
       });
-    }, 60000);
-
-    return () => clearInterval(interval);
+    }, 60000); // Actualiza cada 60 segundos
+  
+    return () => clearInterval(interval); // Limpia el intervalo al desmontar el componente
   }, []);
-
-  // Verificar disponibilidad de botones según la hora
+  
   useEffect(() => {
     const currentDate = new Date();
     const currentTimeInMinutes = currentDate.getHours() * 60 + currentDate.getMinutes();
@@ -50,12 +54,6 @@ export const Personal = () => {
     const todayDate = formState.todayDate;
     const currentTime = formState.currentTime;
     const status = new Date().getHours() < 8 ? "A tiempo" : "Tarde";
-
-    if (status === "Tarde" && !reason) {
-      // Mostrar popup si es tarde y no se ha proporcionado una razón
-      setShowPopup(true);
-      return;
-    }
 
     try {
       const ipResponse = await fetch('https://api.ipify.org?format=json');
@@ -84,6 +82,7 @@ export const Personal = () => {
     }
   };
 
+
   const handleMarkExit = () => {
     const exitTime = new Date().toTimeString().split(' ')[0];
 
@@ -93,10 +92,15 @@ export const Personal = () => {
         : record
     );
 
+    // Actualizar el estado y guardar en localStorage
     setAttendanceRecords(updatedRecords);
     localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
 
     alert("Hora de salida registrada correctamente");
+  };
+
+  const handleShowPopup = () => {
+    setShowPopup(true);
   };
 
   return (
@@ -121,7 +125,7 @@ export const Personal = () => {
                 </div>
               </div>
             </div>
-            <button onClick={handleAttendance} disabled={isSendButtonDisabled}>
+            <button onClick={handleShowPopup} disabled={isSendButtonDisabled}>
               <span>Enviar</span>
             </button>
             <button 
@@ -129,18 +133,6 @@ export const Personal = () => {
               disabled={isExitButtonDisabled}>
               Marcar Salida
             </button>
-
-            {showPopup && (
-              <div className="popup">
-                <textarea
-                  placeholder="Escribe la razón..."
-                  value={reason}
-                  onChange={(e) => setReason(e.target.value)}
-                />
-                <button onClick={handleAttendance}>Confirmar</button>
-                <button onClick={() => setShowPopup(false)}>Cancelar</button>
-              </div>
-            )}
 
             <div className="attendance-records">
               {attendanceRecords.map((record, index) => (

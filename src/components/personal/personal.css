@@ -1,15 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 
+.personal {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
 /*------------------------------------------ CARTA ------------------------------------------------------------*/
 .e-card {
-  margin: 100px auto;
+  margin: auto;
+  margin-top: 50px;
   background: transparent;
-  box-shadow: 0px 8px 28px -9px rgba(0, 0, 0, 0.45);
-  position: relative;
-  width: 100%;
-  height: 530px;
+  width: 80%;
+  max-width: 400px;
   border-radius: 16px;
   overflow: hidden;
+  text-align: center;
+  position: relative;
 }
 
 .wave {
@@ -21,62 +26,18 @@
   top: 0;
   margin-left: -50%;
   margin-top: -70%;
-  z-index: 1; /* Set z-index for waves */
-}
-
-.icon {
-  width: 3em;
-  margin-top: -1em;
-  padding-bottom: 1em;
-}
-
-.wave:nth-child(2),
-.wave:nth-child(3) {
-  top: 210px;
-}
-
-.playing .wave {
+  z-index: 1;
   border-radius: 40%;
-  animation: wave 6000ms infinite linear; /* 3000 */
-}
-
-.wave {
-  border-radius: 40%;
-  animation: wave 120s infinite linear; /* 55 */
-}
-
-.playing .wave:nth-child(2) {
-  animation-duration: 8000ms; /* 4000 */
-}
-
-.wave:nth-child(2) {
-  animation-duration: 100s; /* 50 */
-}
-
-.playing .wave:nth-child(3) {
-  animation-duration: 10000ms; /* 5000 */
-}
-
-.wave:nth-child(3) {
-  animation-duration: 80s; /* 45 */
+  animation: wave 120s infinite linear;
 }
 
 @keyframes wave {
   0% {
     transform: rotate(0deg);
   }
-
   100% {
     transform: rotate(360deg);
   }
-}
-
-.icon {
-  width: 6em; /* Maintain the width */
-  height: 6em; /* Maintain the height */
-  border-radius: 50%; /* Make it circular */
-  object-fit: cover; /* Ensure it covers the area without distortion */
-  margin-right: 1em; /* Add some space between the image and text */
 }
 
 /* ---------------------------------TIEMPO --------------------------------------------------*/
@@ -98,12 +59,16 @@
   transition: transform 0.4s ease;
 }
 
-.card .card-top, .card .card-bottom {
+.card .card-top,
+.card .card-bottom {
   display: flex;
   justify-content: space-between;
 }
 
-.card .card-top p, .card .card-top .card-title, .card .card-bottom p, .card .card-bottom .card-title {
+.card .card-top p,
+.card .card-top .card-title,
+.card .card-bottom p,
+.card .card-bottom .card-title {
   margin: 0;
 }
 
@@ -111,7 +76,8 @@
   font-weight: bold;
 }
 
-.card .card-top p, .card .card-bottom p {
+.card .card-top p,
+.card .card-bottom p {
   font-weight: 600;
 }
 
@@ -121,8 +87,8 @@
 
 .card .card-image {
   position: absolute;
-  width: 100%; /* Asegura que ocupe el ancho del contenedor */
-  height: 100%; /* Asegura que ocupe el alto del contenedor */
+  width: 100%;
+  height: 100%;
   top: 0;
   left: 0;
   display: grid;
@@ -131,13 +97,13 @@
 }
 
 .card .status-icon {
-  width: 4em; /* Ajusta el ancho */
-  height: 4em; /* Ajusta el alto */
+  width: 4em;
+  height: 4em;
   transition: transform 0.4s ease;
 }
 
 .card:hover .status-icon {
-  transform: scale(1.05); /* Efecto al hacer hover */
+  transform: scale(1.05);
 }
 
 .card:hover {
@@ -158,76 +124,60 @@
 
 /* ------- ACOMODAR DATOS -------------------------------------------------------*/
 .content-user {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: flex; /* Mantiene la imagen y la información en la misma línea */
+  align-items: center; /* Centra verticalmente la imagen y el texto */
   padding: 20px;
-  position: relative; /* Ensure content user is positioned correctly */
-  z-index: 2; /* Ensure it’s above waves */
-}
-
-.infotop {
-  display: flex; /* Use flexbox for layout */
-  flex-direction: column; /* Stack elements vertically */
-  align-items: center; /* Center items horizontally */
-  position: relative;
   z-index: 2;
 }
 
 .icon {
-  width: 80px; /* Tamaño reducido para íconos */
+  width: 80px;
   height: 80px;
-  border-radius: 50%; /* Mantén el borde circular */
-  object-fit: cover;  /* Asegura que las imágenes no se distorsionen */
+  border-radius: 50%; /* Imagen circular */
+  margin-right: 15px; /* Espacio entre la imagen y el texto */
+  object-fit: cover; /* Asegura que la imagen no se deforme */
 }
 
-
-
-
-.user-info {
-  font-size: 14px; /* Reduce el tamaño del texto */
+.infotop {
+  text-align: left; /* Alinea la información del texto a la izquierda */
 }
 
 .user-name {
-  font-size: 16px; /* Tamaño ajustado */
+  font-size: 16px;
   font-weight: bold;
 }
 
 .user-department {
-  font-size: 12px; /* Ajuste adicional */
+  font-size: 12px;
+  margin-top: 5px; /* Espacio entre líneas de texto */
 }
 
-.name {
-  font-size: 14px;
-  font-weight: 100;
-}
-
-.date-time {
-  flex: 1; /* Allow date-time to take available space */
-  display: flex; /* Enable flexbox for the card */
-  justify-content: flex-end; /* Align the card to the right */
+/* Ajustar posición de `posts-personal` */
+.posts-personal {
+  margin-top: 50px; /* Ajusta el margen superior para bajarlo más */
+  text-align: center; /* Centra el texto en su contenedor */
 }
 
 /* ------------------------------------------ Boton de enviar ---------------------------------------*/
 
-/* From Uiverse.io by alexmaracinaru */
 button {
-  cursor: pointer;
-  font-weight: 700;
-  transition: all 0.2s;
+  margin: 10px;
   padding: 10px 20px;
-  border-radius: 100px;
-  background: #cfef00;
-  border: 1px solid transparent;
-  display: flex;
-  align-items: center;
-  font-size: 15px;
-  position: relative; /* Asegura que el botón esté posicionado en el flujo de la página */
-  z-index: 3; /* Asegura que esté por encima de las olas */
+  background-color: #0056b3;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:disabled {
+  background-color: gray;
+  cursor: not-allowed;
 }
 
 button:hover {
-  background: #c4e201;
+  background-color: #004494;
 }
 
 button > svg {
@@ -252,11 +202,11 @@ button:active {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Asegura que el pop-up esté encima del resto del contenido */
+  z-index: 1000;
 }
 
 .popup-content {
@@ -291,6 +241,3 @@ button:active {
 .popup-actions button:focus {
   outline: none;
 }
-
-
-

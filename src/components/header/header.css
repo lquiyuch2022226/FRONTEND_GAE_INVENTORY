@@ -2,40 +2,42 @@
 
 .header {
     display: flex;
-    justify-content: center; /* Centra todos los elementos horizontalmente */
+    justify-content: center; /* Centra horizontalmente */
     align-items: center; /* Alinea verticalmente */
-    background-color: #000; /* Fondo */
-    padding: 5px 10px; /* Reduce el espacio interno del contenedor */
-    border-radius: 10px; /* Mantiene bordes redondeados */
-    gap: 10px; /* Espaciado uniforme entre los elementos */
+    background-color: #000; /* Fondo del header */
+    padding: 5px; /* Espaciado interno mínimo */
+    border-radius: 15px; /* Bordes redondeados */
+    gap: 0px; /* Sin separación entre elementos */
   }
   
   .header-item {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centra contenido en cada sección */
-    margin: 0; /* Elimina espacio extra entre elementos */
+    align-items: center; /* Centra el contenido de cada elemento */
+    margin: 0; /* Sin márgenes adicionales */
   }
   
   .header-label {
-    font-size: 0.85rem; /* Tamaño de etiqueta más compacto */
+    font-size: 0.9rem; /* Tamaño compacto */
     color: #fff;
-    margin-bottom: 2px; /* Reduce la separación entre el label y el valor */
+    margin: 0; /* Elimina separación vertical */
   }
   
   .header-value {
-    font-size: 1rem; /* Tamaño del valor */
-    color: #fff; /* Color del texto */
-    padding: 2px 5px; /* Reduce relleno interno */
-    background-color: #001f3f; /* Fondo del valor */
+    font-size: 1rem; /* Tamaño compacto */
+    color: #fff;
+    background-color: #001f3f; /* Fondo azul */
     border-radius: 4px; /* Bordes redondeados */
+    padding: 2px 5px; /* Espaciado interno mínimo */
+    margin-top: 2px; /* Separación mínima respecto al label */
     text-align: center;
   }
   
   .status-icon {
-    font-size: 1rem; /* Ajusta tamaño del ícono */
-    padding: 2px; /* Reduce relleno interno */
+    font-size: 1rem; /* Tamaño del ícono */
+    padding: 2px; /* Espaciado interno mínimo */
     border-radius: 50%; /* Mantiene forma circular */
+    margin-top: 2px; /* Separación mínima respecto al label */
   }
   
   .status-icon.late {

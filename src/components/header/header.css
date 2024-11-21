@@ -1,22 +1,24 @@
 /* Contenedor principal del header */
 .header {
-    background-color: #1E2A38; /* Color oscuro para el fondo */
-    padding: 20px;
+    background: linear-gradient(145deg, #1e3c72, #2a5298); /* Gradiente de azul profundo */
+    padding: 30px 20px;
     border-radius: 15px; /* Bordes redondeados */
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.15); /* Sombra más marcada */
     display: flex;
     justify-content: center;
     align-items: center;
     color: white;
+    transition: all 0.3s ease-in-out;
   }
   
   /* Contenedor de los elementos dentro del header */
   .header-content {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     width: 100%;
-    max-width: 900px; /* Ancho máximo para mantenerlo centrado */
+    max-width: 1000px; /* Aumentamos el ancho máximo */
+    gap: 30px; /* Espacio mayor entre los elementos */
   }
   
   /* Estilo de cada item dentro del header */
@@ -24,36 +26,52 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 5px;
+    gap: 8px;
     width: 30%; /* Cada item ocupará un 30% del espacio */
   }
   
+  /* Etiquetas dentro de cada item */
   .header-item label {
-    font-size: 14px;
-    color: #BDC3C7; /* Color de las etiquetas */
+    font-size: 16px;
+    font-weight: bold; /* Hacemos la etiqueta más llamativa */
+    color: #f39c12; /* Un color amarillo dorado para llamar la atención */
+    text-transform: uppercase; /* Transformamos el texto en mayúsculas */
   }
   
+  /* Estilo de los inputs */
   .header-item input {
-    padding: 10px 15px;
-    font-size: 16px;
-    border: 1px solid #BDC3C7;
-    border-radius: 8px;
-    background-color: #34495E; /* Fondo oscuro para los inputs */
+    padding: 12px 18px;
+    font-size: 18px;
+    font-weight: bold;
+    border: 2px solid #f39c12; /* Borde dorado */
+    border-radius: 10px;
+    background-color: #34495e;
     color: white;
     width: 100%;
     transition: all 0.3s ease;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Sombra sutil para los inputs */
   }
   
+  /* Efecto cuando el input tiene el foco */
   .header-item input:focus {
-    border-color: #3498db; /* Bordes azules cuando el input tiene el foco */
-    outline: none;
-    box-shadow: 0 0 6px rgba(52, 152, 219, 0.6); /* Sombra de enfoque */
+    border-color: #e74c3c; /* Borde rojo cuando se enfoca */
+    background-color: #2c3e50; /* Fondo más oscuro al enfocar */
+    box-shadow: 0px 4px 15px rgba(231, 76, 60, 0.5); /* Sombra más intensa */
+    outline: none; /* Quitamos el borde por defecto */
   }
   
   /* Estilo cuando los inputs están deshabilitados */
   .header-item input[disabled] {
-    background-color: #7F8C8D; /* Fondo gris para inputs deshabilitados */
-    color: #BDC3C7; /* Color gris claro para el texto */
-    cursor: not-allowed; /* Cambia el cursor cuando no está permitido */
+    background-color: #7F8C8D; /* Fondo gris claro */
+    color: #BDC3C7; /* Texto gris claro */
+    border-color: #BDC3C7; /* Borde gris claro */
+    cursor: not-allowed; /* Indicamos que no es editable */
+    box-shadow: none; /* Quitamos la sombra para los deshabilitados */
   }
-      
+  
+  /* Animación para el header */
+  .header:hover {
+    transform: translateY(-5px); /* Da una sensación de elevación */
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2); /* Sombra más profunda */
+  }
+  

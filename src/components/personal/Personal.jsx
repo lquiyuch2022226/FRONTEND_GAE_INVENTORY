@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar } from '../Navbar.jsx';
 import { reportarEntrada } from '../../services/api.jsx';
-import { header } from "../header/Header.jsx"; 
+import { Header } from '../header/Header.jsx'; 
 import './personal.css';
 import defaultAvatar from '../../assets/img/palmamorro.jpg';
 import earlyImage from '../../assets/img/comprobado.png';

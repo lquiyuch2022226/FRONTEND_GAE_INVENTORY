@@ -77,8 +77,7 @@ export const Navbar = () => {
           <img src={logo} alt="" className="logo" />
         </div>
       </div>
-      <div className="navbar-center">
-        <label>Registro de asistencia</label>
+      <div className="navbar-center">      
         {userEmail === 'Jose.delacerda@transparencia.gob.gt' && (
           <button onClick={exportToExcel} className="export-btn">
             Exportar a Excel

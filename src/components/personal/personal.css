@@ -423,3 +423,53 @@ button:active {
 .popup-actions button:focus {
   outline: none;
 }
+
+/*----------------------------------------- header -----------------------------------------*/
+.header {
+  display: flex;
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Alinea verticalmente */
+  background-color: #001f3f; /* Fondo oscuro */
+  padding: 10px 20px; /* Espaciado interno */
+  border-radius: 15px; /* Bordes redondeados */
+  gap: 20px; /* Separación entre elementos */
+}
+
+.header-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra el contenido de cada elemento */
+  text-align: center;
+}
+
+.header-label {
+  font-size: 0.9rem; /* Tamaño del texto del label */
+  color: #fff; /* Color del texto blanco */
+  margin: 0; /* Sin margen adicional */
+}
+
+.header-value {
+  font-size: 1.2rem; /* Tamaño del texto del valor */
+  color: #fff;
+  background-color: #0074D9; /* Fondo azul */
+  border-radius: 5px; /* Bordes redondeados */
+  padding: 5px 10px; /* Espaciado interno */
+  margin-top: 5px; /* Separación respecto al label */
+}
+
+.status-icon {
+  font-size: 1.5rem; /* Tamaño del ícono */
+  padding: 5px; /* Espaciado interno */
+  border-radius: 50%; /* Forma circular */
+  margin-top: 5px; /* Separación respecto al label */
+}
+
+.status-icon.late {
+  color: #FF4136; /* Rojo para tarde */
+  background-color: #FFDDDD; /* Fondo claro rojo */
+}
+
+.status-icon.on-time {
+  color: #2ECC40; /* Verde para a tiempo */
+  background-color: #DFFFD6; /* Fondo claro verde */
+}

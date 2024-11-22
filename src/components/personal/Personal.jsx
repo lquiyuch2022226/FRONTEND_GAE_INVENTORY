@@ -32,10 +32,9 @@ export const Personal = () => {
 
     try {
       // Obtener la IP del usuario
-      /* const ipResponse = await fetch('https://api.ipify.org?format=json'); */
-
-/*       const ipData = await ipResponse.json(); */
-   /*    const userIp = ipData && ipData.ip ? ipData.ip : 'IP no disponible'; */
+      const ipResponse = await fetch('https://api.ipify.org?format=json');
+      const ipData = await ipResponse.json();
+      const userIp = ipData && ipData.ip ? ipData.ip : 'IP no disponible';
 
       // Crear el objeto de registro
       const record = {
@@ -43,7 +42,7 @@ export const Personal = () => {
         date: todayDate,
         time: currentTime,
         status,
-     /*    ip: userIp, */
+        ip: userIp,
         reason: reason
       };
 

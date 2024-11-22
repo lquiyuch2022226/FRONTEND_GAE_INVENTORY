@@ -106,9 +106,9 @@ export const Personal = () => {
     <div className="personal">
       <Navbar user={user} />
       
-      {/* Agregamos el Header aquí */}
       <Header />
 
+      
       <div className="posts-personal">
         {user ? (
           <div className="e-card playing">

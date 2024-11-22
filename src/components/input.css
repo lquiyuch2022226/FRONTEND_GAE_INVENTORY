@@ -1,0 +1,16 @@
+.input-group {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .input-group input {
+    border: none;
+    background-color: #ffffff;
+    /* Color de fondo oscuro para el input */
+    color: #000000;
+    /* Color de texto claro */
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+  }

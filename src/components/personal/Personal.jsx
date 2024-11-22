@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar } from '../Navbar.jsx';
 import { reportarEntrada } from '../../services/api.jsx';
-import { Header } from "../header/Header.jsx"; // Importamos el Header
+import { Headere } from "../header/Header.jsx"; // Importamos el Header
 import './personal.css';
 import defaultAvatar from '../../assets/img/palmamorro.jpg';
 import earlyImage from '../../assets/img/comprobado.png';
@@ -107,7 +107,7 @@ export const Personal = () => {
       <Navbar user={user} />
       
       {/* Agregamos el Header aquí */}
-      <Header />
+      <Headere />
 
       <div className="posts-personal">
         {user ? (

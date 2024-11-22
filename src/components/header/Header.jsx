@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Input } from "../Input"; // Asegúrate de que la ruta de Input sea correcta
 import './header.css';
 
 export const Header = () => {
@@ -35,7 +34,7 @@ export const Header = () => {
         <div className="header-value">{currentTime}</div>
       </div>
       <div className="header-item">
-        <span className="header-label">Pendejoo</span>
+        <span className="header-label">Estado</span>
         <div className={`status-icon ${isLate ? 'late' : 'on-time'}`}>
           {isLate ? '✘' : '✔'}
         </div>

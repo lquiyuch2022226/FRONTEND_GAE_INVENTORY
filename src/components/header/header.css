@@ -1,52 +1,48 @@
-/* header.css */
-
 .header {
-    display: flex;
-    justify-content: center; /* Centra horizontalmente */
-    align-items: center; /* Alinea verticalmente */
-    background-color: #000; /* Fondo del header */
-    padding: 3px; /* Espaciado interno mínimo */
-    border-radius: 15px; /* Bordes redondeados */
-    gap: 0px; /* Sin separación entre elementos */
-  }
-  
-  .header-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Centra el contenido de cada elemento */
-    margin: 0; /* Sin márgenes adicionales */
-  }
-  
-  .header-label {
-    font-size: 0.9rem; /* Tamaño compacto */
-    color: #fff;
-    margin: 0; /* Elimina separación vertical */
-  }
-  
-  .header-value {
-    font-size: 1rem; /* Tamaño compacto */
-    color: #fff;
-    background-color: #001f3f; /* Fondo azul */
-    border-radius: 4px; /* Bordes redondeados */
-    padding: 2px 5px; /* Espaciado interno mínimo */
-    margin-top: 2px; /* Separación mínima respecto al label */
-    text-align: center;
-  }
-  
-  .status-icon {
-    font-size: 1rem; /* Tamaño del ícono */
-    padding: 2px; /* Espaciado interno mínimo */
-    border-radius: 50%; /* Mantiene forma circular */
-    margin-top: 2px; /* Separación mínima respecto al label */
-  }
-  
-  .status-icon.late {
-    color: #ff4136; /* Rojo para tarde */
-    background-color: #ffeaea; /* Fondo claro */
-  }
-  
-  .status-icon.on-time {
-    color: #2ecc40; /* Verde para a tiempo */
-    background-color: #eaffea; /* Fondo claro */
-  }
-  
+  display: flex;
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Alinea verticalmente */
+  background-color: #001f3f; /* Fondo oscuro */
+  padding: 10px 20px; /* Espaciado interno */
+  border-radius: 15px; /* Bordes redondeados */
+  gap: 20px; /* Separación entre elementos */
+}
+
+.header-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra el contenido de cada elemento */
+  text-align: center;
+}
+
+.header-label {
+  font-size: 0.9rem; /* Tamaño del texto del label */
+  color: #fff; /* Color del texto blanco */
+  margin: 0; /* Sin margen adicional */
+}
+
+.header-value {
+  font-size: 1.2rem; /* Tamaño del texto del valor */
+  color: #fff;
+  background-color: #0074D9; /* Fondo azul */
+  border-radius: 5px; /* Bordes redondeados */
+  padding: 5px 10px; /* Espaciado interno */
+  margin-top: 5px; /* Separación respecto al label */
+}
+
+.status-icon {
+  font-size: 1.5rem; /* Tamaño del ícono */
+  padding: 5px; /* Espaciado interno */
+  border-radius: 50%; /* Forma circular */
+  margin-top: 5px; /* Separación respecto al label */
+}
+
+.status-icon.late {
+  color: #FF4136; /* Rojo para tarde */
+  background-color: #FFDDDD; /* Fondo claro rojo */
+}
+
+.status-icon.on-time {
+  color: #2ECC40; /* Verde para a tiempo */
+  background-color: #DFFFD6; /* Fondo claro verde */
+}

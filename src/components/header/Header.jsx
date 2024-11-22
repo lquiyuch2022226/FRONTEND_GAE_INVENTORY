@@ -15,7 +15,7 @@ export const Header = () => {
       const formattedDate = now.toLocaleDateString('es-ES');
       setCurrentDate(formattedDate);
       setCurrentTime(formattedTime);
-      setIsLate(hours >= 8); // Determina si está tarde
+      setIsLate(hours >= 8); 
     };
 
     updateDateTime();

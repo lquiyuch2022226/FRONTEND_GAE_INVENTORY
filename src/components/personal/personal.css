@@ -346,6 +346,7 @@ button:active {
 /* ------------------------------------------ Boton de enviar ---------------------------------------*/
 
 /* From Uiverse.io by alexmaracinaru */
+/* Botón de Enviar - Ajustes generales */
 button {
   cursor: pointer;
   font-weight: 700;
@@ -356,9 +357,15 @@ button {
   border: 1px solid transparent;
   display: flex;
   align-items: center;
+  justify-content: center;  /* Centra el contenido dentro del botón */
   font-size: 15px;
-  position: right; /* Asegura que el botón esté posicionado en el flujo de la página */
-  z-index: 3; /* Asegura que esté por encima de las olas */
+  z-index: 3;
+  width: auto;  /* Asegura que el botón no se estire si no es necesario */
+}
+
+button:disabled {
+  background: gray;
+  cursor: not-allowed;
 }
 
 button:hover {
@@ -378,6 +385,7 @@ button:hover svg {
 button:active {
   transform: scale(0.95);
 }
+
 
 /*----------------------------------------- pop-ups -----------------------------------------*/
 

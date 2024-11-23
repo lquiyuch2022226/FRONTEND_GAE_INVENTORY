@@ -1,9 +1,10 @@
 .header {
     display: flex;
+    width: 300px;
     justify-content: space-between; /* Centra horizontalmente */
     align-items: center; /* Alinea verticalmente */
     background-color: #9c1212 !important; /* Cambia el fondo a blanco */      
-
+    padding: 5px; /* Espaciado interno */
     border-radius: 30px; /* Bordes redondeados */
     gap: 8px; /* Separación entre elementos */
   }

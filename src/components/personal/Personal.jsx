@@ -60,8 +60,10 @@ export const Personal = () => {
     const lastAttendanceDate = localStorage.getItem(`lastAttendance_${userId}`);
     const currentHour = new Date().getHours();
     const isWithinAllowedTime = currentHour >= 20 && currentHour < 22;
-    setIsButtonDisabled(lastAttendanceDate === formState.todayDate || !isWithinAllowedTime);
+    setIsSendButtonDisabled(lastAttendanceDate === formState.todayDate || !isWithinAllowedTime);
   }, [formState.todayDate, userId]);
+  
+  
 
   useEffect(() => {
     const storedRecords = JSON.parse(localStorage.getItem(`attendanceRecords_${userId}`)) || [];

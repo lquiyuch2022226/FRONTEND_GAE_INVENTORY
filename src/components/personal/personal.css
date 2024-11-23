@@ -6,6 +6,7 @@
 .e-card {
   margin: auto;
   margin-top: 50px;
+  margin-bottom: 30px;  /* Esto empuja la carta hacia abajo */
   background: transparent;
   width: 80%;
   max-width: 400px;
@@ -13,8 +14,8 @@
   overflow: hidden;
   text-align: center;
   position: relative;
-  
 }
+
 
 .wave {
   position: absolute;

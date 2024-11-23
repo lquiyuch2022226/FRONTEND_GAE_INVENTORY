@@ -350,14 +350,14 @@ button {
   cursor: pointer;
   font-weight: 700;
   transition: all 0.2s;
-  padding: 10px 20px 5px 0px;
+  padding: 10px 20px;
   border-radius: 100px;
   background: #cfef00;
   border: 1px solid transparent;
   display: flex;
   align-items: center;
   font-size: 15px;
-  position: left; /* Asegura que el botón esté posicionado en el flujo de la página */
+  position: right; /* Asegura que el botón esté posicionado en el flujo de la página */
   z-index: 3; /* Asegura que esté por encima de las olas */
 }
 

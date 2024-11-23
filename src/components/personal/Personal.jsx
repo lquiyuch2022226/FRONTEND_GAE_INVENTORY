@@ -20,8 +20,41 @@ export const Personal = () => {
 
   const [showPopup, setShowPopup] = useState(false);
   const [reason, setReason] = useState("");
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
+  const [isExitButtonDisabled, setIsExitButtonDisabled] = useState(true); // Inicialmente deshabilitado
   const [exitTime, setExitTime] = useState(null); // Nueva variable para la hora de salida
+
+  // Función para verificar la disponibilidad de los botones según la hora
+  useEffect(() => {
+    const currentDate = new Date();
+    const currentHour = currentDate.getHours();
+    const currentMinute = currentDate.getMinutes();
+
+    const currentTimeInMinutes = currentHour * 60 + currentMinute;
+
+    // Horarios para el botón de Enviar (7:00 AM a 10:00 AM)
+    const startTimeSend = 7 * 60; // 7:00 AM
+    const endTimeSend = 10 * 60; // 10:00 AM
+
+    // Horarios para el botón de Marcar Salida (3:30 PM a 6:00 PM)
+    const startTimeExit = 15 * 60 + 30; // 3:30 PM
+    const endTimeExit = 18 * 60; // 6:00 PM
+
+    // Verificar si el botón de Enviar debe estar habilitado
+    if (currentTimeInMinutes >= startTimeSend && currentTimeInMinutes <= endTimeSend) {
+      setIsSendButtonDisabled(false); // Habilitar el botón de Enviar
+    } else {
+      setIsSendButtonDisabled(true); // Deshabilitar el botón de Enviar
+    }
+
+    // Verificar si el botón de Marcar Salida debe estar habilitado
+    const isExitButtonEnabled = attendanceRecords.some(record => record.date === formState.todayDate && !record.exitTime);
+    if (currentTimeInMinutes >= startTimeExit && currentTimeInMinutes <= endTimeExit && isExitButtonEnabled) {
+      setIsExitButtonDisabled(false); // Habilitar el botón de Marcar Salida
+    } else {
+      setIsExitButtonDisabled(true); // Deshabilitar el botón de Marcar Salida
+    }
+  }, [formState.todayDate, attendanceRecords]);
 
   useEffect(() => {
     const lastAttendanceDate = localStorage.getItem(`lastAttendance_${userId}`);
@@ -65,7 +98,6 @@ export const Personal = () => {
         localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
 
         localStorage.setItem(`lastAttendance_${userId}`, todayDate);
-        setIsButtonDisabled(true);
         alert("Asistencia registrada correctamente");
       }
     } catch (error) {
@@ -95,7 +127,6 @@ export const Personal = () => {
     alert("Hora de salida registrada correctamente");
   };
 
-  // Definir la función handleShowPopup
   const handleShowPopup = () => {
     setShowPopup(true); // Muestra el popup si es necesario
   };
@@ -122,12 +153,12 @@ export const Personal = () => {
                 </div>
               </div>
             </div>
-            <button onClick={handleShowPopup} disabled={isButtonDisabled}>
+            <button onClick={handleShowPopup} disabled={isSendButtonDisabled}>
               <span>Enviar</span>
             </button>
             <button 
               onClick={handleMarkExit} 
-              disabled={!attendanceRecords.some(record => record.date === formState.todayDate && !record.exitTime)}>
+              disabled={isExitButtonDisabled}>
               Marcar Salida
             </button>
 

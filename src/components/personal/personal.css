@@ -168,7 +168,7 @@
 .icon {
   width: 80px;
   height: 80px;
-  position: fixed;
+  
   border-radius: 50%;
   margin-right: 15px; /* Añade espacio entre la imagen y el texto */
   object-fit: cover; /* Evita la deformación de la imagen */
@@ -176,7 +176,8 @@
 
 .infotop {
   display: flex;
-  flex-direction: column; /* Organiza el texto en una columna */
+  position: fixed;
+  flex-direction:row; /* Organiza el texto en una columna */
   text-align: left; /* Alinea el texto a la izquierda */
   color: white; /* Cambia el color del texto a blanco */
 }

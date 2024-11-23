@@ -29,24 +29,24 @@ export const Personal = () => {
     const currentDate = new Date();
     const currentHour = currentDate.getHours();
     const currentMinute = currentDate.getMinutes();
-
+  
     const currentTimeInMinutes = currentHour * 60 + currentMinute;
-
+  
     // Horarios para el botón de Enviar (7:00 AM a 10:00 AM)
     const startTimeSend = 7 * 60; // 7:00 AM
     const endTimeSend = 10 * 60; // 10:00 AM
-
+  
     // Horarios para el botón de Marcar Salida (3:30 PM a 6:00 PM)
     const startTimeExit = 15 * 60 + 30; // 3:30 PM
     const endTimeExit = 18 * 60; // 6:00 PM
-
+  
     // Verificar si el botón de Enviar debe estar habilitado
     if (currentTimeInMinutes >= startTimeSend && currentTimeInMinutes <= endTimeSend) {
       setIsSendButtonDisabled(false); // Habilitar el botón de Enviar
     } else {
       setIsSendButtonDisabled(true); // Deshabilitar el botón de Enviar
     }
-
+  
     // Verificar si el botón de Marcar Salida debe estar habilitado
     const isExitButtonEnabled = attendanceRecords.some(record => record.date === formState.todayDate && !record.exitTime);
     if (currentTimeInMinutes >= startTimeExit && currentTimeInMinutes <= endTimeExit && isExitButtonEnabled) {
@@ -54,8 +54,8 @@ export const Personal = () => {
     } else {
       setIsExitButtonDisabled(true); // Deshabilitar el botón de Marcar Salida
     }
-  }, [formState.todayDate, attendanceRecords]);
-
+  }, [formState.todayDate, attendanceRecords]); // Verificar los cambios en los registros de asistencia y la fecha
+  
   useEffect(() => {
     const lastAttendanceDate = localStorage.getItem(`lastAttendance_${userId}`);
     const currentHour = new Date().getHours();

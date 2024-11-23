@@ -7,6 +7,7 @@ export const Header = () => {
     todayDate: '',
     currentTime: '',
   });
+  const [isLate, setIsLate] = useState(false);
 
   useEffect(() => {
     const updateDateTime = () => {
@@ -15,11 +16,13 @@ export const Header = () => {
       const minutes = now.getMinutes();
       const formattedTime = `${hours}:${minutes < 10 ? `0${minutes}` : minutes}`;
       const formattedDate = now.toLocaleDateString('es-ES');
-      
+
       setFormState({
         todayDate: formattedDate,
         currentTime: formattedTime,
       });
+
+      setIsLate(hours >= 8); // Actualiza el estado "A tiempo/Tarde"
     };
 
     updateDateTime();
@@ -50,6 +53,12 @@ export const Header = () => {
           type="text"
           disabled={true}
         />
+      </div>
+      <div className="status-container">
+        <span className="status-label">Estado</span>
+        <div className={`status-icon ${isLate ? 'late' : 'on-time'}`}>
+          {isLate ? '✘' : '✔'}
+        </div>
       </div>
     </div>
   );

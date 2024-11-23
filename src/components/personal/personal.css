@@ -346,9 +346,9 @@ button:active {
 /* ------------------------------------------ Boton de enviar ---------------------------------------*/
 .button-container {
   display: flex;
-  justify-content: space-between; /* Distribuye los botones a los extremos */
-  gap: 10px; /* Espacio entre los botones */
-  width: 100%; /* Asegura que el contenedor ocupe todo el ancho disponible */
+  flex-direction: column; /* Apila los botones verticalmente */
+  gap: 10px; /* Añade espacio entre los botones */
+  width: 100%;
 }
 
 .button-container button {
@@ -357,10 +357,7 @@ button:active {
   background: #cfef00;
   border: 1px solid transparent;
   font-size: 15px;
-  flex: 1; /* Asegura que los botones ocupen el mismo espacio */
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%; /* Los botones ocupan todo el ancho */
 }
 
 .button-container button:hover {

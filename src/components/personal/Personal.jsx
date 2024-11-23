@@ -95,6 +95,11 @@ export const Personal = () => {
     alert("Hora de salida registrada correctamente");
   };
 
+  // Definir la función handleShowPopup
+  const handleShowPopup = () => {
+    setShowPopup(true); // Muestra el popup si es necesario
+  };
+
   return (
     <div className="personal">
       <Navbar user={user} />

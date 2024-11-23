@@ -2,7 +2,7 @@
     display: flex;
     justify-content: space-between; /* Centra horizontalmente */
     align-items: center; /* Alinea verticalmente */
-    background-color: #001f3f; /* Fondo oscuro */
+    background-color: #fff !important; /* Cambia el fondo a blanco */      
     padding: 20px; /* Espaciado interno */
     border-radius: 30px; /* Bordes redondeados */
     gap: 10px; /* Separación entre elementos */
@@ -10,9 +10,9 @@
   
   .header-item {
     display: flex;
-    flex-direction: column;
+    flex-direction:row;
     align-items: center; /* Centra el contenido de cada elemento */
-    text-align: center;
+    text-align: left;
   }
   
   .header-label {

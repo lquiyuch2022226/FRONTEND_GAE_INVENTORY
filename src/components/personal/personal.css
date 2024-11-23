@@ -357,7 +357,7 @@ button {
   display: flex;
   align-items: center;
   font-size: 15px;
-  position: center; /* Asegura que el botón esté posicionado en el flujo de la página */
+  position:static; /* Asegura que el botón esté posicionado en el flujo de la página */
   z-index: 3; /* Asegura que esté por encima de las olas */
 }
 

@@ -26,35 +26,44 @@ export const Personal = () => {
 
   // Función para verificar la disponibilidad de los botones según la hora
   useEffect(() => {
+    // Actualizar la hora actual cada minuto
+    const interval = setInterval(() => {
+      const now = new Date();
+      setFormState({
+        todayDate: now.toISOString().split('T')[0],
+        currentTime: now.toTimeString().split(' ')[0]
+      });
+    }, 60000); // Actualiza cada 60 segundos
+  
+    return () => clearInterval(interval); // Limpia el intervalo al desmontar el componente
+  }, []);
+  
+  useEffect(() => {
     const currentDate = new Date();
     const currentHour = currentDate.getHours();
     const currentMinute = currentDate.getMinutes();
   
     const currentTimeInMinutes = currentHour * 60 + currentMinute;
   
-    // Horarios para el botón de Enviar (7:00 AM a 10:00 AM)
+    // Rangos de tiempo
     const startTimeSend = 7 * 60; // 7:00 AM
     const endTimeSend = 10 * 60; // 10:00 AM
-  
-    // Horarios para el botón de Marcar Salida (3:30 PM a 6:00 PM)
     const startTimeExit = 15 * 60 + 30; // 3:30 PM
     const endTimeExit = 18 * 60; // 6:00 PM
   
-    // Verificar si el botón de Enviar debe estar habilitado
-    if (currentTimeInMinutes >= startTimeSend && currentTimeInMinutes <= endTimeSend) {
-      setIsSendButtonDisabled(false); // Habilitar el botón de Enviar
-    } else {
-      setIsSendButtonDisabled(true); // Deshabilitar el botón de Enviar
-    }
+    // Habilitar/deshabilitar botón Enviar
+    setIsSendButtonDisabled(!(currentTimeInMinutes >= startTimeSend && currentTimeInMinutes <= endTimeSend));
   
-    // Verificar si el botón de Marcar Salida debe estar habilitado
-    const isExitButtonEnabled = attendanceRecords.some(record => record.date === formState.todayDate && !record.exitTime);
-    if (currentTimeInMinutes >= startTimeExit && currentTimeInMinutes <= endTimeExit && isExitButtonEnabled) {
-      setIsExitButtonDisabled(false); // Habilitar el botón de Marcar Salida
-    } else {
-      setIsExitButtonDisabled(true); // Deshabilitar el botón de Marcar Salida
-    }
-  }, [formState.todayDate, attendanceRecords]); // Verificar los cambios en los registros de asistencia y la fecha
+    // Habilitar/deshabilitar botón de Salida
+    const hasRecordWithoutExit = attendanceRecords.some(record => record.date === formState.todayDate && !record.exitTime);
+    setIsExitButtonDisabled(!(currentTimeInMinutes >= startTimeExit && currentTimeInMinutes <= endTimeExit && hasRecordWithoutExit));
+  }, [attendanceRecords, formState.todayDate]);
+  
+  useEffect(() => {
+    const storedRecords = JSON.parse(localStorage.getItem(`attendanceRecords_${userId}`)) || [];
+    setAttendanceRecords(storedRecords);
+  }, [userId]);
+   // Verificar los cambios en los registros de asistencia y la fecha
   
   useEffect(() => {
     const lastAttendanceDate = localStorage.getItem(`lastAttendance_${userId}`);

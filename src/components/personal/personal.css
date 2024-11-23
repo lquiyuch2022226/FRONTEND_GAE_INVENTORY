@@ -158,7 +158,7 @@
   align-items: center; /* Alinea verticalmente los elementos */
   padding: 20px;
   z-index: 2;
-  position: fixed;
+  position: relative;
   width: 100%; /* Ocupa todo el ancho del contenedor */
   justify-content: flex-start; /* Alinea los elementos al inicio (izquierda) */
   margin-bottom: 20px; /* Empuja hacia abajo el contenedor */
@@ -168,6 +168,7 @@
 .icon {
   width: 80px;
   height: 80px;
+  position: fixed;
   border-radius: 50%;
   margin-right: 15px; /* Añade espacio entre la imagen y el texto */
   object-fit: cover; /* Evita la deformación de la imagen */

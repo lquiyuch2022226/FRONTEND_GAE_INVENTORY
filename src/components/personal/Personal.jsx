@@ -120,7 +120,9 @@ export const Personal = () => {
             <button onClick={handleShowPopup} disabled={isButtonDisabled}>
               <span>Enviar</span>
             </button>
-            <button onClick={handleMarkExit} disabled={!attendanceRecords.some(record => record.date === formState.todayDate && !record.exitTime)}>
+            <button 
+              onClick={handleMarkExit} 
+              disabled={!attendanceRecords.some(record => record.date === formState.todayDate && !record.exitTime)}>
               Marcar Salida
             </button>
 

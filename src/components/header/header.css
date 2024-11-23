@@ -3,9 +3,9 @@
     justify-content: space-between; /* Centra horizontalmente */
     align-items: center; /* Alinea verticalmente */
     background-color: #9c1212 !important; /* Cambia el fondo a blanco */      
-    padding: 20px; /* Espaciado interno */
+
     border-radius: 30px; /* Bordes redondeados */
-    gap: 3px; /* Separación entre elementos */
+    gap: 8px; /* Separación entre elementos */
   }
   
   .header-item {

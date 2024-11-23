@@ -2,9 +2,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    padding: 10px 20px; /* Reducido para hacerlo más angosto */
     background-color: #f4f4f4;
     border-radius: 8px;
+    margin-top: 20px; /* Espacio entre el navbar y el header */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   }
   
   .input-group {

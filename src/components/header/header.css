@@ -1,6 +1,6 @@
 .header {
     display: flex;
-    width: 300px;
+    width:fit-content;
     justify-content: space-between; /* Centra horizontalmente */
     align-items: center; /* Alinea verticalmente */
     background-color: #9c1212 !important; /* Cambia el fondo a blanco */      

@@ -176,7 +176,6 @@
 
 .infotop {
   display: flex;
-  position: fixed;
   flex-direction:row; /* Organiza el texto en una columna */
   text-align: left; /* Alinea el texto a la izquierda */
   color: white; /* Cambia el color del texto a blanco */

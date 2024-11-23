@@ -1,44 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import './header.css';
+import React, { useState, useEffect } from "react";
 
-export const Header = () => {
-  const [currentDate, setCurrentDate] = useState('');
-  const [currentTime, setCurrentTime] = useState('');
-  const [isLate, setIsLate] = useState(false);
+const Header = () => {
+  const [todayDate, setTodayDate] = useState("");
+  const [currentTime, setCurrentTime] = useState("");
 
+  // Obtener la fecha actual
   useEffect(() => {
-    const updateDateTime = () => {
-      const now = new Date();
-      const hours = now.getHours();
-      const minutes = now.getMinutes();
-      const formattedTime = `${hours}:${minutes < 10 ? `0${minutes}` : minutes}`;
-      const formattedDate = now.toLocaleDateString('es-ES');
-      setCurrentDate(formattedDate);
-      setCurrentTime(formattedTime);
-      setIsLate(hours >= 8); 
+    const date = new Date();
+    setTodayDate(date.toLocaleDateString());
+
+    const updateTime = () => {
+      const time = new Date();
+      setCurrentTime(time.toLocaleTimeString());
     };
 
-    updateDateTime();
-    const interval = setInterval(updateDateTime, 60000); // Actualiza cada minuto
-    return () => clearInterval(interval); // Limpia el intervalo cuando se desmonta el componente
+    // Actualizar la hora cada segundo
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval); // Limpiar intervalo al desmontar
   }, []);
 
   return (
-    <div className="header">
-      <div className="header-item">
-        <span className="header-label">Fecha</span>
-        <div className="header-value">{currentDate}</div>
-      </div>
-      <div className="header-item">
-        <span className="header-label">Hora</span>
-        <div className="header-value">{currentTime}</div>
-      </div>
-      <div className="header-item">
-        <span className="header-label">Estado</span>
-        <div className={`status-icon ${isLate ? 'late' : 'on-time'}`}>
-          {isLate ? '✘' : '✔'}
+    <div className="header-container">
+      <div className="input-group">
+        <div className="input-wrapper">
+          <label htmlFor="fecha">Fecha</label>
+          <input
+            id="fecha"
+            type="text"
+            value={todayDate}
+            readOnly
+          />
+        </div>
+        <div className="input-wrapper">
+          <label htmlFor="hora">Hora</label>
+          <input
+            id="hora"
+            type="text"
+            value={currentTime}
+            readOnly
+          />
         </div>
       </div>
     </div>
   );
 };
+
+export default Header;

@@ -346,7 +346,7 @@ button:active {
 /* ------------------------------------------ Boton de enviar ---------------------------------------*/
 .button-container {
   display: flex;
-  flex-direction: column; /* Apila los botones verticalmente */
+  flex-direction: row; /* Apila los botones verticalmente */
   gap: 10px; /* Añade espacio entre los botones */
   width: 100%;
 }

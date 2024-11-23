@@ -1,46 +1,14 @@
 .header-container {
     display: flex;
-    justify-content: center; /* Centra el grupo de inputs horizontalmente */
-    align-items: center; /* Alinea el contenido verticalmente */
-    padding: 20px;
-    background-color: #610b3f; /* Fondo morado */
-    border-bottom: 2px solid #c4e201; /* Línea decorativa debajo */
-    color: white;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
   }
   
   .input-group {
     display: flex;
-    gap: 20px; /* Espacio entre inputs */
-  }
-  
-  .input-wrapper {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .input-wrapper label {
-    font-size: 14px;
-    margin-bottom: 5px;
-    color: white; /* Color del texto */
-  }
-  
-  .input-wrapper input {
-    padding: 10px;
-    border: 1px solid #c4e201; /* Borde decorativo */
-    border-radius: 8px;
-    background-color: #fff;
-    color: #000;
-    font-size: 16px;
-    text-align: center;
-  }
-  
-  .input-wrapper input:focus {
-    outline: none;
-    border-color: #cfef00; /* Cambia el borde al enfocarse */
-  }
-  
-  .input-wrapper input:disabled {
-    background-color: #f3f3f3; /* Fondo gris claro para inputs deshabilitados */
-    color: #999; /* Texto gris claro */
+    gap: 20px;
   }
   

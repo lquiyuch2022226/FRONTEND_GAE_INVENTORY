@@ -63,8 +63,10 @@ export const Personal = () => {
     const storedRecords = JSON.parse(localStorage.getItem(`attendanceRecords_${userId}`)) || [];
     setAttendanceRecords(storedRecords);
   }, [userId]);
-   // Verificar los cambios en los registros de asistencia y la fecha
-  
+
+  console.log("Hora actual:", currentTimeInMinutes);
+console.log("Estado botón Enviar:", !isSendButtonDisabled);
+
   useEffect(() => {
     const lastAttendanceDate = localStorage.getItem(`lastAttendance_${userId}`);
     const currentHour = new Date().getHours();
@@ -119,6 +121,7 @@ export const Personal = () => {
       setReason("");
     }
   };
+
 
   const handleMarkExit = () => {
     const exitTime = new Date().toTimeString().split(' ')[0]; // Obtener la hora actual de salida

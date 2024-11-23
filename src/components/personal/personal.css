@@ -344,48 +344,28 @@ button:active {
 
 
 /* ------------------------------------------ Boton de enviar ---------------------------------------*/
+.button-container {
+  display: flex;
+  justify-content: space-between; /* Distribuye los botones a los extremos */
+  gap: 10px; /* Espacio entre los botones */
+  width: 100%; /* Asegura que el contenedor ocupe todo el ancho disponible */
+}
 
-/* From Uiverse.io by alexmaracinaru */
-/* Botón de Enviar - Ajustes generales */
-button {
-  cursor: pointer;
-  font-weight: 700;
-  transition: all 0.2s;
+.button-container button {
   padding: 10px 20px;
   border-radius: 100px;
   background: #cfef00;
   border: 1px solid transparent;
+  font-size: 15px;
+  flex: 1; /* Asegura que los botones ocupen el mismo espacio */
   display: flex;
   align-items: center;
-  justify-content: center;  /* Centra el contenido dentro del botón */
-  font-size: 15px;
-  z-index: 3;
-  width: auto;  /* Asegura que el botón no se estire si no es necesario */
+  justify-content: center;
 }
 
-button:disabled {
-  background: gray;
-  cursor: not-allowed;
-}
-
-button:hover {
+.button-container button:hover {
   background: #c4e201;
 }
-
-button > svg {
-  width: 34px;
-  margin-left: 10px;
-  transition: transform 0.3s ease-in-out;
-}
-
-button:hover svg {
-  transform: translateX(5px);
-}
-
-button:active {
-  transform: scale(0.95);
-}
-
 
 /*----------------------------------------- pop-ups -----------------------------------------*/
 

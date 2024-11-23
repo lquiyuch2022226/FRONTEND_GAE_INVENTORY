@@ -50,7 +50,9 @@ export const Personal = () => {
     const endTimeSend = 10 * 60; // 10:00 AM
     const startTimeExit = 15 * 60 + 30; // 3:30 PM
     const endTimeExit = 18 * 60; // 6:00 PM
-  
+    console.log("Hora actual:", currentTimeInMinutes);
+    console.log("Estado botón Enviar:", !isSendButtonDisabled);
+    
     // Habilitar/deshabilitar botón Enviar
     setIsSendButtonDisabled(!(currentTimeInMinutes >= startTimeSend && currentTimeInMinutes <= endTimeSend));
   
@@ -64,8 +66,7 @@ export const Personal = () => {
     setAttendanceRecords(storedRecords);
   }, [userId]);
 
-  console.log("Hora actual:", currentTimeInMinutes);
-console.log("Estado botón Enviar:", !isSendButtonDisabled);
+
 
   useEffect(() => {
     const lastAttendanceDate = localStorage.getItem(`lastAttendance_${userId}`);

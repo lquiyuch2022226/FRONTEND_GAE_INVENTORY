@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar } from '../Navbar.jsx';
-import { reportarEntrada } from '../../services/api.jsx';
-import { Header } from "../header/Header.jsx"; // Importamos el Header
+import { Header } from "../header/Header.jsx"; 
 import './personal.css';
 import defaultAvatar from '../../assets/img/palmamorro.jpg';
-import earlyImage from '../../assets/img/comprobado.png';
-import lateImage from '../../assets/img/cerca.png';
 
 export const Personal = () => {
   const user = JSON.parse(localStorage.getItem('datosUsuario')) || {};
@@ -20,13 +17,11 @@ export const Personal = () => {
 
   const [showPopup, setShowPopup] = useState(false);
   const [reason, setReason] = useState("");
-  const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
-  const [isExitButtonDisabled, setIsExitButtonDisabled] = useState(true); // Inicialmente deshabilitado
-  const [exitTime, setExitTime] = useState(null); // Nueva variable para la hora de salida
+  const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(true); // Iniciar deshabilitado
+  const [isExitButtonDisabled, setIsExitButtonDisabled] = useState(true);
 
-  // Función para verificar la disponibilidad de los botones según la hora
+  // Función para actualizar la hora cada minuto
   useEffect(() => {
-    // Actualizar la hora actual cada minuto
     const interval = setInterval(() => {
       const now = new Date();
       setFormState({
@@ -35,9 +30,10 @@ export const Personal = () => {
       });
     }, 60000); // Actualiza cada 60 segundos
   
-    return () => clearInterval(interval); // Limpia el intervalo al desmontar el componente
+    return () => clearInterval(interval); // Limpiar el intervalo al desmontar el componente
   }, []);
   
+  // Verificar la disponibilidad de los botones
   useEffect(() => {
     const currentDate = new Date();
     const currentTimeInMinutes = currentDate.getHours() * 60 + currentDate.getMinutes();
@@ -46,10 +42,10 @@ export const Personal = () => {
     const hasRecordWithoutExit = attendanceRecords.some(record => record.date === formState.todayDate && !record.exitTime);
     const isWithinExitTime = currentTimeInMinutes >= 15 * 60 + 30 && currentTimeInMinutes <= 20 * 60;
 
-    setIsSendButtonDisabled(!isWithinSendTime);
-    setIsExitButtonDisabled(!(isWithinExitTime && hasRecordWithoutExit));
-  }, [attendanceRecords, formState.todayDate]);
-
+    setIsSendButtonDisabled(!isWithinSendTime); // Enviar habilitado entre 7:00 y 10:00
+    setIsExitButtonDisabled(!(isWithinExitTime && hasRecordWithoutExit)); // Salida habilitado entre 15:30 y 20:00
+  }, [attendanceRecords, formState.todayDate]); // Dependencias actualizadas
+  
   const handleAttendance = async () => {
     const todayDate = formState.todayDate;
     const currentTime = formState.currentTime;
@@ -82,7 +78,6 @@ export const Personal = () => {
     }
   };
 
-
   const handleMarkExit = () => {
     const exitTime = new Date().toTimeString().split(' ')[0];
 
@@ -92,7 +87,6 @@ export const Personal = () => {
         : record
     );
 
-    // Actualizar el estado y guardar en localStorage
     setAttendanceRecords(updatedRecords);
     localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
 
@@ -110,8 +104,6 @@ export const Personal = () => {
       <div className="posts-personal">
         {user ? (
           <div className="e-card playing">
-            <div className="image"></div>
-            <div className="wave" style={{ background: `linear-gradient(744deg, #030e2e, #023a0e, #05a00d)` }}></div>
             <div className="content-user">
               <div className="infotop">
                 <img

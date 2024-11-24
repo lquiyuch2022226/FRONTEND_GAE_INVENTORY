@@ -42,40 +42,29 @@ export const Personal = () => {
     const currentDate = new Date();
     const currentHour = currentDate.getHours();
     const currentMinute = currentDate.getMinutes();
-  
     const currentTimeInMinutes = currentHour * 60 + currentMinute;
   
     // Rangos de tiempo
     const startTimeSend = 7 * 60; // 7:00 AM
     const endTimeSend = 10 * 60; // 10:00 AM
     const startTimeExit = 15 * 60 + 30; // 3:30 PM
-    const endTimeExit = 20 * 60; // 6:00 PM
+    const endTimeExit = 20 * 60; // 8:00 PM
+  
+    // Actualizar estado del botón "Enviar"
+    const isWithinSendTime = currentTimeInMinutes >= startTimeSend && currentTimeInMinutes <= endTimeSend;
+    setIsSendButtonDisabled(!isWithinSendTime);
+  
+    // Actualizar estado del botón "Salida"
+    const hasRecordWithoutExit = attendanceRecords.some(record => record.date === formState.todayDate && !record.exitTime);
+    const isWithinExitTime = currentTimeInMinutes >= startTimeExit && currentTimeInMinutes <= endTimeExit;
+    setIsExitButtonDisabled(!(isWithinExitTime && hasRecordWithoutExit));
+  
     console.log("Hora actual:", currentTimeInMinutes);
     console.log("Estado botón Enviar:", !isSendButtonDisabled);
-    
-
-
-    // Habilitar/deshabilitar botón Enviar
-    setIsSendButtonDisabled(!(currentTimeInMinutes >= startTimeSend && currentTimeInMinutes <= endTimeSend));
+    console.log("Estado botón Salida:", !isExitButtonDisabled);
   
-    // Habilitar/deshabilitar botón de Salida
-    const hasRecordWithoutExit = attendanceRecords.some(record => record.date === formState.todayDate && !record.exitTime);
-    setIsExitButtonDisabled(!(currentTimeInMinutes >= startTimeExit && currentTimeInMinutes <= endTimeExit && hasRecordWithoutExit));
   }, [attendanceRecords, formState.todayDate]);
   
-  useEffect(() => {
-    const storedRecords = JSON.parse(localStorage.getItem(`attendanceRecords_${userId}`)) || [];
-    setAttendanceRecords(storedRecords);
-  }, [userId]);
-
-
-
-  useEffect(() => {
-    const lastAttendanceDate = localStorage.getItem(`lastAttendance_${userId}`);
-    const currentHour = new Date().getHours();
-    const isWithinAllowedTime = currentHour >= 20 && currentHour < 22;
-    setIsSendButtonDisabled(lastAttendanceDate === formState.todayDate || !isWithinAllowedTime);
-  }, [formState.todayDate, userId]);
   
   
 

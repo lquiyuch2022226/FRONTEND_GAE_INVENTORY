@@ -1,45 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar } from '../Navbar.jsx';
 import { reportarEntrada } from '../../services/api.jsx';
-import { Header } from "../header/Header.jsx";
+import { Header } from "../header/Header.jsx"; // Importamos el Header
 import './personal.css';
 import defaultAvatar from '../../assets/img/palmamorro.jpg';
+import earlyImage from '../../assets/img/comprobado.png';
+import lateImage from '../../assets/img/cerca.png';
 
 export const Personal = () => {
   const user = JSON.parse(localStorage.getItem('datosUsuario')) || {};
+  const [attendanceRecords, setAttendanceRecords] = useState([]);
   const userId = user.account?.homeAccountId || "Invitado";
   const userName = user.account?.name || "Invitado";
 
   const [formState, setFormState] = useState({
     todayDate: new Date().toISOString().split('T')[0],
-    currentTime: new Date().toTimeString().split(' ')[0],
+    currentTime: new Date().toTimeString().split(' ')[0]
   });
 
-  const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [reason, setReason] = useState("");
   const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
-  const [isExitButtonDisabled, setIsExitButtonDisabled] = useState(true);
+  const [isExitButtonDisabled, setIsExitButtonDisabled] = useState(true); // Inicialmente deshabilitado
+  const [exitTime, setExitTime] = useState(null); // Nueva variable para la hora de salida
 
-  // Cargar registros desde localStorage
+  // Función para verificar la disponibilidad de los botones según la hora
   useEffect(() => {
-    const storedRecords = JSON.parse(localStorage.getItem(`attendanceRecords_${userId}`)) || [];
-    setAttendanceRecords(storedRecords);
-  }, [userId]);
-
-  // Actualizar fecha y hora actuales cada minuto
-  useEffect(() => {
+    // Actualizar la hora actual cada minuto
     const interval = setInterval(() => {
       const now = new Date();
       setFormState({
         todayDate: now.toISOString().split('T')[0],
-        currentTime: now.toTimeString().split(' ')[0],
+        currentTime: now.toTimeString().split(' ')[0]
       });
-    }, 60000);
-    return () => clearInterval(interval);
+    }, 60000); // Actualiza cada 60 segundos
+  
+    return () => clearInterval(interval); // Limpia el intervalo al desmontar el componente
   }, []);
-
-  // Verificar disponibilidad de los botones según la hora
+  
   useEffect(() => {
     const currentDate = new Date();
     const currentTimeInMinutes = currentDate.getHours() * 60 + currentDate.getMinutes();
@@ -84,6 +82,7 @@ export const Personal = () => {
     }
   };
 
+
   const handleMarkExit = () => {
     const exitTime = new Date().toTimeString().split(' ')[0];
 
@@ -93,9 +92,15 @@ export const Personal = () => {
         : record
     );
 
+    // Actualizar el estado y guardar en localStorage
     setAttendanceRecords(updatedRecords);
     localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
+
     alert("Hora de salida registrada correctamente");
+  };
+
+  const handleShowPopup = () => {
+    setShowPopup(true); // Muestra el popup si es necesario
   };
 
   return (
@@ -105,6 +110,8 @@ export const Personal = () => {
       <div className="posts-personal">
         {user ? (
           <div className="e-card playing">
+            <div className="image"></div>
+            <div className="wave" style={{ background: `linear-gradient(744deg, #030e2e, #023a0e, #05a00d)` }}></div>
             <div className="content-user">
               <div className="infotop">
                 <img
@@ -118,10 +125,12 @@ export const Personal = () => {
                 </div>
               </div>
             </div>
-            <button onClick={() => setShowPopup(true)} disabled={isSendButtonDisabled}>
-              Enviar Entrada
+            <button onClick={handleShowPopup} disabled={isSendButtonDisabled}>
+              <span>Enviar</span>
             </button>
-            <button onClick={handleMarkExit} disabled={isExitButtonDisabled}>
+            <button 
+              onClick={handleMarkExit} 
+              disabled={isExitButtonDisabled}>
               Marcar Salida
             </button>
 

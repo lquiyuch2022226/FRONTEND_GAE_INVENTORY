@@ -46,20 +46,22 @@ export const Personal = () => {
     const currentTimeInMinutes = currentHour * 60 + currentMinute;
   
     // Rangos de tiempo
-    const startTimeSend = 7 * 60; // 7:00 AM en minutos
-    const endTimeSend = 10 * 60; // 10:00 AM en minutos
+    const startTimeSend = 7 * 60; // 7:00 AM
+    const endTimeSend = 10 * 60; // 10:00 AM
+    const startTimeExit = 15 * 60 + 30; // 3:30 PM
+    const endTimeExit = 20 * 60; // 6:00 PM
+    console.log("Hora actual:", currentTimeInMinutes);
+    console.log("Estado botón Enviar:", !isSendButtonDisabled);
+    
+
+
+    // Habilitar/deshabilitar botón Enviar
+    setIsSendButtonDisabled(!(currentTimeInMinutes >= startTimeSend && currentTimeInMinutes <= endTimeSend));
   
-    console.log("Hora actual en minutos:", currentTimeInMinutes);
-    console.log("Rango permitido: ", startTimeSend, "-", endTimeSend);
-  
-    // Determinar si el botón debe estar deshabilitado
-    const isOutsideSendTime = currentTimeInMinutes < startTimeSend || currentTimeInMinutes > endTimeSend;
-  
-    console.log("Estado botón Enviar (debe ser false si está permitido enviar):", isOutsideSendTime);
-  
-    setIsSendButtonDisabled(isOutsideSendTime); // El botón está deshabilitado si está fuera de rango
-  }, [formState.currentTime]);
-  
+    // Habilitar/deshabilitar botón de Salida
+    const hasRecordWithoutExit = attendanceRecords.some(record => record.date === formState.todayDate && !record.exitTime);
+    setIsExitButtonDisabled(!(currentTimeInMinutes >= startTimeExit && currentTimeInMinutes <= endTimeExit && hasRecordWithoutExit));
+  }, [attendanceRecords, formState.todayDate]);
   
   useEffect(() => {
     const storedRecords = JSON.parse(localStorage.getItem(`attendanceRecords_${userId}`)) || [];

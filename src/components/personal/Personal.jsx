@@ -1,77 +1,56 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar } from '../Navbar.jsx';
 import { reportarEntrada } from '../../services/api.jsx';
-import { Header } from "../header/Header.jsx"; // Importamos el Header
+import { Header } from "../header/Header.jsx";
 import './personal.css';
 import defaultAvatar from '../../assets/img/palmamorro.jpg';
-import earlyImage from '../../assets/img/comprobado.png';
-import lateImage from '../../assets/img/cerca.png';
 
 export const Personal = () => {
   const user = JSON.parse(localStorage.getItem('datosUsuario')) || {};
-  const [attendanceRecords, setAttendanceRecords] = useState([]);
   const userId = user.account?.homeAccountId || "Invitado";
   const userName = user.account?.name || "Invitado";
 
   const [formState, setFormState] = useState({
     todayDate: new Date().toISOString().split('T')[0],
-    currentTime: new Date().toTimeString().split(' ')[0]
+    currentTime: new Date().toTimeString().split(' ')[0],
   });
 
+  const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [reason, setReason] = useState("");
   const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
-  const [isExitButtonDisabled, setIsExitButtonDisabled] = useState(true); // Inicialmente deshabilitado
-  const [exitTime, setExitTime] = useState(null); // Nueva variable para la hora de salida
+  const [isExitButtonDisabled, setIsExitButtonDisabled] = useState(true);
 
-  // Función para verificar la disponibilidad de los botones según la hora
-  useEffect(() => {
-    // Actualizar la hora actual cada minuto
-    const interval = setInterval(() => {
-      const now = new Date();
-      setFormState({
-        todayDate: now.toISOString().split('T')[0],
-        currentTime: now.toTimeString().split(' ')[0]
-      });
-    }, 60000); // Actualiza cada 60 segundos
-  
-    return () => clearInterval(interval); // Limpia el intervalo al desmontar el componente
-  }, []);
-  
-  useEffect(() => {
-    const currentDate = new Date();
-    const currentHour = currentDate.getHours();
-    const currentMinute = currentDate.getMinutes();
-    const currentTimeInMinutes = currentHour * 60 + currentMinute;
-  
-    // Rangos de tiempo
-    const startTimeSend = 7 * 60; // 7:00 AM
-    const endTimeSend = 10 * 60; // 10:00 AM
-    const startTimeExit = 15 * 60 + 30; // 3:30 PM
-    const endTimeExit = 20 * 60; // 8:00 PM
-  
-    // Actualizar estado del botón "Enviar"
-    const isWithinSendTime = currentTimeInMinutes >= startTimeSend && currentTimeInMinutes <= endTimeSend;
-    setIsSendButtonDisabled(!isWithinSendTime);
-  
-    // Actualizar estado del botón "Salida"
-    const hasRecordWithoutExit = attendanceRecords.some(record => record.date === formState.todayDate && !record.exitTime);
-    const isWithinExitTime = currentTimeInMinutes >= startTimeExit && currentTimeInMinutes <= endTimeExit;
-    setIsExitButtonDisabled(!(isWithinExitTime && hasRecordWithoutExit));
-  
-    console.log("Hora actual:", currentTimeInMinutes);
-    console.log("Estado botón Enviar:", !isSendButtonDisabled);
-    console.log("Estado botón Salida:", !isExitButtonDisabled);
-  
-  }, [attendanceRecords, formState.todayDate]);
-  
-  
-  
-
+  // Cargar registros desde localStorage
   useEffect(() => {
     const storedRecords = JSON.parse(localStorage.getItem(`attendanceRecords_${userId}`)) || [];
     setAttendanceRecords(storedRecords);
   }, [userId]);
+
+  // Actualizar fecha y hora actuales cada minuto
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date();
+      setFormState({
+        todayDate: now.toISOString().split('T')[0],
+        currentTime: now.toTimeString().split(' ')[0],
+      });
+    }, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Verificar disponibilidad de los botones según la hora
+  useEffect(() => {
+    const currentDate = new Date();
+    const currentTimeInMinutes = currentDate.getHours() * 60 + currentDate.getMinutes();
+
+    const isWithinSendTime = currentTimeInMinutes >= 7 * 60 && currentTimeInMinutes <= 10 * 60;
+    const hasRecordWithoutExit = attendanceRecords.some(record => record.date === formState.todayDate && !record.exitTime);
+    const isWithinExitTime = currentTimeInMinutes >= 15 * 60 + 30 && currentTimeInMinutes <= 20 * 60;
+
+    setIsSendButtonDisabled(!isWithinSendTime);
+    setIsExitButtonDisabled(!(isWithinExitTime && hasRecordWithoutExit));
+  }, [attendanceRecords, formState.todayDate]);
 
   const handleAttendance = async () => {
     const todayDate = formState.todayDate;
@@ -88,53 +67,35 @@ export const Personal = () => {
         date: todayDate,
         time: currentTime,
         status,
-        reason: reason,
-        ip: userIp        
+        reason: status === "Tarde" ? reason : "",
+        ip: userIp,
       };
 
-      const response = await reportarEntrada(record);
-
-      if (response && response.error) {
-        console.error(response.error);
-        alert("Error al registrar la asistencia: " + response.error.message || response.error);
-      } else {
-        const updatedRecords = [...attendanceRecords, record];
-        setAttendanceRecords(updatedRecords);
-        localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
-
-        localStorage.setItem(`lastAttendance_${userId}`, todayDate);
-        alert("Asistencia registrada correctamente");
-      }
+      const updatedRecords = [...attendanceRecords, record];
+      setAttendanceRecords(updatedRecords);
+      localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
+      alert("Asistencia registrada correctamente");
     } catch (error) {
-      console.error("Error al registrar la asistencia:", error);
-      alert("Error al registrar la asistencia: " + error.message);
+      console.error("Error al registrar asistencia:", error);
+      alert("Hubo un error al registrar la asistencia");
     } finally {
       setShowPopup(false);
       setReason("");
     }
   };
 
-
   const handleMarkExit = () => {
-    const exitTime = new Date().toTimeString().split(' ')[0]; // Obtener la hora actual de salida
+    const exitTime = new Date().toTimeString().split(' ')[0];
 
-    // Buscar el registro de asistencia de hoy para este usuario
-    const updatedRecords = attendanceRecords.map(record => {
-      if (record.date === formState.todayDate && !record.exitTime) {
-        return { ...record, exitTime }; // Agregar la hora de salida al registro
-      }
-      return record;
-    });
+    const updatedRecords = attendanceRecords.map(record =>
+      record.date === formState.todayDate && !record.exitTime
+        ? { ...record, exitTime }
+        : record
+    );
 
-    // Actualizar el estado y guardar en localStorage
     setAttendanceRecords(updatedRecords);
     localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
-
     alert("Hora de salida registrada correctamente");
-  };
-
-  const handleShowPopup = () => {
-    setShowPopup(true); // Muestra el popup si es necesario
   };
 
   return (
@@ -144,8 +105,6 @@ export const Personal = () => {
       <div className="posts-personal">
         {user ? (
           <div className="e-card playing">
-            <div className="image"></div>
-            <div className="wave" style={{ background: `linear-gradient(744deg, #030e2e, #023a0e, #05a00d)` }}></div>
             <div className="content-user">
               <div className="infotop">
                 <img
@@ -159,12 +118,10 @@ export const Personal = () => {
                 </div>
               </div>
             </div>
-            <button onClick={handleShowPopup} disabled={isSendButtonDisabled}>
-              <span>Enviar</span>
+            <button onClick={() => setShowPopup(true)} disabled={isSendButtonDisabled}>
+              Enviar Entrada
             </button>
-            <button 
-              onClick={handleMarkExit} 
-              disabled={isExitButtonDisabled}>
+            <button onClick={handleMarkExit} disabled={isExitButtonDisabled}>
               Marcar Salida
             </button>
 

@@ -6,8 +6,6 @@ import * as XLSX from 'xlsx';
 import './personal.css';
 import { Header } from '../header/Header.jsx';
 import defaultAvatar from '../../assets/img/palmamorro.jpg';
-import earlyImage from '../../assets/img/comprobado.png';
-import lateImage from '../../assets/img/cerca.png';
 
 export const Personal = () => {
   const user = JSON.parse(localStorage.getItem('datosUsuario')) || {};
@@ -20,7 +18,6 @@ export const Personal = () => {
     currentTime: new Date().toTimeString().split(' ')[0]
   });
 
-  const [showPopup, setShowPopup] = useState(false);
   const [reason, setReason] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -45,20 +42,16 @@ export const Personal = () => {
       const ipData = await ipResponse.json();
       const userIp = ipData?.ip || 'IP no disponible';
 
-      const serverTimeResponse = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala');
-      const serverTimeData = await serverTimeResponse.json();
-      const serverDateTime = new Date(serverTimeData.datetime);
-
-      const currentHour = serverDateTime.getHours();
-      const status = currentHour < 8 ? "A tiempo" : currentHour < 11 ? "Tarde" : "Fuera de horario";
+      const currentHour = new Date().getHours();
+      const status = currentHour < 8 ? "A tiempo" : "Tarde";
 
       const record = {
         user: userName,
-        date: serverDateTime.toISOString().split('T')[0],
-        time: serverDateTime.toTimeString().split(' ')[0],
+        date: formState.todayDate,
+        time: formState.currentTime,
         status,
         ip: userIp,
-        reason: reason.trim(),
+        reason: currentHour >= 8 ? reason.trim() : "",
       };
 
       const response = await reportarEntrada(record);
@@ -77,48 +70,21 @@ export const Personal = () => {
     } catch (error) {
       console.error("Error al registrar la asistencia:", error);
       alert("Error al registrar la asistencia: " + error.message);
-    } finally {
-      setShowPopup(false);
-      setReason("");
     }
   };
 
-  const handleShowPopup = async () => {
-    try {
-      const serverTimeResponse = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala');
-      const serverTimeData = await serverTimeResponse.json();
-      const serverDateTime = new Date(serverTimeData.datetime);
-      const currentHour = serverDateTime.getHours();
-
-      if (currentHour >= 1 && currentHour <= 4) {
-        setShowPopup(true);
-      } else {
-        alert("El registro de asistencia solo está permitido de 7:00 a 10:00 a.m.");
-      }
-    } catch (error) {
-      console.error("Error obteniendo la hora del servidor:", error);
-    }
-  };
-
-  const handleConfirmAttendance = () => {
+  const handleSubmit = () => {
     const currentHour = new Date().getHours();
     if (currentHour >= 8 && !reason.trim()) {
       alert("Por favor, ingresa una razón si llegaste tarde.");
       return;
     }
-    setIsSubmitting(true);
     handleAttendance();
-  };
-
-  const handleCancelAttendance = () => {
-    setShowPopup(false);
-    setReason("");
   };
 
   useEffect(() => {
     fetchInternetTime();
 
-    // Verificar si el usuario ya envió su asistencia hoy
     const savedRecords = JSON.parse(localStorage.getItem(`attendanceRecords_${userId}`)) || [];
     const todayDate = new Date().toISOString().split('T')[0];
     const hasReportedToday = savedRecords.some(record => record.date === todayDate);
@@ -137,9 +103,9 @@ export const Personal = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const usuarioLogueado = JSON.parse(localStorage.getItem('datosUsuario')) || {};
   const currentHour = new Date().getHours();
-  const waveColors = currentHour < 8 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
+  const isLate = currentHour >= 8;
+  const isButtonEnabled = currentHour >= 6 && currentHour < 12 && !isSubmitting;
 
   return (
     <div className="personal">

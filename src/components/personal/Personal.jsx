@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { reportarEntrada } from '../../services/api.jsx';
 import * as XLSX from 'xlsx';
 import './personal.css';
-import { Header } from '../header/Header.jsx';
+import {Header} from '../header/Header.jsx';
 import defaultAvatar from '../../assets/img/palmamorro.jpg';
 import earlyImage from '../../assets/img/comprobado.png';
 import lateImage from '../../assets/img/cerca.png';
@@ -24,39 +24,8 @@ export const Personal = () => {
   const [showPopup, setShowPopup] = useState(false); // Estado para controlar el popup
   const [reason, setReason] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false); // Estado para evitar múltiples envíos
+
   
-  // Verificar si la hora actual está antes o después de las 8:00 AM
-  const currentHour = new Date().getHours();
-  const isLate = currentHour >= 8;
-
-  useEffect(() => {
-    // Función para obtener la hora de servidor y fecha
-    const fetchInternetTime = async () => {
-      try {
-        const response = await fetch('http://worldtimeapi.org/api/timezone/America/Guatemala');
-        const data = await response.json();
-        const currentDateTime = new Date(data.datetime);
-        setFormState((prevState) => ({
-          ...prevState,
-          todayDate: currentDateTime.toISOString().split('T')[0],
-          currentTime: currentDateTime.toTimeString().split(' ')[0],
-        }));
-      } catch (error) {
-        console.error("Error fetching internet time:", error);
-      }
-    };
-
-    fetchInternetTime();
-    const interval = setInterval(() => {
-      setFormState((prevState) => ({
-        ...prevState,
-        currentTime: new Date().toTimeString().split(' ')[0]
-      }));
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
   const handleAttendance = async () => {
     try {
       // Obtener la IP del usuario
@@ -65,7 +34,7 @@ export const Personal = () => {
       const userIp = ipData && ipData.ip ? ipData.ip : 'IP no disponible';
   
       // Obtener la hora y fecha del servidor con HTTPS
-      const serverTimeResponse = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala');
+      const serverTimeResponse = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala'); // Usar HTTPS
       const serverTimeData = await serverTimeResponse.json();
       const serverDateTime = new Date(serverTimeData.utc_datetime);
   
@@ -110,13 +79,44 @@ export const Personal = () => {
       setReason("");
     }
   };
+  
+  
+  const usuarioLogueado = JSON.parse(localStorage.getItem('datosUsuario')) || {};
+  const currentHour = new Date().getHours();
+  const isOnTime = currentHour < 8 ? "A tiempo" : "Tarde";
+  const imageToShow = currentHour < 8 ? earlyImage : lateImage;
+  const backgroundColor = currentHour < 8 ? '#359100' : '#8b0000';
+  const waveColors = currentHour < 8 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
+
+  const fetchInternetTime = async () => {
+    try {
+      const response = await fetch('http://worldtimeapi.org/api/timezone/America/Guatemala');
+      const data = await response.json();
+      const currentDateTime = new Date(data.datetime);
+      setFormState((prevState) => ({
+        ...prevState,
+        todayDate: currentDateTime.toISOString().split('T')[0],
+        currentTime: currentDateTime.toTimeString().split(' ')[0],
+      }));
+    } catch (error) {
+      console.error("Error fetching internet time:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchInternetTime();
+    const interval = setInterval(() => {
+      setFormState((prevState) => ({
+        ...prevState,
+        currentTime: new Date().toTimeString().split(' ')[0]
+      }));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handleShowPopup = () => {
-    if (isLate) {
-      setShowPopup(true); // Solo muestra el popup si está tarde
-    } else {
-      handleAttendance(); // Si está a tiempo, registra la asistencia directamente
-    }
+    setShowPopup(true); // Muestra el pop-up
   };
 
   const handleConfirmAttendance = () => {
@@ -131,24 +131,26 @@ export const Personal = () => {
 
   return (
     <div className="personal">
-      <Navbar user={user} />
+      <Navbar user={usuarioLogueado} />
       <Header />
       <div className="posts-personal">
-        {user ? (
+        {usuarioLogueado ? (
           <div className="e-card playing">
             <div className="image"></div>
-            <div className="wave" style={{ background: `linear-gradient(744deg, ${isLate ? '#8b0000' : '#359100'}, ${isLate ? '#b22222' : '#023a0e'})` }}></div>
+            <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})` }}></div>
+            <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '210px' }}></div>
+            <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '420px' }}></div>
 
             <div className='content-user'>
               <div className="infotop">
                 <img
-                  src={user.profilePicture || defaultAvatar}
+                  src={usuarioLogueado.profilePicture || defaultAvatar}
                   alt="User Icon"
                   className="icon"
                 />
                 <div className="user-info text-white">
-                  <div className="user-name">{user.account.name}</div>
-                  <div className="user-department">{user.account.username}</div>
+                  <div className="user-name">{usuarioLogueado.account.name}</div>
+                  <div className="user-department">{usuarioLogueado.account.username}</div>
                 </div>
               </div>
             </div>

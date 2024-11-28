@@ -133,7 +133,7 @@ const handleShowPopup = async () => {
 
   const usuarioLogueado = JSON.parse(localStorage.getItem('datosUsuario')) || {};
   const currentHour = new Date().getHours();
-  const waveColors = currentHour < 8 ? ['#8b0000', '#b22222', '#ff4500']: ['#030e2e', '#023a0e', '#05a00d']  ;
+  const waveColors = currentHour < 8 ?  ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
 
   return (
     <div className="personal">

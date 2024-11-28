@@ -26,31 +26,35 @@ export const Personal = () => {
 
   const handleAttendance = async () => {
     try {
+      // Obtener IP del usuario
       const ipResponse = await fetch('https://api.ipify.org?format=json');
       const ipData = await ipResponse.json();
-      const userIp = ipData && ipData.ip ? ipData.ip : 'IP no disponible';
-
+      const userIp = ipData?.ip || 'IP no disponible';
+  
+      // Obtener hora del servidor
       const serverTimeResponse = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala');
       const serverTimeData = await serverTimeResponse.json();
-      const serverDateTime = new Date(serverTimeData.utc_datetime);
-
+      const serverDateTime = new Date(serverTimeData.datetime);
+  
       const currentHour = serverDateTime.getHours();
-      const status = currentHour < 8 ? "A tiempo" : "Tarde";
-
+      const status = currentHour < 8 ? "A tiempo" : currentHour < 11 ? "Tarde" : "Fuera de horario";
+  
+      // Crear registro
       const record = {
         user: userName,
-        date: formState.todayDate,
-        time: formState.currentTime,
+        date: serverDateTime.toISOString().split('T')[0],
+        time: serverDateTime.toTimeString().split(' ')[0],
         status,
         ip: userIp,
-        reason: reason.trim()
+        reason: reason.trim(),
       };
-
+  
+      // Enviar a la API
       const response = await reportarEntrada(record);
-
-      if (response && response.error) {
+  
+      if (response?.error) {
         console.error(response.error);
-        alert("Error al registrar la asistencia: " + response.error.message || response.error);
+        alert("Error al registrar la asistencia: " + (response.error.message || response.error));
       } else {
         const updatedRecords = [...attendanceRecords, record];
         setAttendanceRecords(updatedRecords);
@@ -66,7 +70,7 @@ export const Personal = () => {
       setIsSubmitting(false);
     }
   };
-
+  
   const fetchInternetTime = async () => {
     try {
       const response = await fetch('http://worldtimeapi.org/api/timezone/America/Guatemala');
@@ -94,14 +98,23 @@ export const Personal = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleShowPopup = () => {
-    const currentHour = new Date().getHours();
+const handleShowPopup = async () => {
+  try {
+    const serverTimeResponse = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala');
+    const serverTimeData = await serverTimeResponse.json();
+    const serverDateTime = new Date(serverTimeData.datetime);
+    const currentHour = serverDateTime.getHours();
+
     if (currentHour >= 7 && currentHour <= 10) {
       setShowPopup(true);
     } else {
       alert("El registro de asistencia solo está permitido de 7:00 a 10:00 a.m.");
     }
-  };
+  } catch (error) {
+    console.error("Error obteniendo la hora del servidor:", error);
+  }
+};
+
 
   const handleConfirmAttendance = () => {
     const currentHour = new Date().getHours();

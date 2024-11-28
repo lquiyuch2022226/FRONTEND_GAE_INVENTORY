@@ -9,13 +9,15 @@ export const Header = () => {
   });
   const [isLate, setIsLate] = useState(false);
 
-  useEffect(() => {
-    const updateDateTime = () => {
-      const now = new Date();
-      const hours = now.getHours();
-      const minutes = now.getMinutes();
+  const fetchInternetTime = async () => {
+    try {
+      const response = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala');
+      const data = await response.json();
+      const currentDateTime = new Date(data.datetime);
+      const hours = currentDateTime.getHours();
+      const minutes = currentDateTime.getMinutes();
       const formattedTime = `${hours}:${minutes < 10 ? `0${minutes}` : minutes}`;
-      const formattedDate = now.toLocaleDateString('es-ES');
+      const formattedDate = currentDateTime.toLocaleDateString('es-ES');
 
       setFormState({
         todayDate: formattedDate,
@@ -23,10 +25,14 @@ export const Header = () => {
       });
 
       setIsLate(hours >= 8); // Actualiza el estado "A tiempo/Tarde"
-    };
+    } catch (error) {
+      console.error("Error fetching internet time:", error);
+    }
+  };
 
-    updateDateTime();
-    const interval = setInterval(updateDateTime, 60000); // Actualiza cada minuto
+  useEffect(() => {
+    fetchInternetTime();
+    const interval = setInterval(fetchInternetTime, 60000); // Actualiza cada minuto desde la API
     return () => clearInterval(interval); // Limpia el intervalo al desmontar el componente
   }, []);
 

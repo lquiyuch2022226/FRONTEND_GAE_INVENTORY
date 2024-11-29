@@ -169,13 +169,11 @@ export const Personal = () => {
               </svg>
             </button>
 
-            {/* Pop-up para confirmar */}
-            {/* Pop-up para confirmar */}
             {showPopup && (
               <div className="popup">
                 <div className="popup-content">
                   <p>¿Estás seguro de que deseas registrar tu asistencia?</p>
-                  {currentHour >= 8 && (
+                  {formState.currentTime.split(':')[0] >= 8 && (
                     <textarea
                       placeholder="Escribe aquí la razón de tu asistencia"
                       value={reason}
@@ -191,6 +189,7 @@ export const Personal = () => {
                 </div>
               </div>
             )}
+
 
           </div>
         ) : (

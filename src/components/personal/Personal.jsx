@@ -5,7 +5,7 @@ import { reportarEntrada } from '../../services/api.jsx';
 import * as XLSX from 'xlsx';
 import './personal.css';
 import { Header } from '../header/Header.jsx';
-import defaultAvatar from '../../assets/img/palmamorro.jpg';
+/* import defaultAvatar from '../../assets/img/palmamorro.jpg'; */
 import earlyImage from '../../assets/img/comprobado.png';
 import lateImage from '../../assets/img/cerca.png';
 
@@ -98,7 +98,7 @@ export const Personal = () => {
     return () => clearInterval(interval);
   }, []);
 
-const handleShowPopup = async () => {
+/* const handleShowPopup = async () => {
   try {
     const serverTimeResponse = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala');
     const serverTimeData = await serverTimeResponse.json();
@@ -114,7 +114,7 @@ const handleShowPopup = async () => {
     console.error("Error obteniendo la hora del servidor:", error);
   }
 };
-
+ */
 
   const handleConfirmAttendance = () => {
     const currentHour = new Date().getHours();

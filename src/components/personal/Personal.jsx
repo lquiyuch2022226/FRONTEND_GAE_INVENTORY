@@ -21,7 +21,6 @@ export const Personal = () => {
     currentTime: new Date().toTimeString().split(' ')[0]
   });
 
-
   const [showPopup, setShowPopup] = useState(false); // Estado para controlar el popup
   const [reason, setReason] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false); // Estado para evitar múltiples envíos
@@ -40,7 +39,7 @@ export const Personal = () => {
 
       // Calcular el estado basado en la hora del servidor
       const currentHour = serverDateTime.getHours();
-      const status = currentHour < 8 ? "A tiempo" : "Tarde";
+      const status = currentHour < 4 ? "A tiempo" : "Tarde";
 
       // Crear el objeto de registro
       const record = {
@@ -85,7 +84,7 @@ export const Personal = () => {
   const isOnTime = currentHour < 8 ? "A tiempo" : "Tarde";
   const imageToShow = currentHour < 8 ? earlyImage : lateImage;
   const backgroundColor = currentHour < 8 ? '#359100' : '#8b0000';
-  const waveColors = currentHour < 8 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
+  const waveColors = currentHour < 4 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
 
   const fetchInternetTime = async () => {
     try {
@@ -115,16 +114,8 @@ export const Personal = () => {
   }, []);
 
   const handleShowPopup = () => {
-    const currentHour = new Date().getHours();
-    if (currentHour < 8) {
-      // Si está a tiempo, registrar directamente
-      handleAttendance();
-    } else {
-      // Si llega tarde, mostrar el popup
-      setShowPopup(true);
-    }
+    setShowPopup(true); // Muestra el pop-up
   };
-
 
   const handleConfirmAttendance = () => {
     setShowPopup(false);
@@ -139,7 +130,7 @@ export const Personal = () => {
   // Nueva función para validar horario
   const isTimeInRange = () => {
     const currentHour = parseInt(formState.currentTime.split(':')[0], 10);
-    return currentHour >= 6 && currentHour < 12; // De 6:00 AM a 12:00 PM
+    return currentHour >= 3 && currentHour < 12; // De 6:00 AM a 12:00 PM
   };
 
   return (
@@ -193,7 +184,7 @@ export const Personal = () => {
               <div className="popup">
                 <div className="popup-content">
                   <p>¿Estás seguro de que deseas registrar tu asistencia?</p>
-                  {parseInt(formState.currentTime.split(':')[0], 10) >= 8 && (
+                  {parseInt(formState.currentTime.split(':')[0], 10) >= 4 && (
                     <textarea
                       placeholder="Escribe aquí la razón de tu asistencia"
                       value={reason}
@@ -215,7 +206,6 @@ export const Personal = () => {
                 </div>
               </div>
             )}
-
 
           </div>
         ) : (

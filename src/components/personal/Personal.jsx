@@ -15,12 +15,11 @@ export const Personal = () => {
   const userId = user.account?.homeAccountId || "Invitado";
   const userName = user.account?.name || "Invitado";
 
-  // Definimos el estado formState
   const [formState, setFormState] = useState({
     todayDate: new Date().toISOString().split('T')[0],
-    currentTime: new Date().toTimeString().split(' ')[0]
+    currentTime: new Date().toTimeString().split(' ')[0],
   });
-
+  
   const [showPopup, setShowPopup] = useState(false); // Estado para controlar el popup
   const [reason, setReason] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false); // Estado para evitar múltiples envíos
@@ -88,32 +87,33 @@ export const Personal = () => {
 
   const fetchInternetTime = async () => {
     try {
-      const response = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala'); // Cambiar a HTTPS
+      const response = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala');
       const data = await response.json();
       const currentDateTime = new Date(data.datetime);
-      setFormState((prevState) => ({
-        ...prevState,
+  
+      // Actualiza la fecha y hora obtenidas de la API
+      setFormState({
         todayDate: currentDateTime.toISOString().split('T')[0],
         currentTime: currentDateTime.toTimeString().split(' ')[0],
-      }));
+      });
     } catch (error) {
       console.error("Error fetching internet time:", error);
     }
   };
-  
+    
 
   useEffect(() => {
-    fetchInternetTime();
+    fetchInternetTime(); // Llamar la función al montar el componente
     const interval = setInterval(() => {
       setFormState((prevState) => ({
         ...prevState,
         currentTime: new Date().toTimeString().split(' ')[0]
       }));
     }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
+  
+    return () => clearInterval(interval); // Limpiar intervalo al desmontar el componente
+  }, []); // El array vacío asegura que solo se ejecute una vez
+  
   const handleShowPopup = () => {
     const currentHour = new Date().getHours();
     if (currentHour < 8) {

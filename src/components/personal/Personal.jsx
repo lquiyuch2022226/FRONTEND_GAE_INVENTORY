@@ -156,14 +156,7 @@ export const Personal = () => {
                 </div>
               </div>
             </div>
-            <button
-              onClick={handleShowPopup}
-              disabled={!isTimeInRange()} // Desactiva el botón si está fuera del rango
-              style={{
-                cursor: isTimeInRange() ? 'pointer' : 'not-allowed', // Cambia el cursor según el estado
-                opacity: isTimeInRange() ? 1 : 0.5, // Ajusta la opacidad
-              }}
-            >
+            <button onClick={handleShowPopup}>
               <span>Enviar</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -179,6 +172,7 @@ export const Personal = () => {
                 ></path>
               </svg>
             </button>
+
 
             {showPopup && (
               <div className="popup">

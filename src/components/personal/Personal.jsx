@@ -39,7 +39,7 @@ export const Personal = () => {
 
       // Calcular el estado basado en la hora del servidor
       const currentHour = serverDateTime.getHours();
-      const status = currentHour < 8 ? "A tiempo" : "Tarde";
+      const status = currentHour < 4 ? "A tiempo" : "Tarde";
 
       // Crear el objeto de registro
       const record = {
@@ -130,7 +130,7 @@ export const Personal = () => {
   // Nueva función para validar horario
   const isTimeInRange = () => {
     const currentHour = parseInt(formState.currentTime.split(':')[0], 10);
-    return currentHour >= 3 && currentHour < 4; // De 6:00 AM a 12:00 PM
+    return currentHour >= 3 && currentHour < 12; // De 6:00 AM a 12:00 PM
   };
 
   return (

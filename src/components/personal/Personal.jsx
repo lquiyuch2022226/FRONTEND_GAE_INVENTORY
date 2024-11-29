@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { reportarEntrada } from '../../services/api.jsx';
 import * as XLSX from 'xlsx';
 import './personal.css';
-import {Header} from '../header/Header.jsx';
+import { Header } from '../header/Header.jsx';
 import defaultAvatar from '../../assets/img/palmamorro.jpg';
 import earlyImage from '../../assets/img/comprobado.png';
 import lateImage from '../../assets/img/cerca.png';
@@ -25,23 +25,23 @@ export const Personal = () => {
   const [reason, setReason] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false); // Estado para evitar múltiples envíos
 
-  
+
   const handleAttendance = async () => {
     try {
       // Obtener la IP del usuario
       const ipResponse = await fetch('https://api.ipify.org?format=json');
       const ipData = await ipResponse.json();
       const userIp = ipData && ipData.ip ? ipData.ip : 'IP no disponible';
-  
+
       // Obtener la hora y fecha del servidor con HTTPS
       const serverTimeResponse = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala'); // Usar HTTPS
       const serverTimeData = await serverTimeResponse.json();
       const serverDateTime = new Date(serverTimeData.utc_datetime);
-  
+
       // Calcular el estado basado en la hora del servidor
       const currentHour = serverDateTime.getHours();
       const status = currentHour < 8 ? "A tiempo" : "Tarde";
-  
+
       // Crear el objeto de registro
       const record = {
         user: userName,
@@ -51,12 +51,12 @@ export const Personal = () => {
         ip: userIp,
         reason: reason
       };
-  
+
       console.log(record);
-  
+
       // Enviar al backend
       const response = await reportarEntrada(record);
-  
+
       if (response && response.error) {
         console.error(response.error);
         alert("Error al registrar la asistencia: " + response.error.message || response.error);
@@ -64,10 +64,10 @@ export const Personal = () => {
         // Actualizar los registros en el frontend (localStorage)
         const updatedRecords = [...attendanceRecords, record];
         setAttendanceRecords(updatedRecords);
-  
+
         // Guardar los registros actualizados en localStorage
         localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
-  
+
         // Mostrar mensaje de éxito
         alert("Asistencia registrada correctamente");
       }
@@ -79,8 +79,8 @@ export const Personal = () => {
       setReason("");
     }
   };
-  
-  
+
+
   const usuarioLogueado = JSON.parse(localStorage.getItem('datosUsuario')) || {};
   const currentHour = new Date().getHours();
   const isOnTime = currentHour < 8 ? "A tiempo" : "Tarde";
@@ -136,9 +136,9 @@ export const Personal = () => {
       <div className="posts-personal">
         {usuarioLogueado ? (
           <div className="e-card playing">
-          <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})` }}></div>
-          <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '210px' }}></div>
-          <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '420px' }}></div>
+            <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})` }}></div>
+            <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '210px' }}></div>
+            <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '420px' }}></div>
             <div className='content-user'>
               <div className="infotop">
                 <img
@@ -170,17 +170,20 @@ export const Personal = () => {
             </button>
 
             {/* Pop-up para confirmar */}
+            {/* Pop-up para confirmar */}
             {showPopup && (
               <div className="popup">
                 <div className="popup-content">
                   <p>¿Estás seguro de que deseas registrar tu asistencia?</p>
-                  <textarea
-                    placeholder="Escribe aquí la razón de tu asistencia"
-                    value={reason}
-                    onChange={(e) => setReason(e.target.value)}
-                    rows="4"
-                    style={{ width: '100%', marginTop: '10px', padding: '8px' }}
-                  />
+                  {currentHour >= 8 && (
+                    <textarea
+                      placeholder="Escribe aquí la razón de tu asistencia"
+                      value={reason}
+                      onChange={(e) => setReason(e.target.value)}
+                      rows="4"
+                      style={{ width: '100%', marginTop: '10px', padding: '8px' }}
+                    />
+                  )}
                   <div className="popup-actions">
                     <button onClick={handleConfirmAttendance}>Sí</button>
                     <button onClick={handleCancelAttendance}>No</button>
@@ -188,6 +191,7 @@ export const Personal = () => {
                 </div>
               </div>
             )}
+
           </div>
         ) : (
           <p>No hay datos del usuario disponibles.</p>

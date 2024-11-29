@@ -64,7 +64,7 @@ export const Personal = () => {
       const serverDateTime = new Date(serverTimeData.utc_datetime);
 
       const currentHour = serverDateTime.getHours();
-      if (currentHour < 6 || currentHour >= 12) {
+      if (currentHour < 4 || currentHour >= 12) {
         alert("Solo se puede registrar asistencia entre las 6:00 am y las 12:00 pm.");
         return;
       }

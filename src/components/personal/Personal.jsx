@@ -85,24 +85,16 @@ export const Personal = () => {
 
   const handleShowPopup = async () => {
     try {
-      const serverTimeResponse = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala');
-      const serverTimeData = await serverTimeResponse.json();
-      const serverDateTime = new Date(serverTimeData.datetime);
-      const currentHour = serverDateTime.getHours();
-
-      if (currentHour >= 1 && currentHour <= 4) {
-        setShowPopup(true);
-      } else {
-        alert("El registro de asistencia solo está permitido de 7:00 a 10:00 a.m.");
-      }
+      // Eliminar validación horaria: Permitir que el popup se muestre sin restricciones de horario
+      setShowPopup(true);
     } catch (error) {
       console.error("Error obteniendo la hora del servidor:", error);
     }
   };
 
   const handleConfirmAttendance = () => {
-    const currentHour = new Date().getHours();
-    if (currentHour >= 8 && !reason.trim()) {
+    // Mantener la validación para exigir razón si el usuario está tarde
+    if (!reason.trim() && formState.currentTime >= "08:00:00") {
       alert("Por favor, ingresa una razón si llegaste tarde.");
       return;
     }
@@ -184,7 +176,7 @@ export const Personal = () => {
               <div className="popup">
                 <div className="popup-content">
                   <p>¿Estás seguro de que deseas registrar tu asistencia?</p>
-                  {currentHour >= 8 && (
+                  {formState.currentTime >= "08:00:00" && (
                     <textarea
                       placeholder="Escribe aquí la razón de tu asistencia"
                       value={reason}
@@ -193,16 +185,14 @@ export const Personal = () => {
                       style={{ width: '100%', marginTop: '10px', padding: '8px' }}
                     />
                   )}
-                  <div className="popup-actions">
-                    <button onClick={handleConfirmAttendance}>Sí</button>
-                    <button onClick={handleCancelAttendance}>No</button>
-                  </div>
+                  <button onClick={handleConfirmAttendance}>Sí</button>
+                  <button onClick={handleCancelAttendance}>No</button>
                 </div>
               </div>
             )}
           </div>
         ) : (
-          <p>No hay datos del usuario disponibles.</p>
+          <h1>Acceso denegado.</h1>
         )}
       </div>
     </div>

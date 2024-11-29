@@ -130,7 +130,7 @@ export const Personal = () => {
   // Nueva función para validar horario
   const isTimeInRange = () => {
     const currentHour = parseInt(formState.currentTime.split(':')[0], 10);
-    return currentHour >= 6 && currentHour < 12; // De 6:00 AM a 12:00 PM
+    return currentHour >= 3 && currentHour < 12; // De 6:00 AM a 12:00 PM
   };
 
   return (

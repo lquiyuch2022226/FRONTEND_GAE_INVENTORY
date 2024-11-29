@@ -39,7 +39,7 @@ export const Personal = () => {
 
       // Calcular el estado basado en la hora del servidor
       const currentHour = serverDateTime.getHours();
-      const status = currentHour < 4? "A tiempo" : "Tarde";
+      const status = currentHour < 4 ? "A tiempo" : "Tarde";
 
       // Crear el objeto de registro
       const record = {
@@ -181,31 +181,31 @@ export const Personal = () => {
             </button>
 
             {showPopup && (
-  <div className="popup">
-    <div className="popup-content">
-      <p>¿Estás seguro de que deseas registrar tu asistencia?</p>
-      {parseInt(formState.currentTime.split(':')[0], 10) >= 8 && (
-        <textarea
-          placeholder="Escribe aquí la razón de tu asistencia"
-          value={reason}
-          onChange={(e) => setReason(e.target.value)}
-          rows="4"
-          style={{
-            width: '100%', 
-            marginTop: '10px', 
-            padding: '8px', 
-            border: '1px solid #ccc',  // Agrega un borde para asegurarte que sea visible
-            backgroundColor: '#f9f9f9'  // Fondo para asegurar la visibilidad
-          }}
-        />
-      )}
-      <div className="popup-actions">
-        <button onClick={handleConfirmAttendance}>Sí</button>
-        <button onClick={handleCancelAttendance}>No</button>
-      </div>
-    </div>
-  </div>
-)}
+              <div className="popup">
+                <div className="popup-content">
+                  <p>¿Estás seguro de que deseas registrar tu asistencia?</p>
+                  {parseInt(formState.currentTime.split(':')[0], 10) >= 8 && (
+                    <textarea
+                      placeholder="Escribe aquí la razón de tu asistencia"
+                      value={reason}
+                      onChange={(e) => setReason(e.target.value)}
+                      rows="4"
+                      style={{
+                        width: '100%',
+                        marginTop: '10px',
+                        padding: '8px',
+                        border: '1px solid #ccc',  // Agrega un borde para asegurarte que sea visible
+                        backgroundColor: '#f9f9f9'  // Fondo para asegurar la visibilidad
+                      }}
+                    />
+                  )}
+                  <div className="popup-actions">
+                    <button onClick={handleConfirmAttendance}>Sí</button>
+                    <button onClick={handleCancelAttendance}>No</button>
+                  </div>
+                </div>
+              </div>
+            )}
 
           </div>
         ) : (

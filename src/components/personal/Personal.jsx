@@ -184,13 +184,19 @@ export const Personal = () => {
   <div className="popup">
     <div className="popup-content">
       <p>¿Estás seguro de que deseas registrar tu asistencia?</p>
-      {parseInt(formState.currentTime.split(':')[0], 10) >= 8 && (  // Verifica si la hora es mayor o igual a 8
+      {parseInt(formState.currentTime.split(':')[0], 10) >= 8 && (
         <textarea
           placeholder="Escribe aquí la razón de tu asistencia"
           value={reason}
           onChange={(e) => setReason(e.target.value)}
           rows="4"
-          style={{ width: '100%', marginTop: '10px', padding: '8px' }}
+          style={{
+            width: '100%', 
+            marginTop: '10px', 
+            padding: '8px', 
+            border: '1px solid #ccc',  // Agrega un borde para asegurarte que sea visible
+            backgroundColor: '#f9f9f9'  // Fondo para asegurar la visibilidad
+          }}
         />
       )}
       <div className="popup-actions">
@@ -200,8 +206,6 @@ export const Personal = () => {
     </div>
   </div>
 )}
-
-
 
           </div>
         ) : (

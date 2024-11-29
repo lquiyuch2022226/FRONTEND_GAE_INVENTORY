@@ -114,8 +114,16 @@ export const Personal = () => {
   }, []);
 
   const handleShowPopup = () => {
-    setShowPopup(true); // Muestra el pop-up
+    const currentHour = new Date().getHours();
+    if (currentHour < 8) {
+      // Si está a tiempo, registrar directamente
+      handleAttendance();
+    } else {
+      // Si llega tarde, mostrar el popup
+      setShowPopup(true);
+    }
   };
+
 
   const handleConfirmAttendance = () => {
     setShowPopup(false);
@@ -206,6 +214,7 @@ export const Personal = () => {
                 </div>
               </div>
             )}
+
 
           </div>
         ) : (

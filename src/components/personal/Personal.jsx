@@ -76,7 +76,7 @@ export const Personal = () => {
         const updatedRecords = [...attendanceRecords, record];
         setAttendanceRecords(updatedRecords);
 
-        // Guardar los registros actualizados en localStorage
+        // Guardar los registros actualizados en localStorage con el ID del usuario
         localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
         
         // Guardar la fecha de envío para evitar envíos posteriores por el mismo usuario
@@ -190,7 +190,7 @@ export const Personal = () => {
                 <circle strokeWidth="3" stroke="black" r="35.5" cy="37" cx="37"></circle>
                 <path
                   fill="black"
-                  d="M25 35.5C24.1716 35.5 23.5 36.1716 23.5 37C23.5 37.8284 24.1716 38.5 25 38.5H49C49.8284 38.5 50.5 37.8284 50.5 37C50.5 36.1716 49.8284 35.5 49 35.5H25Z"
+                  d="M25 35L35 25V30H45V25H50V35H45V40H50V45H45V40H35V45H30V40H25Z"
                 ></path>
               </svg>
             </button>

@@ -113,25 +113,21 @@ export const Personal = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleShowPopup = () => {
-    setShowPopup(true); // Muestra el pop-up
-  };
-
   const handleConfirmAttendance = () => {
-    setShowPopup(false);
-    handleAttendance(); // Realiza el registro de asistencia
+    const currentHour = new Date().getHours();
+    if (currentHour >= 4 && !reason.trim()) {
+      alert("Por favor, ingresa una razón si llegaste tarde.");
+      return;
+    }
+    setIsSubmitting(true);
+    handleAttendance();
   };
 
   const handleCancelAttendance = () => {
-    setShowPopup(false); // Cierra el pop-up sin hacer nada
+    setShowPopup(false);
     setReason("");
   };
 
-  // Nueva función para validar horario
-  const isTimeInRange = () => {
-    const currentHour = parseInt(formState.currentTime.split(':')[0], 10);
-    return currentHour >= 3 && currentHour < 12; // De 6:00 AM a 12:00 PM
-  };
 
   return (
     <div className="personal">

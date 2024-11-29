@@ -24,6 +24,53 @@ export const Personal = () => {
   const [reason, setReason] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const handleAttendance = async () => {
+    try {
+      // Obtener IP del usuario
+      const ipResponse = await fetch('https://api.ipify.org?format=json');
+      const ipData = await ipResponse.json();
+      const userIp = ipData?.ip || 'IP no disponible';
+  
+      // Obtener hora del servidor
+      const serverTimeResponse = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala');
+      const serverTimeData = await serverTimeResponse.json();
+      const serverDateTime = new Date(serverTimeData.datetime);
+  
+      const currentHour = serverDateTime.getHours();
+      const status = currentHour < 8 ? "A tiempo" : currentHour < 11 ? "Tarde" : "Fuera de horario";
+  
+      // Crear registro
+      const record = {
+        user: userName,
+        date: serverDateTime.toISOString().split('T')[0],
+        time: serverDateTime.toTimeString().split(' ')[0],
+        status,
+        ip: userIp,
+        reason: reason.trim(),
+      };
+  
+      // Enviar a la API
+      const response = await reportarEntrada(record);
+  
+      if (response?.error) {
+        console.error(response.error);
+        alert("Error al registrar la asistencia: " + (response.error.message || response.error));
+      } else {
+        const updatedRecords = [...attendanceRecords, record];
+        setAttendanceRecords(updatedRecords);
+        localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
+        alert("Asistencia registrada correctamente");
+      }
+    } catch (error) {
+      console.error("Error al registrar la asistencia:", error);
+      alert("Error al registrar la asistencia: " + error.message);
+    } finally {
+      setShowPopup(false);
+      setReason("");
+      setIsSubmitting(false);
+    }
+  };
+  
   const fetchInternetTime = async () => {
     try {
       const response = await fetch('http://worldtimeapi.org/api/timezone/America/Guatemala');
@@ -39,66 +86,36 @@ export const Personal = () => {
     }
   };
 
-  const handleAttendance = async () => {
-    try {
-      const ipResponse = await fetch('https://api.ipify.org?format=json');
-      const ipData = await ipResponse.json();
-      const userIp = ipData?.ip || 'IP no disponible';
+  useEffect(() => {
+    fetchInternetTime();
+    const interval = setInterval(() => {
+      setFormState((prevState) => ({
+        ...prevState,
+        currentTime: new Date().toTimeString().split(' ')[0]
+      }));
+    }, 1000);
 
-      const serverTimeResponse = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala');
-      const serverTimeData = await serverTimeResponse.json();
-      const serverDateTime = new Date(serverTimeData.datetime);
-
-      const currentHour = serverDateTime.getHours();
-      const status = currentHour < 8 ? "A tiempo" : currentHour < 11 ? "Tarde" : "Fuera de horario";
-
-      const record = {
-        user: userName,
-        date: serverDateTime.toISOString().split('T')[0],
-        time: serverDateTime.toTimeString().split(' ')[0],
-        status,
-        ip: userIp,
-        reason: reason.trim(),
-      };
-
-      const response = await reportarEntrada(record);
-
-      if (response?.error) {
-        console.error(response.error);
-        alert("Error al registrar la asistencia: " + (response.error.message || response.error));
-      } else {
-        const updatedRecords = [...attendanceRecords, record];
-        setAttendanceRecords(updatedRecords);
-        localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
-        localStorage.setItem(`hasReportedToday_${userId}`, true); // Marcar como enviado hoy
-        alert("Asistencia registrada correctamente");
-        setIsSubmitting(true); // Desactiva el botón
-      }
-    } catch (error) {
-      console.error("Error al registrar la asistencia:", error);
-      alert("Error al registrar la asistencia: " + error.message);
-    } finally {
-      setShowPopup(false);
-      setReason("");
-    }
-  };
-
+    return () => clearInterval(interval);
+  }, []);
   const handleShowPopup = async () => {
     try {
       const serverTimeResponse = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala');
       const serverTimeData = await serverTimeResponse.json();
       const serverDateTime = new Date(serverTimeData.datetime);
       const currentHour = serverDateTime.getHours();
-
-      if (currentHour >= 7 && currentHour <= 10) {
+  
+      // Habilitar entre las 23:00 y las 2:00
+      if ((currentHour >= 23 && currentHour <= 5) || (currentHour >= 0 && currentHour < 5)) {
         setShowPopup(true);
       } else {
-        alert("El registro de asistencia solo está permitido de 7:00 a 10:00 a.m.");
+        alert("El registro de asistencia solo está permitido de 23:00 a 2:00.");
       }
     } catch (error) {
       console.error("Error obteniendo la hora del servidor:", error);
     }
   };
+  
+
 
   const handleConfirmAttendance = () => {
     const currentHour = new Date().getHours();
@@ -115,31 +132,9 @@ export const Personal = () => {
     setReason("");
   };
 
-  useEffect(() => {
-    fetchInternetTime();
-
-    // Verificar si el usuario ya envió su asistencia hoy
-    const savedRecords = JSON.parse(localStorage.getItem(`attendanceRecords_${userId}`)) || [];
-    const todayDate = new Date().toISOString().split('T')[0];
-    const hasReportedToday = savedRecords.some(record => record.date === todayDate);
-
-    if (hasReportedToday) {
-      setIsSubmitting(true); // Desactiva el botón
-    }
-
-    const interval = setInterval(() => {
-      setFormState((prevState) => ({
-        ...prevState,
-        currentTime: new Date().toTimeString().split(' ')[0]
-      }));
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
   const usuarioLogueado = JSON.parse(localStorage.getItem('datosUsuario')) || {};
   const currentHour = new Date().getHours();
-  const waveColors = currentHour < 8 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
+  const waveColors = currentHour < 8 ?  ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
 
   return (
     <div className="personal">
@@ -166,7 +161,7 @@ export const Personal = () => {
             </div>
             <button onClick={handleShowPopup}>
               <span>Enviar</span>
-              <svg
+{/*               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 74 74"
@@ -179,7 +174,7 @@ export const Personal = () => {
                   d="M25 35.5C24.1716 35.5 23.5 36.1716 23.5 37C23.5 37.8284 24.1716 38.5 25 38.5V35.5ZM49.0607 38.0607C49.6464 37.4749 49.6464 36.5251 49.0607 35.9393L39.5147 26.3934C38.9289 25.8076 37.9792 25.8076 37.3934 26.3934C36.8076 26.9792 36.8076 27.9289 37.3934 28.5147L45.8787 37L37.3934 45.4853C36.8076 46.0711 36.8076 47.0208 37.3934 47.6066C37.9792 48.1924 38.9289 48.1924 39.5147 47.6066L49.0607 38.0607ZM25 38.5L48 38.5V35.5L25 35.5V38.5Z"
                 ></path>
               </svg>
-            </button>
+ */}            </button>
             {showPopup && (
               <div className="popup">
                 <div className="popup-content">

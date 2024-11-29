@@ -39,7 +39,7 @@ export const Personal = () => {
 
       // Calcular el estado basado en la hora del servidor
       const currentHour = serverDateTime.getHours();
-      const status = currentHour < 4 ? "A tiempo" : "Tarde";
+      const status = currentHour < 8? "A tiempo" : "Tarde";
 
       // Crear el objeto de registro
       const record = {
@@ -84,7 +84,7 @@ export const Personal = () => {
   const isOnTime = currentHour < 8 ? "A tiempo" : "Tarde";
   const imageToShow = currentHour < 8 ? earlyImage : lateImage;
   const backgroundColor = currentHour < 8 ? '#359100' : '#8b0000';
-  const waveColors = currentHour < 8 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
+  const waveColors = currentHour < 4 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
 
   const fetchInternetTime = async () => {
     try {

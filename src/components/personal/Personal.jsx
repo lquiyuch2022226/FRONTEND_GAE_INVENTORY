@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { reportarEntrada } from '../../services/api.jsx';
 import * as XLSX from 'xlsx';
 import './personal.css';
-import { Header } from '../header/Header.jsx';
+import {Header} from '../header/Header.jsx';
 import defaultAvatar from '../../assets/img/palmamorro.jpg';
 import earlyImage from '../../assets/img/comprobado.png';
 import lateImage from '../../assets/img/cerca.png';
@@ -15,50 +15,60 @@ export const Personal = () => {
   const userId = user.account?.homeAccountId || "Invitado";
   const userName = user.account?.name || "Invitado";
 
+  // Definimos el estado formState
   const [formState, setFormState] = useState({
     todayDate: new Date().toISOString().split('T')[0],
     currentTime: new Date().toTimeString().split(' ')[0]
   });
 
-  const [showPopup, setShowPopup] = useState(false);
+  const [showPopup, setShowPopup] = useState(false); // Estado para controlar el popup
   const [reason, setReason] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // Estado para evitar múltiples envíos
 
+  
   const handleAttendance = async () => {
     try {
-      // Obtener IP del usuario
+      // Obtener la IP del usuario
       const ipResponse = await fetch('https://api.ipify.org?format=json');
       const ipData = await ipResponse.json();
-      const userIp = ipData?.ip || 'IP no disponible';
+      const userIp = ipData && ipData.ip ? ipData.ip : 'IP no disponible';
   
-      // Obtener hora del servidor
-      const serverTimeResponse = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala');
+      // Obtener la hora y fecha del servidor con HTTPS
+      const serverTimeResponse = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala'); // Usar HTTPS
       const serverTimeData = await serverTimeResponse.json();
-      const serverDateTime = new Date(serverTimeData.datetime);
+      const serverDateTime = new Date(serverTimeData.utc_datetime);
   
+      // Calcular el estado basado en la hora del servidor
       const currentHour = serverDateTime.getHours();
-      const status = currentHour < 8 ? "A tiempo" : currentHour < 11 ? "Tarde" : "Fuera de horario";
+      const status = currentHour < 8 ? "A tiempo" : "Tarde";
   
-      // Crear registro
+      // Crear el objeto de registro
       const record = {
         user: userName,
-        date: serverDateTime.toISOString().split('T')[0],
-        time: serverDateTime.toTimeString().split(' ')[0],
+        date: formState.todayDate,
+        time: formState.currentTime,
         status,
         ip: userIp,
-        reason: reason.trim(),
+        reason: reason
       };
   
-      // Enviar a la API
+      console.log(record);
+  
+      // Enviar al backend
       const response = await reportarEntrada(record);
   
-      if (response?.error) {
+      if (response && response.error) {
         console.error(response.error);
-        alert("Error al registrar la asistencia: " + (response.error.message || response.error));
+        alert("Error al registrar la asistencia: " + response.error.message || response.error);
       } else {
+        // Actualizar los registros en el frontend (localStorage)
         const updatedRecords = [...attendanceRecords, record];
         setAttendanceRecords(updatedRecords);
-             localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
+  
+        // Guardar los registros actualizados en localStorage
+        localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
+  
+        // Mostrar mensaje de éxito
         alert("Asistencia registrada correctamente");
       }
     } catch (error) {
@@ -67,10 +77,17 @@ export const Personal = () => {
     } finally {
       setShowPopup(false);
       setReason("");
-      setIsSubmitting(false);
     }
   };
   
+  
+  const usuarioLogueado = JSON.parse(localStorage.getItem('datosUsuario')) || {};
+  const currentHour = new Date().getHours();
+  const isOnTime = currentHour < 8 ? "A tiempo" : "Tarde";
+  const imageToShow = currentHour < 8 ? earlyImage : lateImage;
+  const backgroundColor = currentHour < 8 ? '#359100' : '#8b0000';
+  const waveColors = currentHour < 8 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
+
   const fetchInternetTime = async () => {
     try {
       const response = await fetch('http://worldtimeapi.org/api/timezone/America/Guatemala');
@@ -98,42 +115,19 @@ export const Personal = () => {
     return () => clearInterval(interval);
   }, []);
 
-const handleShowPopup = async () => {
-  try {
-    const serverTimeResponse = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala');
-    const serverTimeData = await serverTimeResponse.json();
-    const serverDateTime = new Date(serverTimeData.datetime);
-    const currentHour = serverDateTime.getHours();
-
-    if (currentHour >= 7 && currentHour <= 10) {
-      setShowPopup(true);
-    } else {
-      alert("El registro de asistencia solo está permitido de 7:00 a 10:00 a.m.");
-    }
-  } catch (error) {
-    console.error("Error obteniendo la hora del servidor:", error);
-  }
-};
-
+  const handleShowPopup = () => {
+    setShowPopup(true); // Muestra el pop-up
+  };
 
   const handleConfirmAttendance = () => {
-    const currentHour = new Date().getHours();
-    if (currentHour >= 8 && !reason.trim()) {
-      alert("Por favor, ingresa una razón si llegaste tarde.");
-      return;
-    }
-    setIsSubmitting(true);
-    handleAttendance();
+    setShowPopup(false);
+    handleAttendance(); // Realiza el registro de asistencia
   };
 
   const handleCancelAttendance = () => {
-    setShowPopup(false);
+    setShowPopup(false); // Cierra el pop-up sin hacer nada
     setReason("");
   };
-
-  const usuarioLogueado = JSON.parse(localStorage.getItem('datosUsuario')) || {};
-  const currentHour = new Date().getHours();
-  const waveColors = currentHour < 8 ?  ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
 
   return (
     <div className="personal">
@@ -141,11 +135,11 @@ const handleShowPopup = async () => {
       <Header />
       <div className="posts-personal">
         {usuarioLogueado ? (
-             <div className="e-card playing">
-             <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})` }}></div>
-             <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '210px' }}></div>
-             <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '420px' }}></div>
-             <div className='content-user'>
+          <div className="e-card playing">
+          <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})` }}></div>
+          <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '210px' }}></div>
+          <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '420px' }}></div>
+            <div className='content-user'>
               <div className="infotop">
                 <img
                   src={usuarioLogueado.profilePicture || defaultAvatar}
@@ -174,19 +168,19 @@ const handleShowPopup = async () => {
                 ></path>
               </svg>
             </button>
+
+            {/* Pop-up para confirmar */}
             {showPopup && (
               <div className="popup">
                 <div className="popup-content">
                   <p>¿Estás seguro de que deseas registrar tu asistencia?</p>
-                  {currentHour >= 8 && (
-                    <textarea
-                      placeholder="Escribe aquí la razón de tu asistencia"
-                      value={reason}
-                      onChange={(e) => setReason(e.target.value)}
-                      rows="4"
-                      style={{ width: '100%', marginTop: '10px', padding: '8px' }}
-                    />
-                  )}
+                  <textarea
+                    placeholder="Escribe aquí la razón de tu asistencia"
+                    value={reason}
+                    onChange={(e) => setReason(e.target.value)}
+                    rows="4"
+                    style={{ width: '100%', marginTop: '10px', padding: '8px' }}
+                  />
                   <div className="popup-actions">
                     <button onClick={handleConfirmAttendance}>Sí</button>
                     <button onClick={handleCancelAttendance}>No</button>

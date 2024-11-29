@@ -88,7 +88,7 @@ export const Personal = () => {
 
   const fetchInternetTime = async () => {
     try {
-      const response = await fetch('http://worldtimeapi.org/api/timezone/America/Guatemala');
+      const response = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala'); // Cambiar a HTTPS
       const data = await response.json();
       const currentDateTime = new Date(data.datetime);
       setFormState((prevState) => ({
@@ -100,6 +100,7 @@ export const Personal = () => {
       console.error("Error fetching internet time:", error);
     }
   };
+  
 
   useEffect(() => {
     fetchInternetTime();

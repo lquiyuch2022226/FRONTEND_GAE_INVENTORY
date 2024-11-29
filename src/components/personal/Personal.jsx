@@ -12,7 +12,7 @@ import lateImage from '../../assets/img/cerca.png';
 export const Personal = () => {
   const user = JSON.parse(localStorage.getItem('datosUsuario')) || {};
   const [attendanceRecords, setAttendanceRecords] = useState([]);
-  const userId = user.account?.homeAccountId || "Invitado";
+  const userId = user.account?.homeAccountId || "Invitado"; // Usar el userId único de cada usuario
   const userName = user.account?.name || "Invitado";
 
   // Definimos el estado formState
@@ -25,10 +25,10 @@ export const Personal = () => {
   const [reason, setReason] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false); // Estado para evitar múltiples envíos
 
-  // Verificar si ya se ha enviado el reporte hoy
+  // Verificar si el usuario ha enviado un reporte hoy
   const isAlreadySubmittedToday = () => {
     const lastSubmittedDate = localStorage.getItem(`attendanceSubmittedDate_${userId}`);
-    return lastSubmittedDate === formState.todayDate; // Compara la fecha actual con la última fecha enviada
+    return lastSubmittedDate === formState.todayDate; // Compara la fecha actual con la última fecha enviada por el usuario
   };
 
   const handleAttendance = async () => {
@@ -79,7 +79,7 @@ export const Personal = () => {
         // Guardar los registros actualizados en localStorage
         localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
         
-        // Guardar la fecha de envío para evitar envíos posteriores
+        // Guardar la fecha de envío para evitar envíos posteriores por el mismo usuario
         localStorage.setItem(`attendanceSubmittedDate_${userId}`, formState.todayDate);
 
         // Mostrar mensaje de éxito

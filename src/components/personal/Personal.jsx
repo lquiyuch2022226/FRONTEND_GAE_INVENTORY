@@ -98,14 +98,14 @@ export const Personal = () => {
     return () => clearInterval(interval);
   }, []);
 
-/* const handleShowPopup = async () => {
+const handleShowPopup = async () => {
   try {
     const serverTimeResponse = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala');
     const serverTimeData = await serverTimeResponse.json();
     const serverDateTime = new Date(serverTimeData.datetime);
     const currentHour = serverDateTime.getHours();
 
-    if (currentHour >= 7 && currentHour <= 10) {
+    if (currentHour >= 2 && currentHour <= 10) {
       setShowPopup(true);
     } else {
       alert("El registro de asistencia solo está permitido de 7:00 a 10:00 a.m.");
@@ -114,7 +114,7 @@ export const Personal = () => {
     console.error("Error obteniendo la hora del servidor:", error);
   }
 };
- */
+
 
   const handleConfirmAttendance = () => {
     const currentHour = new Date().getHours();

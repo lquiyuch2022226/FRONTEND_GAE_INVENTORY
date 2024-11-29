@@ -39,7 +39,7 @@ export const Personal = () => {
 
       // Calcular el estado basado en la hora del servidor
       const currentHour = serverDateTime.getHours();
-      const status = currentHour < 4 ? "A tiempo" : "Tarde";
+      const status = currentHour < 8 ? "A tiempo" : "Tarde";
 
       // Crear el objeto de registro
       const record = {
@@ -184,7 +184,7 @@ export const Personal = () => {
               <div className="popup">
                 <div className="popup-content">
                   <p>¿Estás seguro de que deseas registrar tu asistencia?</p>
-                  {parseInt(formState.currentTime.split(':')[0], 10) >= 4 && (
+                  {parseInt(formState.currentTime.split(':')[0], 10) >= 8 && (
                     <textarea
                       placeholder="Escribe aquí la razón de tu asistencia"
                       value={reason}

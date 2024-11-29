@@ -15,7 +15,6 @@ export const Personal = () => {
   const userId = user.account?.homeAccountId || "Invitado";
   const userName = user.account?.name || "Invitado";
 
-  // Definimos el estado formState
   const [formState, setFormState] = useState({
     todayDate: new Date().toISOString().split('T')[0],
     currentTime: new Date().toTimeString().split(' ')[0]
@@ -23,81 +22,24 @@ export const Personal = () => {
 
   const [showPopup, setShowPopup] = useState(false); // Estado para controlar el popup
   const [reason, setReason] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false); // Estado para evitar múltiples envíos
-
-
-  const handleAttendance = async () => {
-    try {
-      // Obtener la IP del usuario
-      const ipResponse = await fetch('https://api.ipify.org?format=json');
-      const ipData = await ipResponse.json();
-      const userIp = ipData && ipData.ip ? ipData.ip : 'IP no disponible';
-
-      // Obtener la hora y fecha del servidor con HTTPS
-      const serverTimeResponse = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala'); // Usar HTTPS
-      const serverTimeData = await serverTimeResponse.json();
-      const serverDateTime = new Date(serverTimeData.utc_datetime);
-
-      // Calcular el estado basado en la hora del servidor
-      const currentHour = serverDateTime.getHours();
-      const status = currentHour < 8 ? "A tiempo" : "Tarde";
-
-      // Crear el objeto de registro
-      const record = {
-        user: userName,
-        date: formState.todayDate,
-        time: formState.currentTime,
-        status,
-        ip: userIp,
-        reason: reason
-      };
-
-      console.log(record);
-
-      // Enviar al backend
-      const response = await reportarEntrada(record);
-
-      if (response && response.error) {
-        console.error(response.error);
-        alert("Error al registrar la asistencia: " + response.error.message || response.error);
-      } else {
-        // Actualizar los registros en el frontend (localStorage)
-        const updatedRecords = [...attendanceRecords, record];
-        setAttendanceRecords(updatedRecords);
-
-        // Guardar los registros actualizados en localStorage
-        localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
-
-        // Mostrar mensaje de éxito
-        alert("Asistencia registrada correctamente");
-      }
-    } catch (error) {
-      console.error("Error al registrar la asistencia:", error);
-      alert("Error al registrar la asistencia: " + error.message);
-    } finally {
-      setShowPopup(false);
-      setReason("");
-    }
-  };
-
-
-  const usuarioLogueado = JSON.parse(localStorage.getItem('datosUsuario')) || {};
-  const currentHour = new Date().getHours();
-  const isOnTime = currentHour < 8 ? "A tiempo" : "Tarde";
-  const imageToShow = currentHour < 8 ? earlyImage : lateImage;
-  const backgroundColor = currentHour < 8 ? '#359100' : '#8b0000';
-  const waveColors = currentHour < 8 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
+  const [isWithinTimeFrame, setIsWithinTimeFrame] = useState(false); // Estado para el horario permitido
 
   const fetchInternetTime = async () => {
     try {
-      const response = await fetch('http://worldtimeapi.org/api/timezone/America/Guatemala');
+      const response = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala');
       const data = await response.json();
-      const currentDateTime = new Date(data.datetime);
+      const serverDateTime = new Date(data.datetime);
+
+      // Actualizar la fecha y hora
       setFormState((prevState) => ({
         ...prevState,
-        todayDate: currentDateTime.toISOString().split('T')[0],
-        currentTime: currentDateTime.toTimeString().split(' ')[0],
+        todayDate: serverDateTime.toISOString().split('T')[0],
+        currentTime: serverDateTime.toTimeString().split(' ')[0],
       }));
+
+      // Validar si está dentro del rango permitido (6:00 am - 12:00 pm)
+      const currentHour = serverDateTime.getHours();
+      setIsWithinTimeFrame(currentHour >= 6 && currentHour < 12);
     } catch (error) {
       console.error("Error fetching internet time:", error);
     }
@@ -115,6 +57,53 @@ export const Personal = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const handleAttendance = async () => {
+    try {
+      const serverTimeResponse = await fetch('https://worldtimeapi.org/api/timezone/America/Guatemala');
+      const serverTimeData = await serverTimeResponse.json();
+      const serverDateTime = new Date(serverTimeData.utc_datetime);
+
+      const currentHour = serverDateTime.getHours();
+      if (currentHour < 6 || currentHour >= 12) {
+        alert("Solo se puede registrar asistencia entre las 6:00 am y las 12:00 pm.");
+        return;
+      }
+
+      const userIpResponse = await fetch('https://api.ipify.org?format=json');
+      const ipData = await userIpResponse.json();
+      const userIp = ipData && ipData.ip ? ipData.ip : 'IP no disponible';
+
+      const status = currentHour < 8 ? "A tiempo" : "Tarde";
+      const record = {
+        user: userName,
+        date: formState.todayDate,
+        time: formState.currentTime,
+        status,
+        ip: userIp,
+        reason: currentHour >= 8 ? reason : "",
+      };
+
+      console.log(record);
+
+      const response = await reportarEntrada(record);
+
+      if (response && response.error) {
+        alert("Error al registrar la asistencia: " + (response.error.message || response.error));
+      } else {
+        const updatedRecords = [...attendanceRecords, record];
+        setAttendanceRecords(updatedRecords);
+        localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
+        alert("Asistencia registrada correctamente");
+      }
+    } catch (error) {
+      console.error("Error al registrar la asistencia:", error);
+      alert("Error al registrar la asistencia: " + error.message);
+    } finally {
+      setShowPopup(false);
+      setReason("");
+    }
+  };
+
   const handleShowPopup = () => {
     setShowPopup(true); // Muestra el pop-up
   };
@@ -131,42 +120,26 @@ export const Personal = () => {
 
   return (
     <div className="personal">
-      <Navbar user={usuarioLogueado} />
+      <Navbar user={user} />
       <Header />
       <div className="posts-personal">
-        {usuarioLogueado ? (
+        {user ? (
           <div className="e-card playing">
-            <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})` }}></div>
-            <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '210px' }}></div>
-            <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '420px' }}></div>
-            <div className='content-user'>
+            <div className="content-user">
               <div className="infotop">
                 <img
-                  src={usuarioLogueado.profilePicture || defaultAvatar}
+                  src={user.profilePicture || defaultAvatar}
                   alt="User Icon"
                   className="icon"
                 />
                 <div className="user-info text-white">
-                  <div className="user-name">{usuarioLogueado.account.name}</div>
-                  <div className="user-department">{usuarioLogueado.account.username}</div>
+                  <div className="user-name">{user.account.name}</div>
+                  <div className="user-department">{user.account.username}</div>
                 </div>
               </div>
             </div>
-            <button onClick={handleShowPopup}>
+            <button onClick={handleShowPopup} disabled={!isWithinTimeFrame}>
               <span>Enviar</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 74 74"
-                height="34"
-                width="34"
-              >
-                <circle strokeWidth="3" stroke="black" r="35.5" cy="37" cx="37"></circle>
-                <path
-                  fill="black"
-                  d="M25 35.5C24.1716 35.5 23.5 36.1716 23.5 37C23.5 37.8284 24.1716 38.5 25 38.5V35.5ZM49.0607 38.0607C49.6464 37.4749 49.6464 36.5251 49.0607 35.9393L39.5147 26.3934C38.9289 25.8076 37.9792 25.8076 37.3934 26.3934C36.8076 26.9792 36.8076 27.9289 37.3934 28.5147L45.8787 37L37.3934 45.4853C36.8076 46.0711 36.8076 47.0208 37.3934 47.6066C37.9792 48.1924 38.9289 48.1924 39.5147 47.6066L49.0607 38.0607ZM25 38.5L48 38.5V35.5L25 35.5V38.5Z"
-                ></path>
-              </svg>
             </button>
 
             {showPopup && (
@@ -189,8 +162,6 @@ export const Personal = () => {
                 </div>
               </div>
             )}
-
-
           </div>
         ) : (
           <p>No hay datos del usuario disponibles.</p>

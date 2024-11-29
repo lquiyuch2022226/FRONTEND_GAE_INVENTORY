@@ -184,7 +184,7 @@ export const Personal = () => {
               <div className="popup">
                 <div className="popup-content">
                   <p>¿Estás seguro de que deseas registrar tu asistencia?</p>
-                  {parseInt(formState.currentTime.split(':')[0], 10) >= 8 && (
+                  {parseInt(formState.currentTime.split(':')[0], 10) >= 4 && (
                     <textarea
                       placeholder="Escribe aquí la razón de tu asistencia"
                       value={reason}

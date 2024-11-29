@@ -181,26 +181,26 @@ export const Personal = () => {
             </button>
 
             {showPopup && (
-              <div className="popup">
-                <div className="popup-content">
-                  <p>¿Estás seguro de que deseas registrar tu asistencia?</p>
-                  {currentHour >= 8 && (
-                    <textarea
-                      placeholder="Escribe aquí la razón de tu asistencia"
-                      value={reason}
-                      onChange={(e) => setReason(e.target.value)}
-                      rows="4"
-                      style={{ width: '100%', marginTop: '10px', padding: '8px' }}
-                    />
-                  )}
+  <div className="popup">
+    <div className="popup-content">
+      <p>¿Estás seguro de que deseas registrar tu asistencia?</p>
+      {parseInt(formState.currentTime.split(':')[0], 10) >= 8 && (  // Verifica si la hora es mayor o igual a 8
+        <textarea
+          placeholder="Escribe aquí la razón de tu asistencia"
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+          rows="4"
+          style={{ width: '100%', marginTop: '10px', padding: '8px' }}
+        />
+      )}
+      <div className="popup-actions">
+        <button onClick={handleConfirmAttendance}>Sí</button>
+        <button onClick={handleCancelAttendance}>No</button>
+      </div>
+    </div>
+  </div>
+)}
 
-                  <div className="popup-actions">
-                    <button onClick={handleConfirmAttendance}>Sí</button>
-                    <button onClick={handleCancelAttendance}>No</button>
-                  </div>
-                </div>
-              </div>
-            )}
 
 
           </div>

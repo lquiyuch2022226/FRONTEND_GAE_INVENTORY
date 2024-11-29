@@ -113,21 +113,25 @@ export const Personal = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const handleShowPopup = () => {
+    setShowPopup(true); // Muestra el pop-up
+  };
+
   const handleConfirmAttendance = () => {
-    const currentHour = new Date().getHours();
-    if (currentHour >= 4 && !reason.trim()) {
-      alert("Por favor, ingresa una razón si llegaste tarde.");
-      return;
-    }
-    setIsSubmitting(true);
-    handleAttendance();
+    setShowPopup(false);
+    handleAttendance(); // Realiza el registro de asistencia
   };
 
   const handleCancelAttendance = () => {
-    setShowPopup(false);
+    setShowPopup(false); // Cierra el pop-up sin hacer nada
     setReason("");
   };
 
+  // Nueva función para validar horario
+  const isTimeInRange = () => {
+    const currentHour = parseInt(formState.currentTime.split(':')[0], 10);
+    return currentHour >= 3 && currentHour < 12; // De 6:00 AM a 12:00 PM
+  };
 
   return (
     <div className="personal">
@@ -152,7 +156,14 @@ export const Personal = () => {
                 </div>
               </div>
             </div>
-            <button onClick={handleShowPopup}>
+            <button
+              onClick={handleShowPopup}
+              disabled={!isTimeInRange()} // Desactiva el botón si está fuera del rango
+              style={{
+                cursor: isTimeInRange() ? 'pointer' : 'not-allowed', // Cambia el cursor según el estado
+                opacity: isTimeInRange() ? 1 : 0.5, // Ajusta la opacidad
+              }}
+            >
               <span>Enviar</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -168,7 +179,6 @@ export const Personal = () => {
                 ></path>
               </svg>
             </button>
-
 
             {showPopup && (
               <div className="popup">

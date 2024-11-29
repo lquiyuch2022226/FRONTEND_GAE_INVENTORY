@@ -85,7 +85,7 @@ export const Personal = () => {
   const isOnTime = currentHour < 8 ? "A tiempo" : "Tarde";
   const imageToShow = currentHour < 8 ? earlyImage : lateImage;
   const backgroundColor = currentHour < 8 ? '#359100' : '#8b0000';
-  const waveColors = currentHour < 4 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
+  const waveColors = currentHour < 8 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
 
   const fetchInternetTime = async () => {
     try {
@@ -139,7 +139,7 @@ export const Personal = () => {
   // Nueva función para validar horario
   const isTimeInRange = () => {
     const currentHour = parseInt(formState.currentTime.split(':')[0], 10);
-    return currentHour >= 3 && currentHour < 12; // De 6:00 AM a 12:00 PM
+    return currentHour >= 6 && currentHour < 12; // De 6:00 AM a 12:00 PM
   };
 
   return (

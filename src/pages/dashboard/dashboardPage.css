@@ -7,7 +7,7 @@
   font-family: 'Plus Jakarta Sans', sans-serif;
 
   /* Fondo con imagen */
-  background: #f2f3f3 url('src/assets/img/fondo.avif') no-repeat center center; /* Reemplaza la ruta si es necesario */
+  background: #600b0b url('src/assets/img/fondo.avif') no-repeat center center; /* Reemplaza la ruta si es necesario */
   background-size: cover; /* Asegura que la imagen cubra todo el contenedor */
   
   /* Color de respaldo (por si la imagen no carga) */

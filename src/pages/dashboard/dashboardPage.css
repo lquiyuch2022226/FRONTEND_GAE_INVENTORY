@@ -1,17 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
+
 .dashboard-container {
   display: flex;
   flex-direction: column;
   font-family: 'Plus Jakarta Sans', sans-serif;
+
+  /* Fondo con imagen */
+  background: #f2f3f3 url('src/assets/img/fondo.avif') no-repeat center center; /* Reemplaza la ruta si es necesario */
+  background-size: cover; /* Asegura que la imagen cubra todo el contenedor */
   
-  /* Configuración del fondo con el GIF */
-  background-image: url('src/assets/img/fondo2.gif'); /* Ruta al GIF */
-  background-repeat: no-repeat; /* Evita que se repita el GIF */
-  background-size: cover; /* Ajusta el tamaño del GIF para cubrir todo el contenedor */
-  background-position: center; /* Centra el GIF en el contenedor */
-  
-  min-height: 100vh; /* Asegura un mínimo de la altura de la pantalla */
-  width: 100vw; /* Ocupar todo el ancho de la pantalla */
+  /* Color de respaldo (por si la imagen no carga) */
+  background-color: #f2f3f3;
+
+  /* Ajustes de tamaño */
+  min-height: 100vh; /* Altura mínima igual al viewport */
+  width: 100vw; /* Ocupar todo el ancho del viewport */
 }
 
 

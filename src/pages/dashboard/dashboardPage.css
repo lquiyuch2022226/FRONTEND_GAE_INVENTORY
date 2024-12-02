@@ -1,23 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 
-
 .dashboard-container {
   display: flex;
   flex-direction: column;
   font-family: 'Plus Jakarta Sans', sans-serif;
-
-  /* Fondo con imagen */
-  background: #600b0b url('src/assets/img/fondo.avif') no-repeat center center; /* Reemplaza la ruta si es necesario */
-  background-size: cover; /* Asegura que la imagen cubra todo el contenedor */
-  
-  /* Color de respaldo (por si la imagen no carga) */
-  background-color: #f2f3f3;
-
-  /* Ajustes de tamaño */
-  min-height: 100vh; /* Altura mínima igual al viewport */
-  width: 100vw; /* Ocupar todo el ancho del viewport */
+  background-image: 'url(../../assets/img/fondo2.gif)';
+  min-height: 100vh; /* Asegura un mínimo de la altura de la pantalla */
+  width: 100vw; /* Ocupar todo el ancho de la pantalla */
 }
-
 
 .navbar-container {
   display: flex;

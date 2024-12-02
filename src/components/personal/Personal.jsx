@@ -10,6 +10,8 @@ export const Personal = () => {
   const user = JSON.parse(localStorage.getItem('datosUsuario')) || {};
   const userId = user.account?.homeAccountId || "Invitado";
   const userName = user.account?.name || "Invitado";
+  const currentHour = new Date().getHours();
+  const waveColors = currentHour < 4 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
 
   const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [formState, setFormState] = useState({
@@ -62,10 +64,10 @@ export const Personal = () => {
       <Header currentDate={formState.todayDate} />
       <div className="posts-personal">
         <div className="e-card">
-{/*         <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})` }}></div>
+        <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})` }}></div>
             <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '210px' }}></div>
             <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '420px' }}></div>
- */}
+
           <div className="content-user">
             <img
               src={user.profilePicture || defaultAvatar}

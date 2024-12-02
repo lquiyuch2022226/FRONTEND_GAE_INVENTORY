@@ -11,7 +11,7 @@ export const Personal = () => {
   const userId = user.account?.homeAccountId || "Invitado";
   const userName = user.account?.name || "Invitado";
   const currentHour = new Date().getHours();
-  const waveColors = currentHour < 4 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
+  const waveColors = currentHour < 8 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
 
   const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [formState, setFormState] = useState({

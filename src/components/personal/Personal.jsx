@@ -65,26 +65,9 @@ export const Personal = () => {
       <Header currentDate={formState.todayDate} />
       <div className="posts-personal">
         <div className="e-card">
-          <div
-            className="wave"
-            style={{
-              background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`,
-            }}
-          ></div>
-          <div
-            className="wave"
-            style={{
-              background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`,
-              top: '210px',
-            }}
-          ></div>
-          <div
-            className="wave"
-            style={{
-              background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`,
-              top: '420px',
-            }}
-          ></div>
+        <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})` }}></div>
+            <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '210px' }}></div>
+            <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '420px' }}></div>
 
           <div className="content-user">
             <img

@@ -24,7 +24,6 @@ export const Navbar = () => {
         } else {
           setAttendanceRecords(response.data.reportes || []);
         }
-
       } catch (error) {
         console.error('Error al obtener el reporte:', error);
       }
@@ -78,7 +77,7 @@ export const Navbar = () => {
         </div>
       </div>
       <div className="navbar-center">      
-        {userEmail === 'Jose.delacerda@transparencia.gob.gt' && (
+        {(userEmail === 'Jose.delacerda@transparencia.gob.gt' || userEmail === 'anibal.gonzales@transparencia.gob.gt') && (
           <button onClick={exportToExcel} className="export-btn">
             Exportar a Excel
           </button>

@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  background-image: 'url(../../assets/img/fondo2.gif)';
+  background-color: #460b0b;
   min-height: 100vh; /* Asegura un mínimo de la altura de la pantalla */
   width: 100vw; /* Ocupar todo el ancho de la pantalla */
 }

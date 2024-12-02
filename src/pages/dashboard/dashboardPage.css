@@ -4,9 +4,9 @@
   display: flex;
   flex-direction: column;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  overflow: hidden;
   background-color: #1A2854;
-  height: max-content;
+  min-height: 100vh; /* Asegura un mínimo de la altura de la pantalla */
+  width: 100vw; /* Ocupar todo el ancho de la pantalla */
 }
 
 .navbar-container {

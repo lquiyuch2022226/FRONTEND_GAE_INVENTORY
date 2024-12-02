@@ -10,7 +10,8 @@ export const Personal = () => {
   const user = JSON.parse(localStorage.getItem('datosUsuario')) || {};
   const userId = user.account?.homeAccountId || "Invitado";
   const userName = user.account?.name || "Invitado";
-
+  const waveColors = currentHour < 4 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
+    
   const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [formState, setFormState] = useState({
     todayDate: new Date().toISOString().split('T')[0],

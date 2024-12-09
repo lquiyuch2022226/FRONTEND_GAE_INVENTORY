@@ -5,7 +5,7 @@ const apiClient = axios.create({
     timeout: 50000,
 });
 
-apiClient.interceptors.request.use(
+/* apiClient.interceptors.request.use(
     (config) => {
         const storedUserData = JSON.parse(localStorage.getItem('datosUsuario'));
         const token = storedUserData.accessToken;
@@ -21,7 +21,7 @@ apiClient.interceptors.request.use(
         return Promise.reject(error);
     }
 );
-
+ */
 app.get('/GAE/v1/attendance/verify', async (req, res) => {
     const { userId, date } = req.query;
 

@@ -76,7 +76,7 @@ export const Personal = () => {
 
   const isTimeInRange = () => {
     const currentHour = parseInt(formState.currentTime.split(':')[0], 10);
-    return currentHour >= 7 && currentHour < 10;
+    return currentHour >= 0 && currentHour < 1;
   };
 
   return (

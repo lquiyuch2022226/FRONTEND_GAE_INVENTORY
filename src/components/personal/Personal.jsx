@@ -49,40 +49,39 @@ export const Personal = () => {
   // Función para manejar el registro de asistencia
   const handleAttendance = async () => {
     try {
-      // Crea un registro de asistencia con el nombre de usuario, fecha, hora y razón
       const record = {
         user: userName,
         date: formState.todayDate,
         time: formState.currentTime,
         reason,
       };
-
-      // Actualiza los registros de asistencia agregando el nuevo registro
-      const updatedRecords = [...attendanceRecords, record];
-      
-      // Guarda los registros de asistencia en el localStorage
-      setAttendanceRecords(updatedRecords);
-      localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
-      
-      // Guarda la fecha de la última asistencia registrada
-      localStorage.setItem('lastAttendanceDate', formState.todayDate);
-      
-      // Deshabilita el botón de envío
-      setIsButtonDisabled(true);
-      
-      // Muestra una alerta confirmando que la asistencia fue registrada
-      alert("Asistencia registrada correctamente");
+  
+      // Aquí llamamos a la función reportarEntrada para enviar los datos al servidor
+      const response = await reportarEntrada(record);
+  
+      if (response.success) {
+        // Si la respuesta del servidor es exitosa, actualizamos el estado local y el localStorage
+        const updatedRecords = [...attendanceRecords, record];
+        setAttendanceRecords(updatedRecords);
+        localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
+        localStorage.setItem('lastAttendanceDate', formState.todayDate);
+        setIsButtonDisabled(true);
+  
+        // Muestra un mensaje de éxito
+        alert("Asistencia registrada correctamente");
+      } else {
+        // Si la respuesta no es exitosa, muestra un mensaje de error
+        alert("Error al registrar la asistencia en la base de datos");
+      }
     } catch (error) {
-      // Si ocurre un error, lo captura y muestra un mensaje de error
       console.error("Error al registrar la asistencia:", error);
       alert("Error al registrar la asistencia: " + error.message);
     } finally {
-      // Cierra el popup y resetea la razón
       setShowPopup(false);
       setReason("");
     }
   };
-
+  
   // Función para verificar si la hora actual está dentro de un rango (entre las 3 AM y 12 PM)
   const isTimeInRange = () => {
     const currentHour = parseInt(formState.currentTime.split(':')[0], 10);  // Extrae la hora de la cadena de tiempo

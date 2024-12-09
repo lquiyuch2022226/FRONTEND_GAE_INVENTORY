@@ -11,19 +11,21 @@
     align-items: center;
     z-index: 1000;
     transition: opacity 0.3s ease-in-out;
+    padding: 1rem; /* Espaciado en pantallas pequeñas */
 }
 
 /* Contenedor del modal */
 .modal {
-    background-color: #222; /* Fondo elegante y uniforme */
-    color: #fff; /* Contraste claro */
+    background-color: #222; /* Fondo elegante */
+    color: #fff;
     padding: 2rem;
     border-radius: 15px;
-    max-width: 480px; /* Ancho más estilizado */
-    width: 90%;
+    max-width: 480px; /* Limita el ancho */
+    width: 100%; /* Asegura que ocupe todo el espacio disponible */
+    box-sizing: border-box; /* Evita desbordes */
     max-height: 85vh;
     overflow-y: auto;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6); /* Sombra más pronunciada */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
     position: relative;
     animation: scaleIn 0.4s ease-in-out;
 }
@@ -47,26 +49,27 @@
     border: none;
     font-size: 1.8rem;
     position: absolute;
-    top: 12px;
-    right: 16px;
+    top: 16px; /* Más espacio superior */
+    right: 16px; /* Más espacio lateral */
     cursor: pointer;
     transition: color 0.3s ease-in-out;
 }
 
 .modal-close:hover {
-    color: #ff5555; /* Rojo más suave */
+    color: #ff5555;
 }
 
 /* Encabezado del modal */
 .modal-header {
     text-align: center;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem; /* Más espacio inferior */
 }
 
 .modal-title {
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: bold;
     color: #fff;
+    margin: 0; /* Asegura que no tenga márgenes adicionales */
 }
 
 /* Contenido del modal */
@@ -74,8 +77,9 @@
     font-size: 1rem;
     text-align: center;
     line-height: 1.6;
-    color: #ddd; /* Texto ligeramente gris */
-    margin-bottom: 1.5rem;
+    color: #ddd;
+    margin-bottom: 2rem; /* Espaciado con el botón */
+    padding: 0 1rem; /* Espaciado lateral interno */
 }
 
 /* Área de texto */
@@ -84,21 +88,22 @@
     height: 120px;
     border: 1.5px solid #444;
     border-radius: 10px;
-    background: #333; /* Fondo uniforme */
+    background: #333;
     color: #ccc;
     padding: 0.75rem;
     font-size: 1rem;
-    resize: none; /* Desactiva el redimensionamiento */
-    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3); /* Sombra interna sutil */
+    resize: none;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+    margin-bottom: 1rem; /* Separación con otros elementos */
 }
 
 .modal-body textarea::placeholder {
-    color: #888; /* Placeholder menos llamativo */
+    color: #888;
 }
 
 .modal-body textarea:focus {
     outline: none;
-    border-color: #1e88e5; /* Borde azul al enfocar */
+    border-color: #1e88e5;
     background-color: #292929;
 }
 
@@ -109,7 +114,7 @@
 }
 
 .espacio button {
-    background-color: #4caf50; /* Verde moderno */
+    background-color: #4caf50;
     border: none;
     padding: 0.75rem 1.5rem;
     font-size: 1.1rem;
@@ -118,12 +123,12 @@
     color: #fff;
     cursor: pointer;
     transition: background-color 0.3s ease-in-out, transform 0.2s;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra al botón */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .espacio button:hover {
-    background-color: #43a047; /* Verde más oscuro al pasar el mouse */
-    transform: translateY(-2px); /* Pequeño movimiento hacia arriba */
+    background-color: #43a047;
+    transform: translateY(-2px);
 }
 
 /* Scroll personalizado para el modal */

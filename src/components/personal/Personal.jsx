@@ -24,16 +24,23 @@ export const Personal = () => {
   const [reason, setReason] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-  // Use effect to check if the button should be disabled
+  // Synchronize current date and time
   useEffect(() => {
-    // Get the last attendance date from localStorage
+    const timer = setInterval(() => {
+      setFormState({
+        todayDate: new Date().toISOString().split('T')[0],
+        currentTime: new Date().toTimeString().split(' ')[0],
+      });
+    }, 1000); // Update every second
+
+    return () => clearInterval(timer); // Clean up interval on component unmount
+  }, []);
+
+  // Check if the button should be disabled based on the last attendance date
+  useEffect(() => {
     const lastAttendanceDate = localStorage.getItem(`lastAttendanceDate_${userId}`);
-    if (lastAttendanceDate === formState.todayDate) {
-      setIsButtonDisabled(true);  // Disable button if attendance was recorded today
-    } else {
-      setIsButtonDisabled(false); // Enable button if it's a new day
-    }
-  }, [formState.todayDate, userId]); // Depend on today's date
+    setIsButtonDisabled(lastAttendanceDate === formState.todayDate);
+  }, [formState.todayDate, userId]);
 
   const getIp = async () => {
     try {
@@ -50,9 +57,9 @@ export const Personal = () => {
       const ip = await getIp();
       const record = {
         user: userName,
-        date: formState.todayDate, // Use today's date for attendance
+        date: formState.todayDate,
         time: formState.currentTime,
-        status: "presente",  // Assuming the status is "present"
+        status: "presente",
         reason: reason,
         ip: ip,
       };
@@ -63,7 +70,7 @@ export const Personal = () => {
         const updatedRecords = [...attendanceRecords, record];
         setAttendanceRecords(updatedRecords);
         localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
-        localStorage.setItem(`lastAttendanceDate_${userId}`, formState.todayDate); // Store the date of the last attendance
+        localStorage.setItem(`lastAttendanceDate_${userId}`, formState.todayDate);
         setIsButtonDisabled(true); // Disable the button after attendance is sent
         alert("Asistencia registrada correctamente");
       } else {
@@ -80,7 +87,7 @@ export const Personal = () => {
 
   const isTimeInRange = () => {
     const currentHour = parseInt(formState.currentTime.split(':')[0], 10);
-    return currentHour >= 0 && currentHour < 1;  // Adjust your time range logic as needed
+    return currentHour >= 6 && currentHour < 18; // Active between 6:00 and 17:59
   };
 
   return (

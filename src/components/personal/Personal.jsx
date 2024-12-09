@@ -66,14 +66,10 @@ export const Personal = () => {
         reason: reason,
         ip: ip,
       };
-  
-      console.log("Intentando registrar asistencia:", record);
-  
+
       const response = await reportarEntrada(record);
-      console.log("Respuesta del API:", response);
-  
-      // Verificar si el mensaje de respuesta es exitoso
-      if (response.msg === 'Registros de asistencia almacenados correctamente') {
+
+      if (response.success) {
         const updatedRecords = [...attendanceRecords, record];
         setAttendanceRecords(updatedRecords);
         localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
@@ -81,8 +77,11 @@ export const Personal = () => {
         setIsButtonDisabled(true);
         alert("Asistencia registrada correctamente");
       } else {
-        console.error("El API devolvió un error:", response);
-        alert("Hubo un problema al registrar la asistencia. Intenta nuevamente.");
+        if (response.error) {
+          alert(response.error); // Mostrar el mensaje de error que llega del servidor
+        } else {
+          alert("Hubo un problema al registrar la asistencia. Intenta nuevamente.");
+        }
       }
     } catch (error) {
       console.error("Error al registrar la asistencia:", error);
@@ -92,7 +91,7 @@ export const Personal = () => {
       setReason("");
     }
   };
-  
+
   const handleButtonClick = () => {
     const [currentHour, currentMinute] = formState.currentTime.split(':').map(Number);
     if (currentHour >= 8 || (currentHour === 8 && currentMinute > 0)) {

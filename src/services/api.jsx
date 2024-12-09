@@ -39,6 +39,20 @@ app.get('/GAE/v1/attendance/verify', async (req, res) => {
     }
 });
 
+export const verificarAsistencia = async (userId, date) => {
+    try {
+        const response = await apiClient.get('/attendance/verify', {
+            params: { userId, date }
+        });
+        return response.data; // Devuelve si la asistencia existe o no
+    } catch (e) {
+        console.error('Error al verificar la asistencia:', e);
+        return {
+            error: true,
+            message: e.response?.data?.msg || e.message,
+        };
+    }
+};
 
 const handleError = (error) => {
     const responseStatus = error?.response?.status;

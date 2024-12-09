@@ -44,7 +44,7 @@ export const Personal = () => {
   useEffect(() => {
     const lastAttendanceDate = localStorage.getItem(`lastAttendanceDate_${userId}`);
     const [currentHour] = formState.currentTime.split(':').map(Number);
-    const isWithinAllowedTime = currentHour >= 6 && currentHour < 10; // Asistencia solo entre las 6am y las 10am
+    const isWithinAllowedTime = currentHour >= 11 && currentHour < 14; // Asistencia solo entre las 6am y las 10am
     setIsButtonDisabled(lastAttendanceDate === formState.todayDate || !isWithinAllowedTime); // Deshabilita el botón si ya registró o si está fuera del tiempo permitido
   }, [formState.todayDate, formState.currentTime, userId]);
 

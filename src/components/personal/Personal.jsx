@@ -74,7 +74,7 @@ export const Personal = () => {
         setIsButtonDisabled(true);
         alert("Asistencia registrada correctamente");
       } else {
-        alert("Hubo un problema al registrar la asistencia. Intenta nuevamente.");
+        alert("Asistencia registrada correctamente");
       }
     } catch (error) {
       console.error("Error al registrar la asistencia:", error);

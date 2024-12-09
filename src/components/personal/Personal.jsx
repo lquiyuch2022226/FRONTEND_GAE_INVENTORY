@@ -24,13 +24,16 @@ export const Personal = () => {
   const [reason, setReason] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
+  // Use effect to check if the button should be disabled
   useEffect(() => {
-    // Verificar si el usuario ya envió asistencia hoy
+    // Get the last attendance date from localStorage
     const lastAttendanceDate = localStorage.getItem(`lastAttendanceDate_${userId}`);
     if (lastAttendanceDate === formState.todayDate) {
-      setIsButtonDisabled(true);
+      setIsButtonDisabled(true);  // Disable button if attendance was recorded today
+    } else {
+      setIsButtonDisabled(false); // Enable button if it's a new day
     }
-  }, [formState.todayDate, userId]);
+  }, [formState.todayDate, userId]); // Depend on today's date
 
   const getIp = async () => {
     try {
@@ -47,13 +50,12 @@ export const Personal = () => {
       const ip = await getIp();
       const record = {
         user: userName,
-        date: formState.todayDate, // Asegúrate de que esta fecha esté en formato YYYY-MM-DD
+        date: formState.todayDate, // Use today's date for attendance
         time: formState.currentTime,
-        status: status,
+        status: "presente",  // Assuming the status is "present"
         reason: reason,
         ip: ip,
-    };
-    
+      };
 
       const response = await reportarEntrada(record);
 
@@ -61,8 +63,8 @@ export const Personal = () => {
         const updatedRecords = [...attendanceRecords, record];
         setAttendanceRecords(updatedRecords);
         localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
-        localStorage.setItem(`lastAttendanceDate_${userId}`, formState.todayDate); // Guardar la fecha por usuario
-        setIsButtonDisabled(true);
+        localStorage.setItem(`lastAttendanceDate_${userId}`, formState.todayDate); // Store the date of the last attendance
+        setIsButtonDisabled(true); // Disable the button after attendance is sent
         alert("Asistencia registrada correctamente");
       } else {
         alert("Error al registrar la asistencia en la base de datos");
@@ -78,7 +80,7 @@ export const Personal = () => {
 
   const isTimeInRange = () => {
     const currentHour = parseInt(formState.currentTime.split(':')[0], 10);
-    return currentHour >= 0 && currentHour < 1;
+    return currentHour >= 0 && currentHour < 1;  // Adjust your time range logic as needed
   };
 
   return (

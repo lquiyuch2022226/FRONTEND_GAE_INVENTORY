@@ -63,9 +63,9 @@ export const Personal = () => {
         reason: reason,
         ip: ip,
       };
-
+  
       const response = await reportarEntrada(record);
-
+  
       if (response.success) {
         const updatedRecords = [...attendanceRecords, record];
         setAttendanceRecords(updatedRecords);
@@ -74,16 +74,17 @@ export const Personal = () => {
         setIsButtonDisabled(true);
         alert("Asistencia registrada correctamente");
       } else {
-        alert("Error al registrar la asistencia en la base de datos");
+        alert("Hubo un problema al registrar la asistencia. Intenta nuevamente.");
       }
     } catch (error) {
       console.error("Error al registrar la asistencia:", error);
-      alert("Asistencia registrada correctamente");
+      alert("Error al registrar la asistencia. Por favor, inténtalo más tarde.");
     } finally {
       setShowModal(false);
       setReason("");
     }
   };
+  
 
   const isLate = () => {
     const currentHour = parseInt(formState.currentTime.split(':')[0], 10);

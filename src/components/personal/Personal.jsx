@@ -15,60 +15,19 @@ export const Personal = () => {
   const currentHour = new Date().getHours();
   const waveColors = currentHour < 8 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
 
-  const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [formState, setFormState] = useState({
     todayDate: new Date().toISOString().split('T')[0],
     currentTime: new Date().toTimeString().split(' ')[0],
   });
   const [showModal, setShowModal] = useState(false);
-  const [reason, setReason] = useState("");
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-
-  const getIp = async () => {
-    try {
-      const response = await axios.get('https://api.ipify.org?format=json');
-      return response.data.ip;
-    } catch (error) {
-      console.error("Error al obtener la IP:", error);
-      return "IP no disponible";
-    }
-  };
-
-  const handleAttendance = async () => {
-    try {
-      const ip = await getIp();
-      const record = {
-        user: userName,
-        date: formState.todayDate,
-        time: formState.currentTime,
-        reason,
-        ip,
-      };
-
-      const response = await reportarEntrada(record);
-
-      if (response.success) {
-        const updatedRecords = [...attendanceRecords, record];
-        setAttendanceRecords(updatedRecords);
-        localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
-        localStorage.setItem('lastAttendanceDate', formState.todayDate);
-        setIsButtonDisabled(true);
-        alert("Asistencia registrada correctamente");
-      } else {
-        alert("Error al registrar la asistencia en la base de datos");
-      }
-    } catch (error) {
-      console.error("Error al registrar la asistencia:", error);
-      alert("Error al registrar la asistencia: " + error.message);
-    } finally {
-      setShowModal(false);
-      setReason("");
-    }
-  };
 
   const isTimeInRange = () => {
     const currentHour = parseInt(formState.currentTime.split(':')[0], 10);
     return currentHour >= 21 && currentHour < 24;
+  };
+
+  const handleModalOpen = () => {
+    setShowModal(true);
   };
 
   return (
@@ -93,8 +52,8 @@ export const Personal = () => {
             </div>
           </div>
           <button
-            onClick={() => setShowModal(true)}
-            disabled={isButtonDisabled || !isTimeInRange()}
+            onClick={handleModalOpen}
+            disabled={!isTimeInRange()}
           >
             Enviar
             <svg
@@ -119,10 +78,9 @@ export const Personal = () => {
             <p>¿Estás seguro de que deseas registrar tu asistencia?</p>
             <textarea
               placeholder="Escribe aquí la razón de tu asistencia"
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
+              onChange={(e) => console.log(e.target.value)} // Manejar el texto aquí
             />
-            <button onClick={handleAttendance}>Confirmar</button>
+            <button onClick={() => setShowModal(false)}>Confirmar</button>
           </div>
         </Modal>
       </div>

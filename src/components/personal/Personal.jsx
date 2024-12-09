@@ -47,11 +47,13 @@ export const Personal = () => {
       const ip = await getIp();
       const record = {
         user: userName,
-        date: formState.todayDate,
+        date: formState.todayDate, // Asegúrate de que esta fecha esté en formato YYYY-MM-DD
         time: formState.currentTime,
-        reason,
-        ip,
-      };
+        status: status,
+        reason: reason,
+        ip: ip,
+    };
+    
 
       const response = await reportarEntrada(record);
 

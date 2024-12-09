@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar } from '../Navbar.jsx';
 import { useNavigate } from "react-router-dom";
-import { reportarEntrada } from '../../services/api.jsx';
+import { reportarEntrada, verificarAsistencia } from '../../services/api.jsx';
 import './personal.css';
 import { Header } from '../header/Header.jsx';
 import defaultAvatar from '../../assets/img/palmamorro.jpg';
@@ -37,13 +37,21 @@ export const Personal = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // Verificar si el botón debe estar deshabilitado
+  // Verificar si el usuario ya registró su asistencia
   useEffect(() => {
-    const lastAttendanceDate = localStorage.getItem(`lastAttendanceDate_${userId}`);
-    const [currentHour] = formState.currentTime.split(':').map(Number);
-    const isWithinAllowedTime = currentHour >= 1 && currentHour < 10;
-    setIsButtonDisabled(lastAttendanceDate === formState.todayDate || !isWithinAllowedTime);
-  }, [formState.todayDate, formState.currentTime, userId]);
+    const checkAttendance = async () => {
+      try {
+        const response = await verificarAsistencia(userId, formState.todayDate);
+        if (response.exists) {
+          setIsButtonDisabled(true); // Deshabilitar el botón si ya registró la asistencia
+        }
+      } catch (error) {
+        console.error("Error al verificar asistencia:", error);
+      }
+    };
+
+    checkAttendance();
+  }, [formState.todayDate, userId]);
 
   const getIp = async () => {
     try {

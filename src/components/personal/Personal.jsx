@@ -40,12 +40,12 @@ export const Personal = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   // useEffect que verifica si ya se registró la asistencia para hoy
-  useEffect(() => {
+  /* useEffect(() => {
     const lastAttendanceDate = localStorage.getItem('lastAttendanceDate');  // Obtiene la última fecha de asistencia
     const today = new Date().toISOString().split('T')[0];  // Obtiene la fecha de hoy
     setIsButtonDisabled(lastAttendanceDate === today);  // Deshabilita el botón si ya se registró asistencia hoy
   }, []);  // Solo se ejecuta al cargar el componente
-
+ */
   // Función para manejar el registro de asistencia
   const handleAttendance = async () => {
     try {

@@ -22,6 +22,24 @@ apiClient.interceptors.request.use(
     }
 );
 
+app.get('/GAE/v1/attendance/verify', async (req, res) => {
+    const { userId, date } = req.query;
+
+    try {
+        // Aquí deberías consultar la base de datos para ver si existe un registro de asistencia
+        const attendance = await Attendance.findOne({ userId, date });
+
+        if (attendance) {
+            return res.json({ exists: true });
+        } else {
+            return res.json({ exists: false });
+        }
+    } catch (error) {
+        return res.status(500).json({ msg: 'Error en la verificación de asistencia' });
+    }
+});
+
+
 const handleError = (error) => {
     const responseStatus = error?.response?.status;
     if (responseStatus === 401 || responseStatus === 403) {

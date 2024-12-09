@@ -72,7 +72,8 @@ export const Personal = () => {
       const response = await reportarEntrada(record);
       console.log("Respuesta del API:", response);
   
-      if (response.success) {
+      // Verificar si el mensaje de respuesta es exitoso
+      if (response.msg === 'Registros de asistencia almacenados correctamente') {
         const updatedRecords = [...attendanceRecords, record];
         setAttendanceRecords(updatedRecords);
         localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));

@@ -52,14 +52,14 @@ export const Personal = () => {
     }
   };
 
-  const handleAttendance = async () => {
+  const handleAttendance = async (isLate) => {
     try {
       const ip = await getIp();
       const record = {
         user: userName,
         date: formState.todayDate,
         time: formState.currentTime,
-        status: "presente",
+        status: isLate ? "tarde" : "presente",
         reason: reason,
         ip: ip,
       };
@@ -71,7 +71,7 @@ export const Personal = () => {
         setAttendanceRecords(updatedRecords);
         localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
         localStorage.setItem(`lastAttendanceDate_${userId}`, formState.todayDate);
-        setIsButtonDisabled(true); // Disable the button after attendance is sent
+        setIsButtonDisabled(true);
         alert("Asistencia registrada correctamente");
       } else {
         alert("Error al registrar la asistencia en la base de datos");
@@ -85,9 +85,21 @@ export const Personal = () => {
     }
   };
 
-  const isTimeInRange = () => {
+  const isLate = () => {
     const currentHour = parseInt(formState.currentTime.split(':')[0], 10);
-    return currentHour >= 6 && currentHour < 18; // Active between 6:00 and 17:59
+    const currentMinute = parseInt(formState.currentTime.split(':')[1], 10);
+    const lateThresholdHour = 8;
+    const lateThresholdMinute = 0;
+
+    return currentHour > lateThresholdHour || (currentHour === lateThresholdHour && currentMinute > lateThresholdMinute);
+  };
+
+  const handleButtonClick = () => {
+    if (isLate()) {
+      setShowModal(true); // Show modal if the user is late
+    } else {
+      handleAttendance(false); // Directly register attendance if on time
+    }
   };
 
   return (
@@ -112,8 +124,8 @@ export const Personal = () => {
             </div>
           </div>
           <button
-            onClick={() => setShowModal(true)}
-            disabled={isButtonDisabled || !isTimeInRange()}
+            onClick={handleButtonClick}
+            disabled={isButtonDisabled}
           >
             Enviar
             <svg
@@ -141,7 +153,7 @@ export const Personal = () => {
               value={reason}
               onChange={(e) => setReason(e.target.value)}
             />
-            <button onClick={handleAttendance}>Confirmar</button>
+            <button onClick={() => handleAttendance(true)}>Confirmar</button>
           </div>
         </Modal>
       </div>

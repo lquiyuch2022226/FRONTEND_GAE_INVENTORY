@@ -6,7 +6,7 @@ import './personal.css';
 import { Header } from '../header/Header.jsx';
 import defaultAvatar from '../../assets/img/palmamorro.jpg';
 import axios from 'axios';
-import { Modal } from '../modal/Modal.jsx'; // Asegúrate de importar el Modal aquí
+import { Modal } from '../modal/Modal.jsx';
 
 export const Personal = () => {
   const user = JSON.parse(localStorage.getItem('datosUsuario')) || {};
@@ -23,6 +23,14 @@ export const Personal = () => {
   const [showModal, setShowModal] = useState(false);
   const [reason, setReason] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
+  useEffect(() => {
+    // Verificar si el usuario ya envió asistencia hoy
+    const lastAttendanceDate = localStorage.getItem(`lastAttendanceDate_${userId}`);
+    if (lastAttendanceDate === formState.todayDate) {
+      setIsButtonDisabled(true);
+    }
+  }, [formState.todayDate, userId]);
 
   const getIp = async () => {
     try {
@@ -51,7 +59,7 @@ export const Personal = () => {
         const updatedRecords = [...attendanceRecords, record];
         setAttendanceRecords(updatedRecords);
         localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
-        localStorage.setItem('lastAttendanceDate', formState.todayDate);
+        localStorage.setItem(`lastAttendanceDate_${userId}`, formState.todayDate); // Guardar la fecha por usuario
         setIsButtonDisabled(true);
         alert("Asistencia registrada correctamente");
       } else {
@@ -68,7 +76,7 @@ export const Personal = () => {
 
   const isTimeInRange = () => {
     const currentHour = parseInt(formState.currentTime.split(':')[0], 10);
-    return currentHour >= 21 && currentHour < 24;
+    return currentHour >= 7 && currentHour < 10;
   };
 
   return (
@@ -116,7 +124,7 @@ export const Personal = () => {
         {/* Modal */}
         <Modal show={showModal} onClose={() => setShowModal(false)}>
           <div className="modal-content">
-            <p>¿Estás seguro de que deseas registrar tu asistencia?</p>
+            <p>¿Por qué llegaste tarde?</p>
             <textarea
               placeholder="Escribe aquí la razón de tu asistencia"
               value={reason}

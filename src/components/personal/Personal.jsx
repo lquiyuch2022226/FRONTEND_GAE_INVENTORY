@@ -5,7 +5,8 @@ import { reportarEntrada } from '../../services/api.jsx';
 import './personal.css';
 import { Header } from '../header/Header.jsx';
 import defaultAvatar from '../../assets/img/palmamorro.jpg';
-import axios from 'axios'; // Importamos axios para realizar solicitudes HTTP
+import axios from 'axios';
+import { Modal } from '../modal/Modal.jsx'; // Asegúrate de importar el Modal aquí
 
 export const Personal = () => {
   const user = JSON.parse(localStorage.getItem('datosUsuario')) || {};
@@ -19,59 +20,48 @@ export const Personal = () => {
     todayDate: new Date().toISOString().split('T')[0],
     currentTime: new Date().toTimeString().split(' ')[0],
   });
-  const [showPopup, setShowPopup] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [reason, setReason] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-  // Función para obtener la IP del usuario
   const getIp = async () => {
     try {
-      // Usamos la API de ipify para obtener la IP pública
       const response = await axios.get('https://api.ipify.org?format=json');
       return response.data.ip;
     } catch (error) {
       console.error("Error al obtener la IP:", error);
-      return "IP no disponible";  // Si ocurre un error, devolvemos un valor por defecto
+      return "IP no disponible";
     }
   };
 
-  // Función para manejar el registro de asistencia
   const handleAttendance = async () => {
     try {
-      // Obtenemos la IP del usuario
       const ip = await getIp();
-      
-      // Creamos el objeto con los datos de la asistencia, incluyendo la IP
       const record = {
         user: userName,
         date: formState.todayDate,
         time: formState.currentTime,
         reason,
-        ip,  // Agregamos la IP al reporte
+        ip,
       };
 
-      // Llamamos a la función reportarEntrada para enviar los datos al servidor
       const response = await reportarEntrada(record);
 
       if (response.success) {
-        // Si la respuesta es exitosa, actualizamos los registros
         const updatedRecords = [...attendanceRecords, record];
         setAttendanceRecords(updatedRecords);
         localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
         localStorage.setItem('lastAttendanceDate', formState.todayDate);
         setIsButtonDisabled(true);
-
-        // Mostramos un mensaje de éxito
         alert("Asistencia registrada correctamente");
       } else {
-        // Si la respuesta no es exitosa, mostramos un mensaje de error
         alert("Error al registrar la asistencia en la base de datos");
       }
     } catch (error) {
       console.error("Error al registrar la asistencia:", error);
       alert("Error al registrar la asistencia: " + error.message);
     } finally {
-      setShowPopup(false);
+      setShowModal(false);
       setReason("");
     }
   };
@@ -103,7 +93,7 @@ export const Personal = () => {
             </div>
           </div>
           <button
-            onClick={() => setShowPopup(true)}
+            onClick={() => setShowModal(true)}
             disabled={isButtonDisabled || !isTimeInRange()}
           >
             Enviar
@@ -123,19 +113,18 @@ export const Personal = () => {
           </button>
         </div>
 
-        {showPopup && (
-          <div className="popup">
-            <div className="popup-content">
-              <p>¿Estás seguro de que deseas registrar tu asistencia?</p>
-              <textarea
-                placeholder="Escribe aquí la razón de tu asistencia"
-                value={reason}
-                onChange={(e) => setReason(e.target.value)}
-              />
-              <button onClick={handleAttendance}>Confirmar</button>
-            </div>
+        {/* Modal */}
+        <Modal show={showModal} onClose={() => setShowModal(false)}>
+          <div className="modal-content">
+            <p>¿Estás seguro de que deseas registrar tu asistencia?</p>
+            <textarea
+              placeholder="Escribe aquí la razón de tu asistencia"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+            />
+            <button onClick={handleAttendance}>Confirmar</button>
           </div>
-        )}
+        </Modal>
       </div>
     </div>
   );

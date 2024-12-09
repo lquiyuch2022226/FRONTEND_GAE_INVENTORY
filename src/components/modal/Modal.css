@@ -1,50 +1,140 @@
-.modal {
-    background-color: #2b2b2b;
-    color: white;
-    padding: 2rem;
-    border-radius: 12px;
-    max-width: 500px;
-    width: 90%;
-    max-height: 80vh;
-    overflow-y: auto;
-    position: relative;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-}
-
-.modal-body {
-    padding: 1rem;
-}
-
-.modal-body textarea {
-    height: 120px;
-    resize: none;
+/* Fondo de la superposición */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    border: 1.5px solid #9e9e9e;
-    border-radius: 8px;
-    background: #333333;
-    padding: 0.5rem;
-    font-size: 1rem;
-    color: #f5f5f5;
-    box-sizing: border-box;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Más opaco para destacar el modal */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.3s ease-in-out;
 }
 
+/* Contenedor del modal */
+.modal {
+    background-color: #1f1f1f; /* Color más oscuro para mejor contraste */
+    color: #f5f5f5; /* Texto claro para visibilidad */
+    padding: 2rem;
+    border-radius: 10px;
+    max-width: 500px; /* Ancho máximo más pequeño */
+    width: 90%; /* Ajuste responsivo */
+    max-height: 80vh; /* Asegura que no ocupe toda la pantalla */
+    overflow-y: auto;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); /* Sombra suave */
+    position: relative;
+    animation: fadeIn 0.3s ease-in-out; /* Animación de entrada */
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Botón de cierre */
+.modal-close {
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    font-size: 1.5rem;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+}
+
+.modal-close:hover {
+    color: #ff5c5c; /* Efecto de hover rojo */
+}
+
+/* Título del modal */
+.modal-header {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.modal-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+/* Cuerpo del modal */
+.modal-body {
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    text-align: center;
+    line-height: 1.5;
+    color: #dcdcdc;
+}
+
+/* Estilo del textarea */
+.modal-body textarea {
+    width: 100%;
+    height: 120px; /* Altura inicial */
+    border: 1.5px solid #444;
+    border-radius: 8px;
+    background: #2a2a2a; /* Fondo oscuro */
+    color: #f5f5f5;
+    padding: 0.75rem;
+    font-size: 1rem;
+    resize: none; /* Evitar que el usuario cambie tamaño */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5); /* Sombra interna */
+}
+
+.modal-body textarea:focus {
+    outline: none;
+    border-color: #1e88e5; /* Borde azul al enfocar */
+    background-color: #242424; /* Fondo más claro */
+}
+
+/* Botón de confirmar */
 .espacio {
     display: flex;
     justify-content: center;
-    margin-top: 1rem;
 }
 
 .espacio button {
-    background-color: #cddc39;
+    background-color: #cddc39; /* Verde brillante */
     border: none;
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
+    font-weight: bold;
     border-radius: 8px;
     cursor: pointer;
-    color: black;
+    color: #000;
+    transition: background-color 0.3s ease-in-out, transform 0.2s;
 }
 
 .espacio button:hover {
-    background-color: #b0bf31;
+    background-color: #b0bf31; /* Color más oscuro al pasar el mouse */
+    transform: scale(1.05); /* Ligeramente más grande */
+}
+
+/* Espaciado entre los elementos */
+.modal-body p {
+    margin-bottom: 1rem;
+}
+
+/* Scroll dentro del modal si es necesario */
+.modal::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 10px;
+}
+
+.modal::-webkit-scrollbar-thumb:hover {
+    background: #666;
 }

@@ -1,76 +1,70 @@
-import React, { useState, useEffect } from 'react';  // Importa React y los hooks useState, useEffect
-import { Navbar } from '../Navbar.jsx'; // Importa el componente Navbar
-import { useNavigate } from "react-router-dom";  // Importa el hook useNavigate para redirección (aunque no se utiliza aquí)
-import { reportarEntrada } from '../../services/api.jsx'; // Importa la función reportarEntrada (no usada aquí)
-import './personal.css';  // Importa los estilos para el componente Personal
-import { Header } from '../header/Header.jsx';  // Importa el componente Header
-import defaultAvatar from '../../assets/img/palmamorro.jpg';  // Importa una imagen predeterminada para el avatar
+import React, { useState, useEffect } from 'react';
+import { Navbar } from '../Navbar.jsx';
+import { useNavigate } from "react-router-dom";
+import { reportarEntrada } from '../../services/api.jsx';
+import './personal.css';
+import { Header } from '../header/Header.jsx';
+import defaultAvatar from '../../assets/img/palmamorro.jpg';
+import axios from 'axios'; // Importamos axios para realizar solicitudes HTTP
 
-// Componente principal Personal
 export const Personal = () => {
-  // Obtiene los datos del usuario desde el localStorage, si no existen, asigna un objeto vacío
   const user = JSON.parse(localStorage.getItem('datosUsuario')) || {};
-  
-  // Obtiene el ID de la cuenta y el nombre del usuario, si no existen, asigna valores predeterminados
-  const userId = user.account?.homeAccountId || "Invitado";  
-  const userName = user.account?.name || "Invitado";  
-  
-  // Obtiene la hora actual del sistema
+  const userId = user.account?.homeAccountId || "Invitado";
+  const userName = user.account?.name || "Invitado";
   const currentHour = new Date().getHours();
-  
-  // Define los colores de la ola dependiendo de la hora del día
   const waveColors = currentHour < 8 ? ['#030e2e', '#023a0e', '#05a00d'] : ['#8b0000', '#b22222', '#ff4500'];
 
-  // Estado que almacena los registros de asistencia
   const [attendanceRecords, setAttendanceRecords] = useState([]);
-  
-  // Estado que almacena la fecha y hora actuales
   const [formState, setFormState] = useState({
-    todayDate: new Date().toISOString().split('T')[0],  // Fecha de hoy (YYYY-MM-DD)
-    currentTime: new Date().toTimeString().split(' ')[0],  // Hora actual (HH:MM:SS)
+    todayDate: new Date().toISOString().split('T')[0],
+    currentTime: new Date().toTimeString().split(' ')[0],
   });
-  
-  // Estado que controla la visibilidad del popup de confirmación
   const [showPopup, setShowPopup] = useState(false);
-  
-  // Estado que almacena la razón de la asistencia
   const [reason, setReason] = useState("");
-  
-  // Estado que habilita o deshabilita el botón de envío
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-  // useEffect que verifica si ya se registró la asistencia para hoy
-  /* useEffect(() => {
-    const lastAttendanceDate = localStorage.getItem('lastAttendanceDate');  // Obtiene la última fecha de asistencia
-    const today = new Date().toISOString().split('T')[0];  // Obtiene la fecha de hoy
-    setIsButtonDisabled(lastAttendanceDate === today);  // Deshabilita el botón si ya se registró asistencia hoy
-  }, []);  // Solo se ejecuta al cargar el componente
- */
+  // Función para obtener la IP del usuario
+  const getIp = async () => {
+    try {
+      // Usamos la API de ipify para obtener la IP pública
+      const response = await axios.get('https://api.ipify.org?format=json');
+      return response.data.ip;
+    } catch (error) {
+      console.error("Error al obtener la IP:", error);
+      return "IP no disponible";  // Si ocurre un error, devolvemos un valor por defecto
+    }
+  };
+
   // Función para manejar el registro de asistencia
   const handleAttendance = async () => {
     try {
+      // Obtenemos la IP del usuario
+      const ip = await getIp();
+      
+      // Creamos el objeto con los datos de la asistencia, incluyendo la IP
       const record = {
         user: userName,
         date: formState.todayDate,
         time: formState.currentTime,
         reason,
+        ip,  // Agregamos la IP al reporte
       };
-  
-      // Aquí llamamos a la función reportarEntrada para enviar los datos al servidor
+
+      // Llamamos a la función reportarEntrada para enviar los datos al servidor
       const response = await reportarEntrada(record);
-  
+
       if (response.success) {
-        // Si la respuesta del servidor es exitosa, actualizamos el estado local y el localStorage
+        // Si la respuesta es exitosa, actualizamos los registros
         const updatedRecords = [...attendanceRecords, record];
         setAttendanceRecords(updatedRecords);
         localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
         localStorage.setItem('lastAttendanceDate', formState.todayDate);
         setIsButtonDisabled(true);
-  
-        // Muestra un mensaje de éxito
+
+        // Mostramos un mensaje de éxito
         alert("Asistencia registrada correctamente");
       } else {
-        // Si la respuesta no es exitosa, muestra un mensaje de error
+        // Si la respuesta no es exitosa, mostramos un mensaje de error
         alert("Error al registrar la asistencia en la base de datos");
       }
     } catch (error) {
@@ -81,52 +75,38 @@ export const Personal = () => {
       setReason("");
     }
   };
-  
-  // Función para verificar si la hora actual está dentro de un rango (entre las 3 AM y 12 PM)
+
   const isTimeInRange = () => {
-    const currentHour = parseInt(formState.currentTime.split(':')[0], 10);  // Extrae la hora de la cadena de tiempo
-    return currentHour >= 21 && currentHour < 24;  // Devuelve true si la hora está en el rango permitido
+    const currentHour = parseInt(formState.currentTime.split(':')[0], 10);
+    return currentHour >= 21 && currentHour < 24;
   };
 
-  // JSX para renderizar la UI del componente
   return (
     <div className="personal">
-      {/* Componente de la barra de navegación */}
       <Navbar user={user} />
-      
-      {/* Componente del encabezado que muestra la fecha actual */}
       <Header currentDate={formState.todayDate} />
-      
       <div className="posts-personal">
         <div className="e-card">
-          {/* Efecto de fondo con olas, cambia según la hora del día */}
           <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})` }}></div>
           <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '210px' }}></div>
           <div className="wave" style={{ background: `linear-gradient(744deg, ${waveColors[0]}, ${waveColors[1]} 60%, ${waveColors[2]})`, top: '420px' }}></div>
 
-          {/* Información del usuario */}
           <div className="content-user">
-            {/* Imagen de perfil del usuario (si no tiene, usa la imagen predeterminada) */}
             <img
               src={user.profilePicture || defaultAvatar}
               alt="User Icon"
               className="icon"
             />
             <div className="user-info text-white">
-              {/* Muestra el nombre del usuario */}
               <div className="user-name">{userName}</div>
-              {/* Muestra el nombre de usuario (departamento) */}
               <div className="user-department">{user.account.username}</div>
             </div>
           </div>
-
-          {/* Botón para enviar el registro de asistencia */}
           <button
-            onClick={() => setShowPopup(true)}  // Muestra el popup al hacer clic
-            disabled={isButtonDisabled || !isTimeInRange()}  // Deshabilita el botón si ya se registró asistencia o si la hora no está en el rango permitido
+            onClick={() => setShowPopup(true)}
+            disabled={isButtonDisabled || !isTimeInRange()}
           >
             Enviar
-            {/* Icono SVG del botón */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -143,18 +123,16 @@ export const Personal = () => {
           </button>
         </div>
 
-        {/* Popup de confirmación cuando se presiona el botón */}
         {showPopup && (
           <div className="popup">
             <div className="popup-content">
               <p>¿Estás seguro de que deseas registrar tu asistencia?</p>
-              {/* Campo de texto para que el usuario ingrese la razón */}
               <textarea
                 placeholder="Escribe aquí la razón de tu asistencia"
                 value={reason}
-                onChange={(e) => setReason(e.target.value)}  // Actualiza el estado de la razón
+                onChange={(e) => setReason(e.target.value)}
               />
-              <button onClick={handleAttendance}>Confirmar</button>  {/* Botón para confirmar el registro de asistencia */}
+              <button onClick={handleAttendance}>Confirmar</button>
             </div>
           </div>
         )}

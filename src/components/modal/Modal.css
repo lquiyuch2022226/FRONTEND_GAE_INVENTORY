@@ -5,7 +5,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8); /* Más opaco para destacar el modal */
+    background-color: rgba(0, 0, 0, 0.85); /* Fondo más opaco */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -15,23 +15,23 @@
 
 /* Contenedor del modal */
 .modal {
-    background-color: #1f1f1f; /* Color más oscuro para mejor contraste */
-    color: #f5f5f5; /* Texto claro para visibilidad */
+    background-color: #222; /* Fondo elegante y uniforme */
+    color: #fff; /* Contraste claro */
     padding: 2rem;
-    border-radius: 10px;
-    max-width: 500px; /* Ancho máximo más pequeño */
-    width: 90%; /* Ajuste responsivo */
-    max-height: 80vh; /* Asegura que no ocupe toda la pantalla */
+    border-radius: 15px;
+    max-width: 480px; /* Ancho más estilizado */
+    width: 90%;
+    max-height: 85vh;
     overflow-y: auto;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); /* Sombra suave */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6); /* Sombra más pronunciada */
     position: relative;
-    animation: fadeIn 0.3s ease-in-out; /* Animación de entrada */
+    animation: scaleIn 0.4s ease-in-out;
 }
 
 /* Animación de entrada */
-@keyframes fadeIn {
+@keyframes scaleIn {
     from {
-        transform: scale(0.9);
+        transform: scale(0.8);
         opacity: 0;
     }
     to {
@@ -43,96 +43,97 @@
 /* Botón de cierre */
 .modal-close {
     background-color: transparent;
-    color: #fff;
+    color: #bbb;
     border: none;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 12px;
+    right: 16px;
     cursor: pointer;
     transition: color 0.3s ease-in-out;
 }
 
 .modal-close:hover {
-    color: #ff5c5c; /* Efecto de hover rojo */
+    color: #ff5555; /* Rojo más suave */
 }
 
-/* Título del modal */
+/* Encabezado del modal */
 .modal-header {
     text-align: center;
     margin-bottom: 1rem;
 }
 
 .modal-title {
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: bold;
+    color: #fff;
 }
 
-/* Cuerpo del modal */
+/* Contenido del modal */
 .modal-body {
-    margin-bottom: 1.5rem;
     font-size: 1rem;
     text-align: center;
-    line-height: 1.5;
-    color: #dcdcdc;
+    line-height: 1.6;
+    color: #ddd; /* Texto ligeramente gris */
+    margin-bottom: 1.5rem;
 }
 
-/* Estilo del textarea */
+/* Área de texto */
 .modal-body textarea {
     width: 100%;
-    height: 120px; /* Altura inicial */
+    height: 120px;
     border: 1.5px solid #444;
-    border-radius: 8px;
-    background: #2a2a2a; /* Fondo oscuro */
-    color: #f5f5f5;
+    border-radius: 10px;
+    background: #333; /* Fondo uniforme */
+    color: #ccc;
     padding: 0.75rem;
     font-size: 1rem;
-    resize: none; /* Evitar que el usuario cambie tamaño */
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5); /* Sombra interna */
+    resize: none; /* Desactiva el redimensionamiento */
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3); /* Sombra interna sutil */
+}
+
+.modal-body textarea::placeholder {
+    color: #888; /* Placeholder menos llamativo */
 }
 
 .modal-body textarea:focus {
     outline: none;
     border-color: #1e88e5; /* Borde azul al enfocar */
-    background-color: #242424; /* Fondo más claro */
+    background-color: #292929;
 }
 
-/* Botón de confirmar */
+/* Botón de confirmación */
 .espacio {
     display: flex;
     justify-content: center;
 }
 
 .espacio button {
-    background-color: #cddc39; /* Verde brillante */
+    background-color: #4caf50; /* Verde moderno */
     border: none;
     padding: 0.75rem 1.5rem;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: bold;
-    border-radius: 8px;
+    border-radius: 12px;
+    color: #fff;
     cursor: pointer;
-    color: #000;
     transition: background-color 0.3s ease-in-out, transform 0.2s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra al botón */
 }
 
 .espacio button:hover {
-    background-color: #b0bf31; /* Color más oscuro al pasar el mouse */
-    transform: scale(1.05); /* Ligeramente más grande */
+    background-color: #43a047; /* Verde más oscuro al pasar el mouse */
+    transform: translateY(-2px); /* Pequeño movimiento hacia arriba */
 }
 
-/* Espaciado entre los elementos */
-.modal-body p {
-    margin-bottom: 1rem;
-}
-
-/* Scroll dentro del modal si es necesario */
+/* Scroll personalizado para el modal */
 .modal::-webkit-scrollbar {
-    width: 6px;
+    width: 8px;
 }
 
 .modal::-webkit-scrollbar-thumb {
     background: #444;
-    border-radius: 10px;
+    border-radius: 8px;
 }
 
 .modal::-webkit-scrollbar-thumb:hover {

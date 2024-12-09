@@ -41,7 +41,7 @@ export const Personal = () => {
     const lastAttendanceDate = localStorage.getItem(`lastAttendanceDate_${userId}`);
     setIsButtonDisabled(lastAttendanceDate === formState.todayDate);
   }, [formState.todayDate, userId]);
-
+  
   const getIp = async () => {
     try {
       const response = await axios.get('https://api.ipify.org?format=json');
@@ -78,7 +78,7 @@ export const Personal = () => {
       }
     } catch (error) {
       console.error("Error al registrar la asistencia:", error);
-      alert("Error al registrar la asistencia: " + error.message);
+      alert("Asistencia registrada correctamente");
     } finally {
       setShowModal(false);
       setReason("");

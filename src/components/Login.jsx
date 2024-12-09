@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import logoGE from "../assets/img/SmallLogo.jpg";
+import logoGE from "../assets/img/login.jpeg";
 import './login.css';
 /* import { useLogin } from "../shared/hooks"; */
 import * as msal from '@azure/msal-browser'; // Import MSAL

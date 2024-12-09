@@ -5,7 +5,7 @@ const apiClient = axios.create({
     timeout: 50000,
 });
 
-/* apiClient.interceptors.request.use(
+apiClient.interceptors.request.use(
     (config) => {
         const storedUserData = JSON.parse(localStorage.getItem('datosUsuario'));
         const token = storedUserData.accessToken;
@@ -21,38 +21,6 @@ const apiClient = axios.create({
         return Promise.reject(error);
     }
 );
- */
-app.get('/GAE/v1/attendance/verify', async (req, res) => {
-    const { userId, date } = req.query;
-
-    try {
-        // Aquí deberías consultar la base de datos para ver si existe un registro de asistencia
-        const attendance = await Attendance.findOne({ userId, date });
-
-        if (attendance) {
-            return res.json({ exists: true });
-        } else {
-            return res.json({ exists: false });
-        }
-    } catch (error) {
-        return res.status(500).json({ msg: 'Error en la verificación de asistencia' });
-    }
-});
-
-export const verificarAsistencia = async (userId, date) => {
-    try {
-        const response = await apiClient.get('/attendance/verify', {
-            params: { userId, date }
-        });
-        return response.data; // Devuelve si la asistencia existe o no
-    } catch (e) {
-        console.error('Error al verificar la asistencia:', e);
-        return {
-            error: true,
-            message: e.response?.data?.msg || e.message,
-        };
-    }
-};
 
 const handleError = (error) => {
     const responseStatus = error?.response?.status;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar } from '../Navbar.jsx';
 import { useNavigate } from "react-router-dom";
-import { reportarEntrada, verificarAsistencia } from '../../services/api.jsx';
+import { reportarEntrada } from '../../services/api.jsx';
 import './personal.css';
 import { Header } from '../header/Header.jsx';
 import defaultAvatar from '../../assets/img/palmamorro.jpg';
@@ -37,21 +37,13 @@ export const Personal = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // Verificar si el usuario ya registró su asistencia
+  // Verificar si el botón debe estar deshabilitado
   useEffect(() => {
-    const checkAttendance = async () => {
-      try {
-        const response = await verificarAsistencia(userId, formState.todayDate);
-        if (response.exists) {
-          setIsButtonDisabled(true); // Deshabilitar el botón si ya registró la asistencia
-        }
-      } catch (error) {
-        console.error("Error al verificar asistencia:", error);
-      }
-    };
-
-    checkAttendance();
-  }, [formState.todayDate, userId]);
+    const lastAttendanceDate = localStorage.getItem(`lastAttendanceDate_${userId}`);
+    const [currentHour] = formState.currentTime.split(':').map(Number);
+    const isWithinAllowedTime = currentHour >= 1 && currentHour < 10;
+    setIsButtonDisabled(lastAttendanceDate === formState.todayDate || !isWithinAllowedTime);
+  }, [formState.todayDate, formState.currentTime, userId]);
 
   const getIp = async () => {
     try {
@@ -74,10 +66,14 @@ export const Personal = () => {
         reason: reason,
         ip: ip,
       };
-
+  
+      console.log("Intentando registrar asistencia:", record);
+  
       const response = await reportarEntrada(record);
-
-      if (response.success) {
+      console.log("Respuesta del API:", response);
+  
+      // Verificar si el mensaje de respuesta es exitoso
+      if (response.msg === 'Registros de asistencia almacenados correctamente') {
         const updatedRecords = [...attendanceRecords, record];
         setAttendanceRecords(updatedRecords);
         localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords));
@@ -85,11 +81,8 @@ export const Personal = () => {
         setIsButtonDisabled(true);
         alert("Asistencia registrada correctamente");
       } else {
-        if (response.error) {
-          alert(response.error); // Mostrar el mensaje de error que llega del servidor
-        } else {
-          alert("Hubo un problema al registrar la asistencia. Intenta nuevamente.");
-        }
+        console.error("El API devolvió un error:", response);
+        alert("Hubo un problema al registrar la asistencia. Intenta nuevamente.");
       }
     } catch (error) {
       console.error("Error al registrar la asistencia:", error);
@@ -99,7 +92,7 @@ export const Personal = () => {
       setReason("");
     }
   };
-
+  
   const handleButtonClick = () => {
     const [currentHour, currentMinute] = formState.currentTime.split(':').map(Number);
     if (currentHour >= 8 || (currentHour === 8 && currentMinute > 0)) {

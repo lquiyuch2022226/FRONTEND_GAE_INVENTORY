@@ -39,7 +39,7 @@ export const Personal = () => {
   useEffect(() => {
     const lastAttendanceDate = localStorage.getItem(`lastAttendanceDate_${userId}`);
     const [currentHour] = formState.currentTime.split(':').map(Number);
-    const isWithinAllowedTime = currentHour >= 22 && currentHour < 5; 
+    const isWithinAllowedTime = currentHour >= 22 && currentHour < 24; 
     setIsButtonDisabled(lastAttendanceDate === formState.todayDate || !isWithinAllowedTime);
   }, [formState.todayDate, formState.currentTime, userId]);
 
@@ -95,7 +95,7 @@ export const Personal = () => {
   // Maneja el clic en el botón de asistencia
   const handleButtonClick = () => {
     const [currentHour, currentMinute] = formState.currentTime.split(':').map(Number); 
-    if (currentHour >= 22 || (currentHour === 24 && currentMinute > 0)) {
+    if (currentHour >= 8 || (currentHour === 8 && currentMinute > 0)) {
       setShowModal(true); // Si es tarde, muestra el modal para ingresar la razón
     } else {
       handleAttendance(false); // Si es temprano, registra la asistencia como presente

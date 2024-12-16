@@ -39,12 +39,12 @@ export const Personal = () => {
   useEffect(() => {
     const lastAttendanceDate = localStorage.getItem(`lastAttendanceDate_${userId}`);
     const [currentHour] = formState.currentTime.split(':').map(Number);
-    const isWithinAllowedTime = currentHour >= 22 && currentHour < 24; 
+    const isWithinAllowedTime = currentHour >= 24 && currentHour < 5; 
     setIsButtonDisabled(lastAttendanceDate === formState.todayDate || !isWithinAllowedTime);
   }, [formState.todayDate, formState.currentTime, userId]);
 
   // Función para obtener la IP pública del usuario
-  const getIp = async () => {
+  const getIp = async () => { 
     try {
       const response = await axios.get('https://api.ipify.org?format=json'); // Llama a la API para obtener la IP
       return response.data.ip;

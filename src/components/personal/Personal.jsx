@@ -126,7 +126,7 @@ export const Personal = () => {
 
           <button
             onClick={handleButtonClick}
-            disabled={isButtonDisabled} 
+            /* disabled={isButtonDisabled} */ 
           >
             Enviar
             <svg

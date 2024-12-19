@@ -44,15 +44,19 @@ export const Personal = () => {
   }, [formState.todayDate, formState.currentTime, userId]);
 
   // Función para obtener la IP pública del usuario
-  const getIp = async () => { 
+  const getIp = async () => {
     try {
-      const response = await axios.get('https://api.ipify.org?format=json'); // Llama a la API para obtener la IP
-      return response.data.ip;
+        const response = await axios.get('https://api.ipify.org?format=json');
+        if (response.status === 200 && response.data?.ip) {
+            return response.data.ip;
+        } else {
+            throw new Error("La API no devolvió la IP correctamente");
+        }
     } catch (error) {
-      console.error("Error al obtener la IP:", error);
-      return "IP no disponible"; // Retorna un mensaje si hay un error al obtener la IP
+        console.error("Error al obtener la IP pública:", error.message);
+        return "IP no disponible";
     }
-  };
+};
 
   // Maneja el registro de asistencia (temprano o tarde)
   const handleAttendance = async (isLate) => {

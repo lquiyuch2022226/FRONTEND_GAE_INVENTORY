@@ -39,7 +39,7 @@ export const Personal = () => {
   useEffect(() => {
     const lastAttendanceDate = localStorage.getItem(`lastAttendanceDate_${userId}`);
     const [currentHour] = formState.currentTime.split(':').map(Number);
-    const isWithinAllowedTime = currentHour >= 1 && currentHour < 5; 
+    const isWithinAllowedTime = currentHour >= 21 && currentHour < 24; 
     setIsButtonDisabled(lastAttendanceDate === formState.todayDate || !isWithinAllowedTime);
   }, [formState.todayDate, formState.currentTime, userId]);
 

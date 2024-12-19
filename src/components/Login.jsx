@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import logoGE from "../assets/img/Login.jpeg";
+import logoGEA from "../assets/img/Login.jpeg";
 import './login.css';
 /* import { useLogin } from "../shared/hooks"; */
 import * as msal from '@azure/msal-browser'; // Import MSAL
@@ -143,7 +143,7 @@ export const Login = () => {
       <div className="login-right">
         <form className="auth-form" onSubmit={handleLogin}>
           <div className="auth-logo-container">
-            <img src={logoGE} className="logoGobE" alt="Logo" />
+            <img src={logoGEA} className="logoGobE" alt="Logo" />
             
           </div>
           <div className="logo-separator"></div>

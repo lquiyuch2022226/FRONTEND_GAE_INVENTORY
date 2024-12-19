@@ -77,7 +77,7 @@ export const Personal = () => {
         setAttendanceRecords(updatedRecords);
         localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords)); // Guarda los registros en localStorage
         localStorage.setItem(`lastAttendanceDate_${userId}`, formState.todayDate); // Guarda la fecha de la última asistencia
-        setIsButtonDisabled(true); // Deshabilita el botón después de registrar la asistencia
+/*         setIsButtonDisabled(true); */ // Deshabilita el botón después de registrar la asistencia
         alert("Asistencia registrada correctamente");
       } else {
         console.error("El API devolvió un error:", response);

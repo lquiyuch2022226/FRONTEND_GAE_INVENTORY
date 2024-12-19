@@ -44,7 +44,7 @@ export const Personal = () => {
   }, [formState.todayDate, formState.currentTime, userId]);
 
   // Función para obtener la IP pública del usuario
-  const getIp = async () => {
+const getIp = async () => {
     try {
         const response = await axios.get('https://api.ipify.org?format=json');
         if (response.status === 200 && response.data?.ip) {

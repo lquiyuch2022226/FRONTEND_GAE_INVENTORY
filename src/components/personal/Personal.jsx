@@ -40,7 +40,7 @@ export const Personal = () => {
     const lastAttendanceDate = localStorage.getItem(`lastAttendanceDate_${userId}`);
     const [currentHour] = formState.currentTime.split(':').map(Number);
     const isWithinAllowedTime = currentHour >= 21 && currentHour < 24; 
-    setIsButtonDisabled(lastAttendanceDate === formState.todayDate || !isWithinAllowedTime);
+    /* setIsButtonDisabled(lastAttendanceDate === formState.todayDate || !isWithinAllowedTime); */
   }, [formState.todayDate, formState.currentTime, userId]);
 
   // Función para obtener la IP pública del usuario
@@ -77,7 +77,7 @@ export const Personal = () => {
         setAttendanceRecords(updatedRecords);
         localStorage.setItem(`attendanceRecords_${userId}`, JSON.stringify(updatedRecords)); // Guarda los registros en localStorage
         localStorage.setItem(`lastAttendanceDate_${userId}`, formState.todayDate); // Guarda la fecha de la última asistencia
-        setIsButtonDisabled(true); // Deshabilita el botón después de registrar la asistencia
+        /* setIsButtonDisabled(true); */ // Deshabilita el botón después de registrar la asistencia
         alert("Asistencia registrada correctamente");
       } else {
         console.error("El API devolvió un error:", response);
